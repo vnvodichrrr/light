@@ -1,0 +1,3352 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aether HE — Bộ Điều Khiển Đèn RGB Bàn Phím (Win60 HE + WebHID)</title>
+  <style>
+    /* =========================================================================
+     * KHỐI 0: GIAO DIỆN CSS THUẦN (DARK GAMING UI, RESPONSIVE, SYSTEM FONT)
+     * Không sử dụng font ngoài, không ảnh ngoài, không filter: blur() tốn GPU.
+     * ========================================================================= */
+    :root {
+      --bg-main: #0b0d13;
+      --bg-panel: #121621;
+      --bg-card: #181d2c;
+      --bg-card-hover: #1f263a;
+      --bg-card-active: #1b2842;
+      --border-subtle: #252c40;
+      --border-active: #00e5ff;
+      --accent: #00e5ff;
+      --accent-dim: rgba(0, 229, 255, 0.14);
+      --accent-secondary: #7c4dff;
+      --text-primary: #eef2f9;
+      --text-secondary: #94a0b8;
+      --text-muted: #5e6a82;
+      --success: #00e676;
+      --warning: #ffab00;
+      --danger: #ff5252;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      background-image: radial-gradient(circle at 50% 0%, #172036 0%, var(--bg-main) 65%);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.45;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-shell {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 18px 16px 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Thanh Header */
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 12px 18px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #00e5ff 0%, #7c4dff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #090b10;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge-model {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Pill / Toggle Buttons trên Header */
+    .pill-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .pill-toggle:hover:not(:disabled) {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .pill-toggle:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
+    .pill-toggle.is-active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .pill-toggle.power-btn.is-active {
+      background: rgba(0, 230, 118, 0.14);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .pill-toggle.power-btn:not(.is-active) {
+      background: rgba(255, 82, 82, 0.12);
+      border-color: rgba(255, 82, 82, 0.45);
+      color: var(--danger);
+    }
+
+    .pill-toggle.warn-btn.is-active {
+      background: rgba(255, 171, 0, 0.15);
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+
+    .dot-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Bộ đếm FPS góc màn hình / thanh trạng thái */
+    .fps-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.76rem;
+      padding: 6px 11px;
+      border-radius: var(--radius-md);
+      background: #0d1018;
+      border: 1px solid var(--border-subtle);
+      color: var(--success);
+    }
+
+    .fps-badge.is-hidden {
+      display: none;
+    }
+
+    .fps-badge .fps-state {
+      color: var(--text-secondary);
+      font-size: 0.72rem;
+    }
+
+    /* Khung Bàn Phím Chính */
+    .keyboard-stage {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+
+    .stage-header {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .stage-hint {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .kbd-tag {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.73rem;
+      color: var(--text-primary);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .canvas-wrapper {
+      width: 100%;
+      max-width: 900px;
+      aspect-ratio: 3 / 1;
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #090b10;
+      border: 1px solid #1e2436;
+    }
+
+    #mainKeyboardCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    /* Bố cục phía dưới: Bảng điều khiển + Lưới hiệu ứng */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .panel-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Điều khiển Thanh trượt & Màu sắc */
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .control-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .control-val {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.76rem;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 1px 7px;
+      border-radius: 4px;
+    }
+
+    .step-slider-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #232a3d;
+      border-radius: 999px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid #0b0d13;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid #0b0d13;
+      cursor: pointer;
+    }
+
+    .step-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      padding: 0 4px;
+    }
+
+    /* Chọn màu FG / BG */
+    .color-pickers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .color-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 9px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .color-box-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .color-box-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .color-hex {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.74rem;
+      color: var(--text-primary);
+      text-transform: uppercase;
+    }
+
+    input[type="color"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 34px;
+      height: 30px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 2px;
+    }
+
+    input[type="color"]::-webkit-color-swatch {
+      border: none;
+      border-radius: 4px;
+    }
+
+    .swatches-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .swatch-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: transform 0.12s;
+    }
+
+    .swatch-btn:hover {
+      transform: scale(1.12);
+    }
+
+    /* Chọn hướng (6 hướng) */
+    .direction-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+
+    .dir-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      padding: 8px 6px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .dir-btn:hover:not(:disabled) {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .dir-btn.is-active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .dir-btn:disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+    }
+
+    .dir-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Lưới chọn 13 hiệu ứng kèm Preview động 96x36 */
+    .effects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 10px;
+    }
+
+    .effect-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text-primary);
+      transition: background-color 0.15s, border-color 0.15s, transform 0.12s;
+      position: relative;
+    }
+
+    .effect-card:hover {
+      background: var(--bg-card-hover);
+      border-color: #36415e;
+    }
+
+    .effect-card.is-selected {
+      background: var(--bg-card-active);
+      border-color: var(--border-active);
+    }
+
+    .effect-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .effect-name {
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .effect-tag {
+      font-size: 0.66rem;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+    }
+
+    .effect-card.is-selected .effect-tag {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    .preview-frame {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #090c14;
+      border: 1px solid #1b2234;
+      border-radius: 6px;
+      padding: 5px 0;
+    }
+
+    .preview-canvas {
+      width: 96px;
+      height: 36px;
+      display: block;
+      image-rendering: auto;
+    }
+
+    .effect-desc {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    .btn-action {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: background-color 0.15s, border-color 0.15s;
+    }
+
+    .btn-action:hover:not(:disabled) {
+      background: var(--bg-card-hover);
+      border-color: var(--accent);
+    }
+
+    .btn-action:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
+    .btn-action.btn-primary {
+      background: rgba(0, 229, 255, 0.14);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-action.btn-primary:hover:not(:disabled) {
+      background: rgba(0, 229, 255, 0.24);
+    }
+
+    .btn-action.btn-danger {
+      background: rgba(255, 82, 82, 0.12);
+      border-color: rgba(255, 82, 82, 0.45);
+      color: var(--danger);
+    }
+
+    .svg-icon {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* =========================================================================
+     * KHỐI CSS WEBHID & DEBUG PANEL (MỤC 6)
+     * ========================================================================= */
+    .webhid-section {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .webhid-section {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hid-banner {
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.78rem;
+      border: 1px solid var(--border-subtle);
+      background: #0e131f;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hid-banner.is-connected {
+      border-color: rgba(0, 230, 118, 0.45);
+      background: rgba(0, 230, 118, 0.08);
+      color: var(--success);
+    }
+
+    .hid-banner.is-unsupported {
+      border-color: rgba(255, 171, 0, 0.45);
+      background: rgba(255, 171, 0, 0.08);
+      color: var(--warning);
+    }
+
+    .hid-banner.is-error {
+      border-color: rgba(255, 82, 82, 0.5);
+      background: rgba(255, 82, 82, 0.1);
+      color: var(--danger);
+    }
+
+    .hid-btn-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    @media (max-width: 520px) {
+      .hid-btn-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mode-switch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mode-pill-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: border-color 0.15s, background-color 0.15s;
+    }
+
+    .mode-pill-card:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .mode-pill-card.is-active {
+      background: var(--bg-card-active);
+      border-color: var(--accent);
+    }
+
+    .mode-pill-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mode-pill-sub {
+      font-size: 0.71rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    .debug-controls-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr 1fr;
+      gap: 8px;
+    }
+
+    @media (max-width: 560px) {
+      .debug-controls-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-block label {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .select-input, .num-input {
+      background: #0d111a;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      padding: 6px 8px;
+      font-size: 0.76rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      outline: none;
+    }
+
+    .select-input:focus, .num-input:focus {
+      border-color: var(--accent);
+    }
+
+    .collections-table-wrap {
+      max-height: 135px;
+      overflow-y: auto;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      background: #0b0e17;
+    }
+
+    .collections-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.72rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .collections-table th,
+    .collections-table td {
+      padding: 5px 8px;
+      text-align: left;
+      border-bottom: 1px solid #1a2133;
+    }
+
+    .collections-table th {
+      background: #121726;
+      color: var(--text-secondary);
+      position: sticky;
+      top: 0;
+    }
+
+    .collections-table tr.is-chosen {
+      background: rgba(0, 229, 255, 0.1);
+      color: var(--accent);
+    }
+
+    .hex-log-box {
+      height: 255px;
+      overflow-y: auto;
+      background: #080a10;
+      border: 1px solid #1d2436;
+      border-radius: var(--radius-md);
+      padding: 8px 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.72rem;
+      line-height: 1.48;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .log-entry {
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: #b8c4dc;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
+      padding-bottom: 2px;
+    }
+
+    .log-entry.log-tx { color: #00e5ff; }
+    .log-entry.log-dry { color: #ffab00; }
+    .log-entry.log-err { color: #ff5252; font-weight: 600; }
+    .log-entry.log-sys { color: #00e676; }
+
+    .checkbox-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-inline input {
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- HEADER -->
+    <header class="top-bar">
+      <div class="brand-group">
+        <div class="brand-logo" aria-hidden="true">
+          <svg class="svg-icon" style="width:20px;height:20px;stroke:#090b10;stroke-width:2.4" viewBox="0 0 24 24">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">
+            AETHER HE
+            <span class="badge-model">Aula Win60 HE · WebHID Lighting</span>
+          </div>
+          <div class="brand-subtitle">Mô phỏng 61 phím ANSI &amp; Điều khiển đèn RGB thật qua WebHID (Cmd 7 Firmware / Cmd 9 Streaming 30 FPS)</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <!-- Bộ đếm FPS -->
+        <div id="fpsBadge" class="fps-badge" aria-live="polite">
+          <span id="fpsValue">30 FPS</span>
+          <span id="fpsState" class="fps-state">Chuẩn 30Hz</span>
+        </div>
+
+        <!-- Bật/tắt hiển thị FPS -->
+        <button id="toggleFpsBtn" type="button" class="pill-toggle is-active" title="Bật hoặc tắt bộ đếm FPS ở góc">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          <span>Hiện FPS</span>
+        </button>
+
+        <!-- Công tắc Chế độ tiết kiệm (20 FPS + tắt preview động) -->
+        <button id="ecoModeBtn" type="button" class="pill-toggle" title="Chế độ tiết kiệm: Hạ xuống 20 FPS và tắt preview động">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          <span id="ecoModeLabel">Tiết kiệm (20 FPS)</span>
+        </button>
+
+        <!-- Công tắc Nguồn Đèn LED -->
+        <button id="powerBtn" type="button" class="pill-toggle power-btn is-active" title="Bật hoặc tắt toàn bộ đèn LED bàn phím">
+          <span class="dot-indicator"></span>
+          <span id="powerLabel">Đèn: BẬT</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- SÂN KHẤU BÀN PHÍM 60% (CANVAS 900x300) -->
+    <section class="keyboard-stage" aria-label="Mô phỏng bàn phím 60% ANSI Win60">
+      <div class="stage-header">
+        <div class="stage-hint">
+          <span>Gõ phím thật trên máy tính hoặc <strong>nhấp/kéo chuột trực tiếp trên phím</strong> để kích hoạt</span>
+          <span class="kbd-tag">reactive</span>
+          <span class="kbd-tag">cross</span>
+          <span class="kbd-tag">ripple</span>
+        </div>
+        <div id="activeKeyIndicator">Phím vừa nhấn: <strong>Chưa có</strong></div>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas id="mainKeyboardCanvas" width="900" height="300"></canvas>
+      </div>
+    </section>
+
+    <!-- KHU VỰC ĐIỀU KHIỂN & LƯỚI HIỆU ỨNG -->
+    <main class="workspace-grid">
+      <!-- CỘT TRÁI: BẢNG ĐIỀU KHIỂN THÔNG SỐ -->
+      <aside class="panel-box" aria-label="Bảng điều khiển ánh sáng">
+        <div class="panel-title">
+          <span>Thông số Lighting</span>
+          <span id="currentEffectBadge" style="color:var(--accent);font-size:0.78rem;">WAVE</span>
+        </div>
+
+        <!-- Độ sáng (1 - 4) -->
+        <div class="control-group">
+          <div class="control-label-row">
+            <label for="brightnessSlider">Độ sáng (Brightness)</label>
+            <span id="brightnessVal" class="control-val">Mức 4 / 4</span>
+          </div>
+          <div class="step-slider-row">
+            <input id="brightnessSlider" type="range" min="1" max="4" step="1" value="4" />
+          </div>
+          <div class="step-ticks">
+            <span>1 (25%)</span>
+            <span>2 (50%)</span>
+            <span>3 (75%)</span>
+            <span>4 (100%)</span>
+          </div>
+        </div>
+
+        <!-- Tốc độ (1 - 4) -->
+        <div class="control-group">
+          <div class="control-label-row">
+            <label for="speedSlider">Tốc độ (Speed)</label>
+            <span id="speedVal" class="control-val">Mức 3 / 4</span>
+          </div>
+          <div class="step-slider-row">
+            <input id="speedSlider" type="range" min="1" max="4" step="1" value="3" />
+          </div>
+          <div class="step-ticks">
+            <span>1 (Chậm)</span>
+            <span>2 (Vừa)</span>
+            <span>3 (Nhanh)</span>
+            <span>4 (Cực nhanh)</span>
+          </div>
+        </div>
+
+        <!-- Màu chính (FG) & Màu nền (BG) + FullColor flag -->
+        <div class="control-group">
+          <div class="control-label-row">
+            <span>Màu chính (FG) &amp; Màu nền (BG)</span>
+            <label class="checkbox-inline" title="Byte [15] fullColor trong gói Cmd 7">
+              <input id="fullColorCheckbox" type="checkbox" checked />
+              <span>Đa sắc (fullColor)</span>
+            </label>
+          </div>
+          <div class="color-pickers-grid">
+            <div class="color-box">
+              <div class="color-box-info">
+                <span class="color-box-title">Màu chính (FG)</span>
+                <span id="fgHexText" class="color-hex">#00E5FF</span>
+              </div>
+              <input id="fgColorInput" type="color" value="#00e5ff" aria-label="Chọn màu chính FG" />
+            </div>
+
+            <div class="color-box">
+              <div class="color-box-info">
+                <span class="color-box-title">Màu nền (BG)</span>
+                <span id="bgHexText" class="color-hex">#101828</span>
+              </div>
+              <input id="bgColorInput" type="color" value="#101828" aria-label="Chọn màu nền BG" />
+            </div>
+          </div>
+
+          <!-- Preset màu nhanh cho FG -->
+          <div class="swatches-row" id="fgSwatches" aria-label="Màu chính gợi ý nhanh">
+            <button type="button" class="swatch-btn" data-fg="#00e5ff" style="background:#00e5ff" title="Aether Cyan"></button>
+            <button type="button" class="swatch-btn" data-fg="#7c4dff" style="background:#7c4dff" title="Neon Purple"></button>
+            <button type="button" class="swatch-btn" data-fg="#ff2a85" style="background:#ff2a85" title="Cyber Magenta"></button>
+            <button type="button" class="swatch-btn" data-fg="#00e676" style="background:#00e676" title="Matrix Green"></button>
+            <button type="button" class="swatch-btn" data-fg="#ffab00" style="background:#ffab00" title="Amber Gold"></button>
+            <button type="button" class="swatch-btn" data-fg="#ff3d00" style="background:#ff3d00" title="Lava Red"></button>
+            <button type="button" class="swatch-btn" data-fg="#ffffff" style="background:#ffffff" title="Pure White"></button>
+          </div>
+        </div>
+
+        <!-- Hướng hiệu ứng (Direction) -->
+        <div class="control-group">
+          <div class="control-label-row">
+            <span>Hướng chuyển động (Direction)</span>
+          </div>
+          <div class="direction-grid" id="directionGrid">
+            <button type="button" class="dir-btn is-active" data-dir="right">
+              <svg class="svg-icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <span>Right</span>
+            </button>
+            <button type="button" class="dir-btn" data-dir="left">
+              <svg class="svg-icon" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              <span>Left</span>
+            </button>
+            <button type="button" class="dir-btn" data-dir="up">
+              <svg class="svg-icon" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+              <span>Up</span>
+            </button>
+            <button type="button" class="dir-btn" data-dir="down">
+              <svg class="svg-icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+              <span>Down</span>
+            </button>
+            <button type="button" class="dir-btn" data-dir="spread">
+              <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              <span>Spread</span>
+            </button>
+            <button type="button" class="dir-btn" data-dir="gather">
+              <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              <span>Gather</span>
+            </button>
+          </div>
+          <div id="dirSupportNote" class="dir-note">Hiệu ứng hiện tại có sử dụng tham số hướng.</div>
+        </div>
+
+        <!-- Nút giả lập nhấn phím cho người dùng mobile / test nhanh -->
+        <button id="simulateKeyBtn" type="button" class="btn-action">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+            <line x1="6" y1="8" x2="6.01" y2="8"></line>
+            <line x1="10" y1="8" x2="10.01" y2="8"></line>
+            <line x1="14" y1="8" x2="14.01" y2="8"></line>
+            <line x1="18" y1="8" x2="18.01" y2="8"></line>
+            <line x1="8" y1="16" x2="16" y2="16"></line>
+          </svg>
+          <span>Kích hoạt thử xung gõ phím (Test Pulse)</span>
+        </button>
+      </aside>
+
+      <!-- CỘT PHẢI: LƯỚI 13 HIỆU ỨNG KÈM PREVIEW GIF CANVAS NHỎ -->
+      <section class="panel-box" aria-label="Danh sách hiệu ứng ánh sáng">
+        <div class="panel-title">
+          <span>Chế độ Hiệu ứng (13 Aether HE Modes)</span>
+          <span id="previewStatusNote" style="font-size:0.74rem;color:var(--text-muted);font-weight:500;">Preview: 15 FPS · Tự dừng khi cuộn khuất</span>
+        </div>
+
+        <div id="effectsGrid" class="effects-grid"></div>
+      </section>
+    </main>
+
+    <!-- KHU VỰC MỤC 6: KẾT NỐI BÀN PHÍM THẬT AULA WIN60 HE QUA WEBHID & GỠ LỖI -->
+    <section class="webhid-section" aria-label="Kết nối bàn phím thật Aula Win60 HE qua WebHID">
+      <!-- BẢNG TRÁI: ĐIỀU KHIỂN KẾT NỐI WEBHID & COLLECTIONS DEBUG -->
+      <div class="panel-box">
+        <div class="panel-title">
+          <span>Kết nối phần cứng WebHID (Aula Win60 HE · 0x2E3C:0xC365)</span>
+          <span class="badge-model">CHỈ GHI LED (CMD 7 &amp; CMD 9)</span>
+        </div>
+
+        <!-- Thông báo trạng thái trình duyệt / thiết bị -->
+        <div id="hidStatusBanner" class="hid-banner">
+          <span id="hidStatusText">Chưa kết nối bàn phím. Chế độ mô phỏng vẫn hoạt động bình thường.</span>
+          <span id="hidDeviceBadge" class="kbd-tag">VID: 0x2E3C · PID: 0xC365</span>
+        </div>
+
+        <!-- 3 Nút thao tác chính: Kết nối / Tắt kết nối / Khôi phục đèn -->
+        <div class="hid-btn-row">
+          <button id="connectHidBtn" type="button" class="btn-action btn-primary">
+            <svg class="svg-icon" viewBox="0 0 24 24">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            <span>Kết nối bàn phím</span>
+          </button>
+
+          <button id="disconnectHidBtn" type="button" class="btn-action btn-danger" disabled>
+            <svg class="svg-icon" viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Tắt kết nối</span>
+          </button>
+
+          <button id="restoreLightBtn" type="button" class="btn-action">
+            <svg class="svg-icon" viewBox="0 0 24 24">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            <span>Khôi phục đèn</span>
+          </button>
+        </div>
+
+        <!-- Chọn 2 chế độ điều khiển: Firmware (Cmd 7) vs Streaming (Cmd 9) -->
+        <div class="control-group">
+          <div class="control-label-row">
+            <span>Chế độ truyền lệnh xuống bàn phím</span>
+            <button id="dryRunBtn" type="button" class="pill-toggle warn-btn is-active" style="padding:4px 10px;font-size:0.74rem;" title="Khi bật Chế độ thử (Dry Run), trang web không gửi lệnh xuống USB mà chỉ in gói Hex ra khung Log">
+              <span class="dot-indicator"></span>
+              <span id="dryRunLabel">Chế độ thử (Dry Run): BẬT</span>
+            </button>
+          </div>
+
+          <div class="mode-switch-grid">
+            <button id="modeFirmwareBtn" type="button" class="mode-pill-card is-active">
+              <div class="mode-pill-title">
+                <span>1. Chế độ Firmware (Cmd 7)</span>
+                <span class="kbd-tag">Mặc định</span>
+              </div>
+              <div class="mode-pill-sub">Gửi 1 gói cmd 7 duy nhất khi đổi thông số. Bàn phím tự chạy hiệu ứng, không tốn CPU, không cần giữ tab mở.</div>
+            </button>
+
+            <button id="modeStreamingBtn" type="button" class="mode-pill-card">
+              <div class="mode-pill-title">
+                <span>2. Chế độ Streaming (Cmd 9)</span>
+                <span class="kbd-tag">Per-key 30Hz</span>
+              </div>
+              <div class="mode-pill-sub">Truyền bảng 396-byte (các trang 54-byte) tuần tự từ Canvas xuống phím. Tự bỏ qua khi trùng màu và tự dừng khi ẩn tab.</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Khung Debug HID Collections & Chọn thủ công Collection / Report ID / Checksum -->
+        <div class="control-group">
+          <div class="control-label-row">
+            <span>Debug HID Collections &amp; Cấu hình Gói</span>
+            <span style="font-size:0.71rem;color:var(--text-muted);">Tự động ưu tiên Vendor UsagePage (0xFF00+) có Output Report</span>
+          </div>
+
+          <div class="debug-controls-grid">
+            <div class="field-block">
+              <label for="collectionSelect">HID Collection đang chọn</label>
+              <select id="collectionSelect" class="select-input">
+                <option value="-1">Chưa có thiết bị (Mô phỏng / Dry Run)</option>
+              </select>
+            </div>
+
+            <div class="field-block">
+              <label for="reportIdInput">Report ID (Hex/Số)</label>
+              <input id="reportIdInput" type="number" min="0" max="255" value="0" class="num-input" title="Đổi Report ID thủ công nếu cần" />
+            </div>
+
+            <div class="field-block">
+              <label for="checksumSelect">Thuật toán Checksum (Tùy chỉnh)</label>
+              <select id="checksumSelect" class="select-input">
+                <option value="sum7_inv">Bù 255 tổng 7 byte đầu (Byte [7]/[63])</option>
+                <option value="sum_last">Tổng modulo 256 ở byte cuối [63]</option>
+                <option value="xor_last">XOR toàn gói ở byte cuối [63]</option>
+                <option value="none">Không dùng checksum (0x00)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Bảng liệt kê device.collections -->
+          <div class="collections-table-wrap">
+            <table class="collections-table" aria-label="Danh sách HID Collections">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>usagePage</th>
+                  <th>usage</th>
+                  <th>Output Reports (ID : Kích thước)</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody id="collectionsTableBody">
+                <tr>
+                  <td colspan="5" style="color:var(--text-muted);text-align:center;padding:12px;">
+                    Bấm "Kết nối bàn phím" để liệt kê toàn bộ HID Collections của Aula Win60 HE.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- BẢNG PHẢI: KHUNG HEX LOG (GIỚI HẠN 200 DÒNG, KHÔNG RENDER LẠI TOÀN BỘ) -->
+      <div class="panel-box">
+        <div class="panel-title">
+          <span>Nhật ký Gói Hex (Hex Packet Inspector · Tối đa 200 dòng)</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <label class="checkbox-inline" title="Chỉ ghi 1 dòng tóm tắt cho mỗi khung hình Streaming Cmd 9 để tránh trôi log quá nhanh">
+              <input id="compactStreamLogCheckbox" type="checkbox" checked />
+              <span>Gọn log Cmd 9</span>
+            </label>
+            <button id="sendTestCmd7Btn" type="button" class="pill-toggle" style="padding:3px 8px;font-size:0.72rem;">Gửi lại Cmd 7</button>
+            <button id="clearLogBtn" type="button" class="pill-toggle" style="padding:3px 8px;font-size:0.72rem;">Xóa Log</button>
+          </div>
+        </div>
+
+        <div id="hexLogContainer" class="hex-log-box" aria-live="off"></div>
+
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:0.73rem;color:var(--text-secondary);">
+          <span id="streamStatsText">Đã gửi: <strong>0</strong> gói · Bỏ qua (trùng màu): <strong>0</strong> frame</span>
+          <span>Chỉ ghi lệnh LED (Cmd 7 &amp; Cmd 9) · Không đụng chạm Actuation/Remap/SOCD</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    /* =========================================================================
+     * KHỐI 1: CONFIG & HẰNG SỐ GIAO THỨC WEBHID + HIỆU NĂNG
+     * Bạn có thể chỉnh trực tiếp TARGET_FPS và các hằng số giao thức HID ở đây.
+     * ========================================================================= */
+    const TARGET_FPS = 30;               // Mục tiêu FPS chuẩn (33.33ms / frame) cho cả Canvas và Streaming Cmd 9
+    const ECO_FPS = 20;                  // FPS khi bật Chế độ tiết kiệm (50.0ms / frame)
+    const MAX_DPR = 1.5;                 // Giới hạn cứng devicePixelRatio tối đa 1.5
+    const LOGICAL_WIDTH = 900;           // Chiều rộng logic cố định của canvas bàn phím chính
+    const LOGICAL_HEIGHT = 300;          // Chiều cao logic cố định của canvas bàn phím chính
+    const PREVIEW_WIDTH = 96;            // Chiều rộng canvas preview nhỏ ("gif")
+    const PREVIEW_HEIGHT = 36;           // Chiều cao canvas preview nhỏ ("gif")
+    const PREVIEW_COLS = 6;              // Số cột LED trong preview nhỏ (6x3 = 18 LED)
+    const PREVIEW_ROWS = 3;
+    const PREVIEW_LED_COUNT = PREVIEW_COLS * PREVIEW_ROWS;
+
+    // -------------------------------------------------------------------------
+    // HẰNG SỐ GIAO THỨC WEBHID AULA WIN60 HE (Theo thông số xác minh từ Aether-HE)
+    // [TÙY CHỈNH THEO PROTOCOL.PY]: Nếu bạn có nội dung file protocol.py của repo, hãy cập nhật các hằng số
+    // HEADER / REPORT_ID / CHECKSUM ngay bên dưới cho khớp tuyệt đối từng byte.
+    // -------------------------------------------------------------------------
+    const HID_VENDOR_ID = 0x2E3C;        // Vendor ID của Aula Win60 HE
+    const HID_PRODUCT_ID = 0xC365;       // Product ID của Aula Win60 HE
+    const HID_DEFAULT_REPORT_ID = 0x00;  // [TÙY CHỈNH THEO PROTOCOL.PY]: Report ID mặc định khi gọi device.sendReport(reportId, data)
+    const HID_PACKET_SIZE = 64;          // Độ dài gói chuẩn USB HID (64 bytes)
+    const HID_VENDOR_USAGE_PAGE_MIN = 0xFF00; // UsagePage vendor-defined (0xFF00 .. 0xFFFF)
+
+    // Cấu trúc byte cho lệnh Lighting Firmware (Cmd 7) — Đã xác minh phần cứng:
+    // [5]=mode, [6]=bri (1-4), [7]=speed (1-4), [8:10]=fg RGB, [11:13]=bg RGB, [14]=dir, [15]=fullColor, [16]=power
+    const HID_CMD_LIGHTING_FW = 0x07;    // Mã lệnh Lighting Firmware (cmd 7)
+    const HID_HEADER_BYTE_0 = 0x04;      // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [0] định danh gói lệnh host->device (theo chuẩn Sonix/Aula)
+    const HID_CMD_BYTE_INDEX = 1;        // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [1] chứa mã lệnh (0x07 = Lighting FW, 0x09 = Per-key RGB)
+    const HID_SUBCMD_BYTE_2 = 0x00;      // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [2] sub-command / page index
+    const HID_SUBCMD_BYTE_3 = 0x00;      // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [3] payload length / flag
+    const HID_SUBCMD_BYTE_4 = 0x00;      // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [4] reserved header byte
+
+    // Vị trí byte chính xác của Cmd 7 (đúng theo tài liệu kỹ thuật Aether-HE):
+    const CMD7_OFFSET_MODE = 5;          // [5] = mode (0..16)
+    const CMD7_OFFSET_BRI = 6;           // [6] = độ sáng (1..4)
+    const CMD7_OFFSET_SPEED = 7;         // [7] = tốc độ (1..4)
+    const CMD7_OFFSET_FG_R = 8;          // [8:10] = màu fg RGB
+    const CMD7_OFFSET_FG_G = 9;
+    const CMD7_OFFSET_FG_B = 10;
+    const CMD7_OFFSET_BG_R = 11;         // [11:13] = màu bg RGB
+    const CMD7_OFFSET_BG_G = 12;
+    const CMD7_OFFSET_BG_B = 13;
+    const CMD7_OFFSET_DIR = 14;          // [14] = hướng (0..5)
+    const CMD7_OFFSET_FULLCOLOR = 15;    // [15] = fullColor (0 hoặc 1)
+    const CMD7_OFFSET_POWER = 16;        // [16] = bật/tắt nguồn đèn (1 = bật, 0 = tắt)
+
+    // Cấu trúc byte cho lệnh Per-key RGB Streaming (Cmd 9):
+    // Bảng 396 byte (132 khe LED * 3 byte RGB), gửi chia thành các trang 54 byte (8 trang)
+    const HID_CMD_PERKEY_RGB = 0x09;     // Mã lệnh Per-key RGB (cmd 9)
+    const PERKEY_TABLE_BYTES = 396;      // Tổng kích thước bảng màu Per-key RGB (396 byte = 6 hàng x 22 cột x 3 byte)
+    const PERKEY_PAGE_BYTES = 54;        // Kích thước mỗi trang RGB gửi trong 1 gói Cmd 9 (54 byte = 18 LED x 3 byte)
+    const PERKEY_TOTAL_PAGES = 8;        // Math.ceil(396 / 54) = 8 trang (7 trang 54B + trang cuối 18B được đệm đủ 54B)
+    const CMD9_OFFSET_PAGE_INDEX = 2;    // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [2] lưu chỉ số trang (0..7) hoặc word offset
+    const CMD9_OFFSET_PAGE_LEN = 3;      // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [3] lưu số byte hiệu lực trong trang (54 hoặc 18)
+    const CMD9_OFFSET_PAYLOAD_START = 8; // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [8..61] chứa 54 byte RGB của trang (8 + 54 = 62 <= 64 byte)
+    const HID_CHECKSUM_BYTE_INDEX = 63;  // [TÙY CHỈNH THEO PROTOCOL.PY]: Vị trí byte checksum cuối gói (byte [63])
+
+    // Bảng mã Mode của Cmd 7 (đã xác minh trên phần cứng theo repo Aether-HE):
+    // static 0, breath 1, wave 2, neon 3, radar 4, reactive 6, cross 7, ripple 8,
+    // twinkle 9, custom 10, fireworks 11, speedres 12, autorip 14, striation 15, aurora 16
+    const FW_MODE_BYTES = {
+      static: 0,
+      breath: 1,
+      wave: 2,
+      neon: 3,
+      radar: 4,
+      reactive: 6,
+      cross: 7,
+      ripple: 8,
+      twinkle: 9,
+      custom: 10,
+      fireworks: 11,
+      speedres: 12,
+      autorip: 14,
+      striation: 15,
+      aurora: 16
+    };
+
+    // Bảng mã Hướng (Direction) của Cmd 7: right 0, left 1, up 2, down 3, spread 4, gather 5
+    const DIR_TO_CODE = {
+      right: 0,
+      left: 1,
+      up: 2,
+      down: 3,
+      spread: 4,
+      gather: 5
+    };
+
+    // BẢNG ÁNH XẠ CHỈ SỐ PHÍM TRÊN HÌNH VẼ (0..60) -> CHỈ SỐ LED PHẦN CỨNG TRONG BẢNG 396-BYTE (0..131)
+    // Trong Aether-HE, ma trận phím dùng stride 22 cột mỗi hàng: ledIndex = row * 22 + col (tối đa 6 * 22 = 132 khe = 396 byte).
+    // Bạn có thể sửa trực tiếp mảng 61 số nguyên dưới đây nếu vị trí LED thực tế lệch cột.
+    const KEYMAP_HARDWARE_LED_INDEX = new Uint8Array([
+      // Hàng 0 (14 phím: Esc, 1..0, -, =, Bksp) -> Hàng ma trận 0 (cột 0..13)
+       0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13,
+      // Hàng 1 (14 phím: Tab, Q..P, [, ], \) -> Hàng ma trận 1 (offset 22 + cột 0..13)
+      22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+      // Hàng 2 (13 phím: Caps, A..L, ;, ', Enter) -> Hàng ma trận 2 (offset 44 + cột 0..12)
+      44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56,
+      // Hàng 3 (12 phím: LShift, Z..M, ,, ., /, RShift) -> Hàng ma trận 3 (offset 66 + cột 0..11)
+      66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77,
+      // Hàng 4 (8 phím: LCtrl, Win, LAlt, Space, RAlt, Fn, Menu, RCtrl) -> Hàng ma trận 4 (offset 88)
+      88, 89, 90, 93, 97, 98, 99, 100
+    ]);
+
+    // Bảng quy đổi mức Độ sáng (1-4) và Tốc độ (1-4)
+    const BRIGHTNESS_SCALE = new Float32Array([0, 0.28, 0.52, 0.76, 1.0]);
+    const SPEED_SCALE = new Float32Array([0, 0.55, 0.9, 1.35, 1.95]);
+
+    // TỐI ƯU BỘ NHỚ: Tạo sẵn bảng tra cứu 4096 chuỗi màu RGB (12-bit: 16x16x16)
+    const RGB_STRING_LUT = new Array(4096);
+    for (let r4 = 0; r4 < 16; r4++) {
+      const r8 = r4 * 17;
+      for (let g4 = 0; g4 < 16; g4++) {
+        const g8 = g4 * 17;
+        for (let b4 = 0; b4 < 16; b4++) {
+          const b8 = b4 * 17;
+          RGB_STRING_LUT[(r4 << 8) | (g4 << 4) | b4] = 'rgb(' + r8 + ',' + g8 + ',' + b8 + ')';
+        }
+      }
+    }
+
+    // Bảng tra cứu 256 chuỗi Hex 2 ký tự ('00'..'FF') để in log gói HID không cần .toString(16).padStart()
+    const BYTE_HEX_LUT = new Array(256);
+    for (let i = 0; i < 256; i++) {
+      BYTE_HEX_LUT[i] = (i < 16 ? '0' : '') + i.toString(16).toUpperCase();
+    }
+
+    // Mảng trả về [r, g, b] dùng chung duy nhất cho mọi hàm hiệu ứng thuần (Zero-allocation)
+    const SHARED_RGB_OUT = new Uint8ClampedArray(3);
+
+    /* =========================================================================
+     * KHỐI 2: LAYOUT BÀN PHÍM ANSI WIN60 (61 PHÍM) & LƯỚI PREVIEW (18 LED)
+     * ========================================================================= */
+    const RAW_ROWS = [
+      [
+        ['Esc', 'Escape', 1], ['1', 'Digit1', 1], ['2', 'Digit2', 1], ['3', 'Digit3', 1],
+        ['4', 'Digit4', 1], ['5', 'Digit5', 1], ['6', 'Digit6', 1], ['7', 'Digit7', 1],
+        ['8', 'Digit8', 1], ['9', 'Digit9', 1], ['0', 'Digit0', 1], ['-', 'Minus', 1],
+        ['=', 'Equal', 1], ['Bksp', 'Backspace', 2]
+      ],
+      [
+        ['Tab', 'Tab', 1.5], ['Q', 'KeyQ', 1], ['W', 'KeyW', 1], ['E', 'KeyE', 1],
+        ['R', 'KeyR', 1], ['T', 'KeyT', 1], ['Y', 'KeyY', 1], ['U', 'KeyU', 1],
+        ['I', 'KeyI', 1], ['O', 'KeyO', 1], ['P', 'KeyP', 1], ['[', 'BracketLeft', 1],
+        [']', 'BracketRight', 1], ['\\', 'Backslash', 1.5]
+      ],
+      [
+        ['Caps', 'CapsLock', 1.75], ['A', 'KeyA', 1], ['S', 'KeyS', 1], ['D', 'KeyD', 1],
+        ['F', 'KeyF', 1], ['G', 'KeyG', 1], ['H', 'KeyH', 1], ['J', 'KeyJ', 1],
+        ['K', 'KeyK', 1], ['L', 'KeyL', 1], [';', 'Semicolon', 1], ["'", 'Quote', 1],
+        ['Enter', 'Enter', 2.25]
+      ],
+      [
+        ['Shift', 'ShiftLeft', 2.25], ['Z', 'KeyZ', 1], ['X', 'KeyX', 1], ['C', 'KeyC', 1],
+        ['V', 'KeyV', 1], ['B', 'KeyB', 1], ['N', 'KeyN', 1], ['M', 'KeyM', 1],
+        [',', 'Comma', 1], ['.', 'Period', 1], ['/', 'Slash', 1], ['Shift', 'ShiftRight', 2.75]
+      ],
+      [
+        ['Ctrl', 'ControlLeft', 1.25], ['Win', 'MetaLeft', 1.25], ['Alt', 'AltLeft', 1.25],
+        ['Space', 'Space', 6.25], ['Alt', 'AltRight', 1.25], ['Fn', 'ContextMenu', 1.25],
+        ['Menu', 'FnKey', 1.25], ['Ctrl', 'ControlRight', 1.25]
+      ]
+    ];
+
+    const KEY_COUNT = 61;
+    const KEY_LABELS = new Array(KEY_COUNT);
+    const KEY_CODES = new Array(KEY_COUNT);
+    const CODE_TO_INDEX = Object.create(null);
+
+    const KEY_PX_X = new Float32Array(KEY_COUNT);
+    const KEY_PX_Y = new Float32Array(KEY_COUNT);
+    const KEY_PX_W = new Float32Array(KEY_COUNT);
+    const KEY_PX_H = new Float32Array(KEY_COUNT);
+    const KEY_CENTER_X = new Float32Array(KEY_COUNT);
+    const KEY_CENTER_Y = new Float32Array(KEY_COUNT);
+    const KEY_NORM_X = new Float32Array(KEY_COUNT);
+    const KEY_NORM_Y = new Float32Array(KEY_COUNT);
+    const KEY_HASH = new Float32Array(KEY_COUNT);
+
+    const BOARD_PAD_X = 45;
+    const BOARD_PAD_Y = 25;
+    const UNIT_W = 54;
+    const UNIT_H = 50;
+    const KEY_GAP = 4;
+
+    {
+      let idx = 0;
+      for (let r = 0; r < RAW_ROWS.length; r++) {
+        const row = RAW_ROWS[r];
+        let uOffset = 0;
+        for (let c = 0; c < row.length; c++) {
+          const item = row[c];
+          const label = item[0];
+          const code = item[1];
+          const uWidth = item[2];
+
+          const px = BOARD_PAD_X + uOffset * UNIT_W + KEY_GAP * 0.5;
+          const py = BOARD_PAD_Y + r * UNIT_H + KEY_GAP * 0.5;
+          const pw = uWidth * UNIT_W - KEY_GAP;
+          const ph = UNIT_H - KEY_GAP;
+
+          KEY_LABELS[idx] = label;
+          KEY_CODES[idx] = code;
+          CODE_TO_INDEX[code] = idx;
+
+          KEY_PX_X[idx] = px;
+          KEY_PX_Y[idx] = py;
+          KEY_PX_W[idx] = pw;
+          KEY_PX_H[idx] = ph;
+          KEY_CENTER_X[idx] = px + pw * 0.5;
+          KEY_CENTER_Y[idx] = py + ph * 0.5;
+
+          KEY_NORM_X[idx] = (uOffset + uWidth * 0.5) / 15.0;
+          KEY_NORM_Y[idx] = r / 4.0;
+          KEY_HASH[idx] = ((Math.sin((idx + 1) * 12.9898) * 43758.5453) % 1 + 1) % 1;
+
+          uOffset += uWidth;
+          idx++;
+        }
+      }
+    }
+
+    const MAIN_LED_BUFFER = new Uint8ClampedArray(KEY_COUNT * 3);
+
+    const PREV_NORM_X = new Float32Array(PREVIEW_LED_COUNT);
+    const PREV_NORM_Y = new Float32Array(PREVIEW_LED_COUNT);
+    const PREV_PX_X = new Float32Array(PREVIEW_LED_COUNT);
+    const PREV_PX_Y = new Float32Array(PREVIEW_LED_COUNT);
+    const PREV_LED_BUFFER = new Uint8ClampedArray(PREVIEW_LED_COUNT * 3);
+
+    for (let r = 0; r < PREVIEW_ROWS; r++) {
+      for (let c = 0; c < PREVIEW_COLS; c++) {
+        const i = r * PREVIEW_COLS + c;
+        PREV_NORM_X[i] = c / (PREVIEW_COLS - 1);
+        PREV_NORM_Y[i] = r / (PREVIEW_ROWS - 1);
+        PREV_PX_X[i] = 6 + c * 14.5;
+        PREV_PX_Y[i] = 5 + r * 9.5;
+      }
+    }
+
+    const MAX_KEY_EVENTS = 16;
+    const EVT_X = new Float32Array(MAX_KEY_EVENTS);
+    const EVT_Y = new Float32Array(MAX_KEY_EVENTS);
+    const EVT_TIME = new Float32Array(MAX_KEY_EVENTS);
+    const EVT_KEY_INDEX = new Int16Array(MAX_KEY_EVENTS);
+    let evtWritePtr = 0;
+
+    const KEY_IS_DOWN = new Uint8Array(KEY_COUNT);
+    const KEY_LAST_HIT = new Float32Array(KEY_COUNT);
+    KEY_LAST_HIT.fill(-999);
+    EVT_TIME.fill(-999);
+
+    function recordKeyHit(keyIndex, nowSec) {
+      if (keyIndex < 0 || keyIndex >= KEY_COUNT) return;
+      KEY_LAST_HIT[keyIndex] = nowSec;
+      EVT_X[evtWritePtr] = KEY_NORM_X[keyIndex];
+      EVT_Y[evtWritePtr] = KEY_NORM_Y[keyIndex];
+      EVT_TIME[evtWritePtr] = nowSec;
+      EVT_KEY_INDEX[evtWritePtr] = keyIndex;
+      evtWritePtr = (evtWritePtr + 1) & (MAX_KEY_EVENTS - 1);
+    }
+
+    /* =========================================================================
+     * KHỐI 3: 13 HÀM HIỆU ỨNG THUẦN (PURE FUNCTIONS, ZERO ALLOCATION)
+     * ========================================================================= */
+    function writeHsvToShared(h, s, v, briScale) {
+      h = (h % 1 + 1) % 1;
+      const i = (h * 6) | 0;
+      const f = h * 6 - i;
+      const p = v * (1 - s);
+      const q = v * (1 - f * s);
+      const t = v * (1 - (1 - f) * s);
+      let r = 0, g = 0, b = 0;
+      switch (i % 6) {
+        case 0: r = v; g = t; b = p; break;
+        case 1: r = q; g = v; b = p; break;
+        case 2: r = p; g = v; b = t; break;
+        case 3: r = p; g = q; b = v; break;
+        case 4: r = t; g = p; b = v; break;
+        case 5: r = v; g = p; b = q; break;
+      }
+      const scale = 255 * briScale;
+      SHARED_RGB_OUT[0] = (r * scale) | 0;
+      SHARED_RGB_OUT[1] = (g * scale) | 0;
+      SHARED_RGB_OUT[2] = (b * scale) | 0;
+      return SHARED_RGB_OUT;
+    }
+
+    function writeMixFgBgToShared(mix, params) {
+      if (mix < 0) mix = 0;
+      else if (mix > 1) mix = 1;
+      const inv = 1 - mix;
+      const bri = params.briScale;
+      SHARED_RGB_OUT[0] = ((params.bgR * inv + params.fgR * mix) * bri) | 0;
+      SHARED_RGB_OUT[1] = ((params.bgG * inv + params.fgG * mix) * bri) | 0;
+      SHARED_RGB_OUT[2] = ((params.bgB * inv + params.fgB * mix) * bri) | 0;
+      return SHARED_RGB_OUT;
+    }
+
+    function computeDirectionalCoord(x, y, dirCode) {
+      switch (dirCode) {
+        case 0: return x;
+        case 1: return 1.0 - x;
+        case 2: return 1.0 - y;
+        case 3: return y;
+        case 4: {
+          const dx = x - 0.5;
+          const dy = (y - 0.5) * 0.55;
+          return Math.sqrt(dx * dx + dy * dy) * 1.8;
+        }
+        case 5: {
+          const dx = x - 0.5;
+          const dy = (y - 0.5) * 0.55;
+          return 1.0 - Math.sqrt(dx * dx + dy * dy) * 1.8;
+        }
+        default: return x;
+      }
+    }
+
+    function fxStatic(t, keyIndex, x, y, params) {
+      const bri = params.briScale;
+      SHARED_RGB_OUT[0] = (params.fgR * bri) | 0;
+      SHARED_RGB_OUT[1] = (params.fgG * bri) | 0;
+      SHARED_RGB_OUT[2] = (params.fgB * bri) | 0;
+      return SHARED_RGB_OUT;
+    }
+
+    function fxBreath(t, keyIndex, x, y, params) {
+      const s = Math.sin(t * params.speedScale * 2.2) * 0.5 + 0.5;
+      const smooth = s * s * (3 - 2 * s);
+      return writeMixFgBgToShared(smooth, params);
+    }
+
+    function fxWave(t, keyIndex, x, y, params) {
+      const coord = computeDirectionalCoord(x, y, params.dirCode);
+      const hue = coord * 0.85 - t * params.speedScale * 0.42;
+      return writeHsvToShared(hue, 0.92, 1.0, params.briScale);
+    }
+
+    function fxNeon(t, keyIndex, x, y, params) {
+      const hue = t * params.speedScale * 0.25 + (y * 0.08);
+      return writeHsvToShared(hue, 0.95, 1.0, params.briScale);
+    }
+
+    function fxRadar(t, keyIndex, x, y, params) {
+      const dx = x - 0.5;
+      const dy = (y - 0.5) * 0.55;
+      const angle = Math.atan2(dy, dx);
+      const dirSign = (params.dirCode === 1 || params.dirCode === 2 || params.dirCode === 5) ? -1 : 1;
+      const beamAngle = (t * params.speedScale * 2.6 * dirSign) % (Math.PI * 2);
+      let diff = angle - beamAngle;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      const trail = dirSign > 0 ? (diff <= 0 ? -diff : Math.PI * 2 - diff) : (diff >= 0 ? diff : Math.PI * 2 + diff);
+      const intensity = Math.max(0, 1.0 - trail / 1.85);
+      return writeMixFgBgToShared(intensity * intensity, params);
+    }
+
+    function fxReactive(t, keyIndex, x, y, params) {
+      let intensity = 0;
+      if (params.isPreview) {
+        const simIdx = ((t * params.speedScale * 2.5) | 0) % PREVIEW_LED_COUNT;
+        const simIdx2 = ((t * params.speedScale * 2.5 + 7) | 0) % PREVIEW_LED_COUNT;
+        const frac = (t * params.speedScale * 2.5) % 1;
+        if (keyIndex === simIdx) intensity = 1.0 - frac;
+        else if (keyIndex === simIdx2) intensity = (1.0 - frac) * 0.7;
+      } else {
+        if (KEY_IS_DOWN[keyIndex]) {
+          intensity = 1.0;
+        } else {
+          const dt = t - KEY_LAST_HIT[keyIndex];
+          const fadeDur = 0.85 / params.speedScale;
+          if (dt >= 0 && dt < fadeDur) {
+            intensity = 1.0 - dt / fadeDur;
+          }
+        }
+      }
+      return writeMixFgBgToShared(intensity * intensity, params);
+    }
+
+    function fxCross(t, keyIndex, x, y, params) {
+      let maxMix = 0;
+      if (params.isPreview) {
+        const cycle = (t * params.speedScale * 0.9) % 1.0;
+        const cx = 0.5 + Math.sin(t * 1.3) * 0.25;
+        const cy = 0.5;
+        const onRow = Math.abs(y - cy) < 0.18;
+        const onCol = Math.abs(x - cx) < 0.11;
+        if (onRow || onCol) {
+          const dist = onRow ? Math.abs(x - cx) : Math.abs(y - cy);
+          const wave = Math.max(0, 1.0 - Math.abs(dist - cycle * 0.75) * 4.5) * (1.0 - cycle);
+          maxMix = wave;
+        }
+      } else {
+        const speed = params.speedScale * 1.15;
+        for (let e = 0; e < MAX_KEY_EVENTS; e++) {
+          const age = t - EVT_TIME[e];
+          if (age >= 0 && age < 1.1) {
+            const ex = EVT_X[e];
+            const ey = EVT_Y[e];
+            const sameRow = Math.abs(y - ey) < 0.08;
+            const sameCol = Math.abs(x - ex) < 0.042;
+            if (sameRow || sameCol) {
+              const dist = sameRow ? Math.abs(x - ex) : Math.abs(y - ey) * 0.6;
+              const head = age * speed;
+              const band = Math.max(0, 1.0 - Math.abs(dist - head) * 6.5);
+              const fade = Math.max(0, 1.0 - age / 1.1);
+              const val = band * fade;
+              if (val > maxMix) maxMix = val;
+            }
+          }
+        }
+      }
+      return writeMixFgBgToShared(maxMix, params);
+    }
+
+    function fxRipple(t, keyIndex, x, y, params) {
+      let maxMix = 0;
+      if (params.isPreview) {
+        const cycle = (t * params.speedScale * 0.85) % 1.0;
+        const dx = x - 0.5;
+        const dy = (y - 0.5) * 0.55;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const ring = Math.max(0, 1.0 - Math.abs(dist - cycle * 0.7) * 5.2) * (1.0 - cycle);
+        maxMix = ring;
+      } else {
+        const speed = params.speedScale * 0.95;
+        for (let e = 0; e < MAX_KEY_EVENTS; e++) {
+          const age = t - EVT_TIME[e];
+          if (age >= 0 && age < 1.35) {
+            const dx = x - EVT_X[e];
+            const dy = (y - EVT_Y[e]) * 0.5;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const radius = age * speed;
+            const ring = Math.max(0, 1.0 - Math.abs(dist - radius) * 6.2);
+            const fade = Math.max(0, 1.0 - age / 1.35);
+            const val = ring * fade;
+            if (val > maxMix) maxMix = val;
+          }
+        }
+      }
+      return writeMixFgBgToShared(maxMix, params);
+    }
+
+    function fxTwinkle(t, keyIndex, x, y, params) {
+      const seed = params.isPreview
+        ? (((Math.sin((keyIndex + 1) * 19.19) * 10000) % 1 + 1) % 1)
+        : KEY_HASH[keyIndex];
+      const phase = t * params.speedScale * (1.6 + seed * 1.8) + seed * 12.56;
+      const raw = Math.sin(phase);
+      const spark = raw > 0.35 ? (raw - 0.35) / 0.65 : 0;
+      return writeMixFgBgToShared(spark * spark, params);
+    }
+
+    function fxFireworks(t, keyIndex, x, y, params) {
+      const speed = params.speedScale * 0.9;
+      let rAcc = params.bgR * 0.35;
+      let gAcc = params.bgG * 0.35;
+      let bAcc = params.bgB * 0.35;
+
+      for (let b = 0; b < 3; b++) {
+        const localT = (t * speed + b * 0.333);
+        const burstId = localT | 0;
+        const frac = localT - burstId;
+        const cx = 0.18 + (((Math.sin((burstId * 7 + b * 13) * 12.989) * 43758.5) % 1 + 1) % 1) * 0.64;
+        const cy = 0.2 + (((Math.cos((burstId * 11 + b * 5) * 9.123) * 23421.1) % 1 + 1) % 1) * 0.6;
+        const dx = x - cx;
+        const dy = (y - cy) * 0.55;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const radius = frac * 0.55;
+        const shell = Math.max(0, 1.0 - Math.abs(dist - radius) * 7.0) * (1.0 - frac);
+        if (shell > 0.01) {
+          const hue = ((burstId * 0.27 + b * 0.33 + dist * 0.5) % 1 + 1) % 1;
+          writeHsvToShared(hue, 0.9, 1.0, 1.0);
+          rAcc += SHARED_RGB_OUT[0] * shell;
+          gAcc += SHARED_RGB_OUT[1] * shell;
+          bAcc += SHARED_RGB_OUT[2] * shell;
+        }
+      }
+      const bri = params.briScale;
+      SHARED_RGB_OUT[0] = Math.min(255, rAcc) * bri;
+      SHARED_RGB_OUT[1] = Math.min(255, gAcc) * bri;
+      SHARED_RGB_OUT[2] = Math.min(255, bAcc) * bri;
+      return SHARED_RGB_OUT;
+    }
+
+    function fxStriation(t, keyIndex, x, y, params) {
+      const rowIndex = Math.round(y * 4);
+      const rowDir = (rowIndex & 1) === 0 ? 1 : -1;
+      const baseCoord = computeDirectionalCoord(x, y, params.dirCode);
+      const phase = baseCoord * 3.5 - t * params.speedScale * 1.4 * rowDir + rowIndex * 0.45;
+      const stripe = Math.pow(Math.sin(phase * Math.PI) * 0.5 + 0.5, 2.4);
+      return writeMixFgBgToShared(stripe, params);
+    }
+
+    function fxAurora(t, keyIndex, x, y, params) {
+      const coord = computeDirectionalCoord(x, y, params.dirCode);
+      const w1 = Math.sin(coord * 4.2 + t * params.speedScale * 1.2 + y * 2.1);
+      const w2 = Math.cos(x * 3.1 - t * params.speedScale * 0.85 + y * 3.4);
+      const blend = (w1 + w2) * 0.25 + 0.5;
+      const auroraR = params.fgR * blend + 30 * (1 - blend);
+      const auroraG = params.fgG * 0.55 + 235 * (1 - Math.abs(blend - 0.5) * 1.6);
+      const auroraB = params.fgB * (1 - blend) + 255 * blend;
+      const bri = params.briScale * (0.45 + 0.55 * blend);
+      SHARED_RGB_OUT[0] = (auroraR * bri) | 0;
+      SHARED_RGB_OUT[1] = (auroraG * bri) | 0;
+      SHARED_RGB_OUT[2] = (auroraB * bri) | 0;
+      return SHARED_RGB_OUT;
+    }
+
+    function fxAutorip(t, keyIndex, x, y, params) {
+      const coord = computeDirectionalCoord(x, y, params.dirCode);
+      const wave = Math.sin((coord * 2.6 - t * params.speedScale * 1.35) * Math.PI * 2);
+      const pulse = Math.pow(wave * 0.5 + 0.5, 3.0);
+      return writeMixFgBgToShared(pulse, params);
+    }
+
+    const EFFECTS_LIST = [
+      { id: 'static',    name: 'Static',    tag: 'Mode 0',  usesDir: false, defaultFullColor: false, fn: fxStatic,    desc: 'Ánh sáng đơn sắc cố định, tự ngắt vòng lặp rAF.' },
+      { id: 'breath',    name: 'Breath',    tag: 'Mode 1',  usesDir: false, defaultFullColor: false, fn: fxBreath,    desc: 'Chuyển sắc mềm mại giữa màu chính và màu nền.' },
+      { id: 'wave',      name: 'Wave',      tag: 'Mode 2',  usesDir: true,  defaultFullColor: true,  fn: fxWave,      desc: 'Sóng cầu vồng RGB trôi mượt theo hướng chọn.' },
+      { id: 'neon',      name: 'Neon',      tag: 'Mode 3',  usesDir: false, defaultFullColor: true,  fn: fxNeon,      desc: 'Đồng bộ chuyển phổ màu Neon trên toàn bàn phím.' },
+      { id: 'radar',     name: 'Radar',     tag: 'Mode 4',  usesDir: true,  defaultFullColor: false, fn: fxRadar,     desc: 'Tia radar xoay tròn quanh tâm bàn phím.' },
+      { id: 'reactive',  name: 'Reactive',  tag: 'Mode 6',  usesDir: false, defaultFullColor: false, fn: fxReactive,  desc: 'Phím bừng sáng khi bạn gõ phím thật hoặc nhấp chuột.' },
+      { id: 'cross',     name: 'Cross',     tag: 'Mode 7',  usesDir: false, defaultFullColor: false, fn: fxCross,     desc: 'Tia sáng bắn dọc & ngang từ vị trí phím vừa nhấn.' },
+      { id: 'ripple',    name: 'Ripple',    tag: 'Mode 8',  usesDir: false, defaultFullColor: false, fn: fxRipple,    desc: 'Sóng tròn lan tỏa khắp bàn phím khi gõ phím.' },
+      { id: 'twinkle',   name: 'Twinkle',   tag: 'Mode 9',  usesDir: false, defaultFullColor: false, fn: fxTwinkle,   desc: 'Các điểm LED lấp lánh ngẫu nhiên như bầu trời sao.' },
+      { id: 'fireworks', name: 'Fireworks', tag: 'Mode 11', usesDir: false, defaultFullColor: true,  fn: fxFireworks, desc: 'Pháo hoa đa sắc bung nở tự động theo nhịp.' },
+      { id: 'striation', name: 'Striation', tag: 'Mode 15', usesDir: true,  defaultFullColor: false, fn: fxStriation, desc: 'Các dải sọc sáng đan xen chạy ngược chiều nhau.' },
+      { id: 'aurora',    name: 'Aurora',    tag: 'Mode 16', usesDir: true,  defaultFullColor: true,  fn: fxAurora,    desc: 'Dải cực quang chuyển sắc uốn lượn mềm mại.' },
+      { id: 'autorip',   name: 'Autorip',   tag: 'Mode 14', usesDir: true,  defaultFullColor: false, fn: fxAutorip,   desc: 'Sóng gợn tự động lan tỏa liên hoàn theo hướng.' }
+    ];
+
+    const EFFECT_MAP = Object.create(null);
+    for (let i = 0; i < EFFECTS_LIST.length; i++) {
+      EFFECT_MAP[EFFECTS_LIST[i].id] = EFFECTS_LIST[i];
+    }
+
+    function evaluateEffectsIntoBuffer(effectFn, t, count, normXArr, normYArr, params, outBuffer) {
+      if (!params.power) {
+        outBuffer.fill(0);
+        return;
+      }
+      for (let i = 0; i < count; i++) {
+        const rgb = effectFn(t, i, normXArr[i], normYArr[i], params);
+        const offset = i * 3;
+        outBuffer[offset]     = rgb[0];
+        outBuffer[offset + 1] = rgb[1];
+        outBuffer[offset + 2] = rgb[2];
+      }
+    }
+
+    /* =========================================================================
+     * KHỐI 4: TÁCH LỚP TĨNH (OFFSCREEN LAYER CACHING) & SPRITE VÒNG SÁNG (GLOW ATLAS)
+     * ========================================================================= */
+    const GLOW_CELL_SIZE = 48;
+    const GLOW_GRID_COLS = 16;
+    const GLOW_GRID_ROWS = 14;
+    const glowAtlasCanvas = document.createElement('canvas');
+    glowAtlasCanvas.width = GLOW_GRID_COLS * GLOW_CELL_SIZE;
+    glowAtlasCanvas.height = GLOW_GRID_ROWS * GLOW_CELL_SIZE;
+
+    function buildGlowSpriteAtlas() {
+      const gCtx = glowAtlasCanvas.getContext('2d');
+      const half = GLOW_CELL_SIZE * 0.5;
+      for (let r6 = 0; r6 < 6; r6++) {
+        const rVal = r6 * 51;
+        for (let g6 = 0; g6 < 6; g6++) {
+          const gVal = g6 * 51;
+          for (let b6 = 0; b6 < 6; b6++) {
+            const bVal = b6 * 51;
+            const idx = r6 * 36 + g6 * 6 + b6;
+            const col = idx % GLOW_GRID_COLS;
+            const row = (idx / GLOW_GRID_COLS) | 0;
+            const cx = col * GLOW_CELL_SIZE + half;
+            const cy = row * GLOW_CELL_SIZE + half;
+
+            const grad = gCtx.createRadialGradient(cx, cy, 2, cx, cy, half);
+            grad.addColorStop(0.0, 'rgba(' + rVal + ',' + gVal + ',' + bVal + ', 0.90)');
+            grad.addColorStop(0.42, 'rgba(' + rVal + ',' + gVal + ',' + bVal + ', 0.42)');
+            grad.addColorStop(1.0, 'rgba(' + rVal + ',' + gVal + ',' + bVal + ', 0.0)');
+
+            gCtx.fillStyle = grad;
+            gCtx.fillRect(col * GLOW_CELL_SIZE, row * GLOW_CELL_SIZE, GLOW_CELL_SIZE, GLOW_CELL_SIZE);
+          }
+        }
+      }
+    }
+
+    function drawRoundRectPath(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    const mainCanvas = document.getElementById('mainKeyboardCanvas');
+    const mainCtx = mainCanvas.getContext('2d', { alpha: false });
+
+    const staticBaseCanvas = document.createElement('canvas');
+    const staticOverlayCanvas = document.createElement('canvas');
+    let currentDpr = 1;
+
+    function initMainCanvasesAndStaticLayers() {
+      currentDpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+      const pixelW = (LOGICAL_WIDTH * currentDpr) | 0;
+      const pixelH = (LOGICAL_HEIGHT * currentDpr) | 0;
+
+      mainCanvas.width = pixelW;
+      mainCanvas.height = pixelH;
+      staticBaseCanvas.width = pixelW;
+      staticBaseCanvas.height = pixelH;
+      staticOverlayCanvas.width = pixelW;
+      staticOverlayCanvas.height = pixelH;
+
+      mainCtx.setTransform(currentDpr, 0, 0, currentDpr, 0, 0);
+
+      const bCtx = staticBaseCanvas.getContext('2d', { alpha: false });
+      bCtx.setTransform(currentDpr, 0, 0, currentDpr, 0, 0);
+      bCtx.fillStyle = '#090b10';
+      bCtx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+
+      drawRoundRectPath(bCtx, 24, 10, LOGICAL_WIDTH - 48, LOGICAL_HEIGHT - 20, 16);
+      bCtx.fillStyle = '#141926';
+      bCtx.fill();
+      bCtx.lineWidth = 2;
+      bCtx.strokeStyle = '#26304a';
+      bCtx.stroke();
+
+      drawRoundRectPath(bCtx, 10, 95, 14, 110, 5);
+      bCtx.fillStyle = '#00b8d4';
+      bCtx.fill();
+
+      drawRoundRectPath(bCtx, BOARD_PAD_X - 6, BOARD_PAD_Y - 6, 15 * UNIT_W + 12, 5 * UNIT_H + 12, 10);
+      bCtx.fillStyle = '#07090e';
+      bCtx.fill();
+      bCtx.lineWidth = 1;
+      bCtx.strokeStyle = '#1b2234';
+      bCtx.stroke();
+
+      for (let i = 0; i < KEY_COUNT; i++) {
+        drawRoundRectPath(bCtx, KEY_PX_X[i], KEY_PX_Y[i], KEY_PX_W[i], KEY_PX_H[i], 6);
+        bCtx.fillStyle = '#101420';
+        bCtx.fill();
+      }
+
+      const oCtx = staticOverlayCanvas.getContext('2d');
+      oCtx.setTransform(currentDpr, 0, 0, currentDpr, 0, 0);
+      oCtx.clearRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+
+      oCtx.textAlign = 'center';
+      oCtx.textBaseline = 'middle';
+
+      for (let i = 0; i < KEY_COUNT; i++) {
+        const kx = KEY_PX_X[i];
+        const ky = KEY_PX_Y[i];
+        const kw = KEY_PX_W[i];
+        const kh = KEY_PX_H[i];
+
+        drawRoundRectPath(oCtx, kx + 1, ky + 1, kw - 2, kh - 2, 6);
+        oCtx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+        oCtx.lineWidth = 1;
+        oCtx.stroke();
+
+        drawRoundRectPath(oCtx, kx + 4, ky + 3, kw - 8, kh - 8, 4);
+        oCtx.fillStyle = 'rgba(15, 19, 30, 0.76)';
+        oCtx.fill();
+
+        const label = KEY_LABELS[i];
+        oCtx.font = (label.length > 2 ? '600 10.5px ' : '700 12.5px ') +
+          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        oCtx.fillStyle = 'rgba(240, 246, 255, 0.92)';
+        oCtx.fillText(label, kx + kw * 0.5, ky + kh * 0.47);
+      }
+    }
+
+    function renderMainKeyboardCanvas() {
+      mainCtx.drawImage(staticBaseCanvas, 0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+
+      if (renderParams.power) {
+        for (let i = 0; i < KEY_COUNT; i++) {
+          const offset = i * 3;
+          const r = MAIN_LED_BUFFER[offset];
+          const g = MAIN_LED_BUFFER[offset + 1];
+          const b = MAIN_LED_BUFFER[offset + 2];
+
+          if ((r | g | b) > 6) {
+            const kx = KEY_PX_X[i];
+            const ky = KEY_PX_Y[i];
+            const kw = KEY_PX_W[i];
+            const kh = KEY_PX_H[i];
+
+            const r6 = (r * 5 + 127) >> 8;
+            const g6 = (g * 5 + 127) >> 8;
+            const b6 = (b * 5 + 127) >> 8;
+            const atlasIdx = r6 * 36 + g6 * 6 + b6;
+            const sx = (atlasIdx % GLOW_GRID_COLS) * GLOW_CELL_SIZE;
+            const sy = ((atlasIdx / GLOW_GRID_COLS) | 0) * GLOW_CELL_SIZE;
+
+            mainCtx.drawImage(
+              glowAtlasCanvas,
+              sx, sy, GLOW_CELL_SIZE, GLOW_CELL_SIZE,
+              kx - 7, ky - 7, kw + 14, kh + 14
+            );
+
+            const lutIdx = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+            mainCtx.fillStyle = RGB_STRING_LUT[lutIdx];
+            mainCtx.fillRect(kx + 2, ky + 2, kw - 4, kh - 4);
+          }
+
+          if (KEY_IS_DOWN[i]) {
+            mainCtx.strokeStyle = '#ffffff';
+            mainCtx.lineWidth = 1.5;
+            mainCtx.strokeRect(KEY_PX_X[i] + 2, KEY_PX_Y[i] + 2, KEY_PX_W[i] - 4, KEY_PX_H[i] - 4);
+          }
+        }
+      }
+
+      mainCtx.drawImage(staticOverlayCanvas, 0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+    }
+
+    /* =========================================================================
+     * KHỐI 5: BỘ ĐIỀU KHIỂN WEBHID (CMD 7 FIRMWARE & CMD 9 PER-KEY STREAMING)
+     * - Chỉ gửi lệnh LED (Cmd 7 & Cmd 9), tuyệt đối không đụng tới Actuation/Calibration/Remap.
+     * - Hỗ trợ Dry Run, Hex Log 200 dòng (DOM ring-buffer), chống chồng chéo sendReport.
+     * ========================================================================= */
+    const MAX_LOG_LINES = 200;
+    const hexLogContainer = document.getElementById('hexLogContainer');
+    const streamStatsTextEl = document.getElementById('streamStatsText');
+
+    // Bộ đệm gói HID tĩnh (không cấp phát mảng mới mỗi lần gửi)
+    const CMD7_PACKET_BUF = new Uint8Array(HID_PACKET_SIZE);
+    const CMD9_PAGE_PACKET_BUF = new Uint8Array(HID_PACKET_SIZE);
+    const HID_RGB_TABLE_396 = new Uint8ClampedArray(PERKEY_TABLE_BYTES);
+    const PREV_HID_RGB_TABLE_396 = new Uint8ClampedArray(PERKEY_TABLE_BYTES);
+    let prevHidTableValid = false;
+
+    const hidCtrl = {
+      supported: Boolean(window.isSecureContext && ('hid' in navigator)),
+      device: null,
+      selectedCollectionIdx: -1,
+      reportId: HID_DEFAULT_REPORT_ID,
+      checksumMode: 'sum7_inv',
+      controlMode: 'firmware', // 'firmware' (cmd 7) | 'streaming' (cmd 9)
+      dryRun: true,            // Mặc định bật Dry Run để kiểm tra gói hex an toàn
+      compactStreamLog: true,
+      isStreamingBusy: false,  // Khóa chống xếp hàng chồng chéo khi await device.sendReport()
+      packetsSentCount: 0,
+      framesSkippedSameColor: 0,
+      sendMethod: 'output',    // 'output' (sendReport) | 'feature' (sendFeatureReport)
+      allDevices: [],          // Mọi interface HID của bàn phím (mỗi interface là 1 HIDDevice riêng)
+      selectedDeviceIdx: -1
+    };
+
+    function formatPacketHexPreview(buf, maxBytes) {
+      const limit = Math.min(buf.length, maxBytes || 24);
+      let out = '';
+      for (let i = 0; i < limit; i++) {
+        out += BYTE_HEX_LUT[buf[i]] + (i < limit - 1 ? ' ' : '');
+      }
+      if (buf.length > limit) {
+        out += ' … [' + buf.length + 'B]';
+      }
+      return out;
+    }
+
+    // Ghi log vào khung giới hạn 200 dòng bằng cách tái sử dụng DOM node đầu tiên (Zero full-rerender)
+    function appendHexLog(typeClass, prefix, message) {
+      const now = new Date();
+      const timeStr =
+        BYTE_HEX_LUT[now.getHours()] + ':' +
+        BYTE_HEX_LUT[now.getMinutes()] + ':' +
+        BYTE_HEX_LUT[now.getSeconds()];
+
+      let rowEl;
+      if (hexLogContainer.childElementCount >= MAX_LOG_LINES) {
+        rowEl = hexLogContainer.firstElementChild;
+        hexLogContainer.appendChild(rowEl);
+      } else {
+        rowEl = document.createElement('div');
+        hexLogContainer.appendChild(rowEl);
+      }
+      rowEl.className = 'log-entry ' + typeClass;
+      rowEl.textContent = '[' + timeStr + '] ' + prefix + ' ' + message;
+      hexLogContainer.scrollTop = hexLogContainer.scrollHeight;
+    }
+
+    function updateStreamStatsUI() {
+      streamStatsTextEl.innerHTML =
+        'Đã gửi: <strong>' + hidCtrl.packetsSentCount +
+        '</strong> gói · Bỏ qua (trùng màu): <strong>' + hidCtrl.framesSkippedSameColor + '</strong> frame';
+    }
+
+    // Hàm tính checksum cho gói 64 byte ([TÙY CHỈNH THEO PROTOCOL.PY]: thay đổi dễ dàng nếu có protocol.py)
+    function applyPacketChecksum(packet) {
+      const mode = hidCtrl.checksumMode;
+      packet[HID_CHECKSUM_BYTE_INDEX] = 0;
+      if (mode === 'none') return;
+
+      if (mode === 'sum7_inv') {
+        let sum7 = 0;
+        for (let i = 0; i < 7; i++) sum7 = (sum7 + packet[i]) & 0xFF;
+        packet[HID_CHECKSUM_BYTE_INDEX] = (255 - sum7) & 0xFF;
+      } else if (mode === 'sum_last') {
+        let sumAll = 0;
+        for (let i = 0; i < HID_CHECKSUM_BYTE_INDEX; i++) sumAll = (sumAll + packet[i]) & 0xFF;
+        packet[HID_CHECKSUM_BYTE_INDEX] = sumAll;
+      } else if (mode === 'xor_last') {
+        let xorVal = 0;
+        for (let i = 0; i < HID_CHECKSUM_BYTE_INDEX; i++) xorVal ^= packet[i];
+        packet[HID_CHECKSUM_BYTE_INDEX] = xorVal & 0xFF;
+      }
+    }
+
+    // Đóng gói lệnh Cmd 7 (Lighting Firmware) đúng vị trí byte [5..16] đã xác minh
+    function buildCmd7LightingPacket(modeByte, bri, speed, fgR, fgG, fgB, bgR, bgG, bgB, dirByte, fullColorBit, powerBit) {
+      CMD7_PACKET_BUF.fill(0);
+      CMD7_PACKET_BUF[0] = HID_HEADER_BYTE_0;
+      CMD7_PACKET_BUF[HID_CMD_BYTE_INDEX] = HID_CMD_LIGHTING_FW; // 0x07
+      CMD7_PACKET_BUF[2] = HID_SUBCMD_BYTE_2;
+      CMD7_PACKET_BUF[3] = HID_SUBCMD_BYTE_3;
+      CMD7_PACKET_BUF[4] = HID_SUBCMD_BYTE_4;
+
+      // Các byte xác minh trên phần cứng Aula Win60 HE (Aether-HE README):
+      CMD7_PACKET_BUF[CMD7_OFFSET_MODE]      = modeByte & 0xFF;     // [5] = mode
+      CMD7_PACKET_BUF[CMD7_OFFSET_BRI]       = bri & 0xFF;          // [6] = độ sáng (1-4)
+      CMD7_PACKET_BUF[CMD7_OFFSET_SPEED]     = speed & 0xFF;        // [7] = tốc độ (1-4)
+      CMD7_PACKET_BUF[CMD7_OFFSET_FG_R]      = fgR & 0xFF;          // [8] = fg R
+      CMD7_PACKET_BUF[CMD7_OFFSET_FG_G]      = fgG & 0xFF;          // [9] = fg G
+      CMD7_PACKET_BUF[CMD7_OFFSET_FG_B]      = fgB & 0xFF;          // [10] = fg B
+      CMD7_PACKET_BUF[CMD7_OFFSET_BG_R]      = bgR & 0xFF;          // [11] = bg R
+      CMD7_PACKET_BUF[CMD7_OFFSET_BG_G]      = bgG & 0xFF;          // [12] = bg G
+      CMD7_PACKET_BUF[CMD7_OFFSET_BG_B]      = bgB & 0xFF;          // [13] = bg B
+      CMD7_PACKET_BUF[CMD7_OFFSET_DIR]       = dirByte & 0xFF;      // [14] = hướng (0-5)
+      CMD7_PACKET_BUF[CMD7_OFFSET_FULLCOLOR] = fullColorBit ? 1 : 0;// [15] = fullColor
+      CMD7_PACKET_BUF[CMD7_OFFSET_POWER]     = powerBit ? 1 : 0;    // [16] = power
+
+      applyPacketChecksum(CMD7_PACKET_BUF);
+      return CMD7_PACKET_BUF;
+    }
+
+    // Đóng gói 1 trang 54-byte của lệnh Cmd 9 (Per-key RGB) từ bảng 396-byte
+    function buildCmd9PagePacket(pageIndex, table396) {
+      CMD9_PAGE_PACKET_BUF.fill(0);
+      const tableOffset = pageIndex * PERKEY_PAGE_BYTES;
+      const validBytes = Math.min(PERKEY_PAGE_BYTES, PERKEY_TABLE_BYTES - tableOffset);
+
+      CMD9_PAGE_PACKET_BUF[0] = HID_HEADER_BYTE_0;
+      CMD9_PAGE_PACKET_BUF[HID_CMD_BYTE_INDEX] = HID_CMD_PERKEY_RGB; // 0x09
+      CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_PAGE_INDEX] = pageIndex & 0xFF;
+      CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_PAGE_LEN] = validBytes & 0xFF;
+
+      for (let i = 0; i < validBytes; i++) {
+        CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_PAYLOAD_START + i] = table396[tableOffset + i];
+      }
+
+      applyPacketChecksum(CMD9_PAGE_PACKET_BUF);
+      return CMD9_PAGE_PACKET_BUF;
+    }
+
+    // Ánh xạ 61 phím trên giao diện vào bảng 396-byte của bàn phím thật và kiểm tra xem có đổi màu không
+    function packMainLedsInto396TableAndCheckDiff() {
+      HID_RGB_TABLE_396.fill(0);
+      if (renderParams.power) {
+        for (let keyIdx = 0; keyIdx < KEY_COUNT; keyIdx++) {
+          const hwLedIdx = KEYMAP_HARDWARE_LED_INDEX[keyIdx];
+          const dstOffset = hwLedIdx * 3;
+          if (dstOffset + 2 < PERKEY_TABLE_BYTES) {
+            const srcOffset = keyIdx * 3;
+            HID_RGB_TABLE_396[dstOffset]     = MAIN_LED_BUFFER[srcOffset];
+            HID_RGB_TABLE_396[dstOffset + 1] = MAIN_LED_BUFFER[srcOffset + 1];
+            HID_RGB_TABLE_396[dstOffset + 2] = MAIN_LED_BUFFER[srcOffset + 2];
+          }
+        }
+      }
+
+      if (prevHidTableValid) {
+        let hasDiff = false;
+        for (let i = 0; i < PERKEY_TABLE_BYTES; i++) {
+          if (HID_RGB_TABLE_396[i] !== PREV_HID_RGB_TABLE_396[i]) {
+            hasDiff = true;
+            break;
+          }
+        }
+        if (!hasDiff) {
+          return false; // Không thay đổi màu so với frame trước -> Bỏ qua gửi!
+        }
+      }
+
+      PREV_HID_RGB_TABLE_396.set(HID_RGB_TABLE_396);
+      prevHidTableValid = true;
+      return true;
+    }
+
+    // Gửi 1 gói Cmd 7 xuống bàn phím (hoặc in ra Dry Run Log)
+    async function sendCmd7CurrentStateToHardware(reasonLabel) {
+      const fx = EFFECT_MAP[appState.effectId];
+      const modeByte = hidCtrl.controlMode === 'streaming'
+        ? FW_MODE_BYTES.custom
+        : (FW_MODE_BYTES[appState.effectId] !== undefined ? FW_MODE_BYTES[appState.effectId] : 0);
+      const dirByte = DIR_TO_CODE[appState.direction] || 0;
+
+      const pkt = buildCmd7LightingPacket(
+        modeByte,
+        appState.brightness,
+        appState.speed,
+        renderParams.fgR,
+        renderParams.fgG,
+        renderParams.fgB,
+        renderParams.bgR,
+        renderParams.bgG,
+        renderParams.bgB,
+        dirByte,
+        appState.fullColor ? 1 : 0,
+        appState.power ? 1 : 0
+      );
+
+      const hexStr = formatPacketHexPreview(pkt, 20);
+      const metaDesc =
+        'Cmd7(' + (reasonLabel || fx.name) +
+        ' | mode=' + modeByte +
+        ' bri=' + appState.brightness +
+        ' spd=' + appState.speed +
+        ' dir=' + dirByte +
+        ' full=' + (appState.fullColor ? 1 : 0) +
+        ' pwr=' + (appState.power ? 1 : 0) + ') -> ' + hexStr;
+
+      if (hidCtrl.dryRun) {
+        appendHexLog('log-dry', '[DRY-RUN TX rId=0x' + BYTE_HEX_LUT[hidCtrl.reportId] + ']', metaDesc);
+        return;
+      }
+
+      if (!hidCtrl.device || !hidCtrl.device.opened) {
+        appendHexLog('log-dry', '[CHƯA MỞ HID]', metaDesc);
+        return;
+      }
+
+      try {
+        await hidSendPacket(pkt);
+        hidCtrl.packetsSentCount++;
+        updateStreamStatsUI();
+        appendHexLog('log-tx', '[TX Cmd7 rId=0x' + BYTE_HEX_LUT[hidCtrl.reportId] + ']', metaDesc);
+      } catch (err) {
+        handleHidSendError('Lỗi gửi gói Cmd 7', err);
+      }
+    }
+
+    // Gửi tuần tự 8 trang 54-byte của bảng 396-byte (Cmd 9) — Không xếp hàng chồng chéo
+    async function streamCmd9FrameIfReady() {
+      if (hidCtrl.controlMode !== 'streaming') return;
+      if (!isPageActive) return;
+      if (hidCtrl.isStreamingBusy) return; // Frame trước chưa gửi xong -> bỏ qua ngay, không xếp hàng
+
+      const changed = packMainLedsInto396TableAndCheckDiff();
+      if (!changed) {
+        hidCtrl.framesSkippedSameColor++;
+        if ((hidCtrl.framesSkippedSameColor & 15) === 0) {
+          updateStreamStatsUI();
+        }
+        return;
+      }
+
+      hidCtrl.isStreamingBusy = true;
+      try {
+        for (let page = 0; page < PERKEY_TOTAL_PAGES; page++) {
+          const pkt = buildCmd9PagePacket(page, HID_RGB_TABLE_396);
+
+          if (hidCtrl.dryRun) {
+            if (!hidCtrl.compactStreamLog || page === 0) {
+              const label = hidCtrl.compactStreamLog
+                ? 'Cmd9 Frame (8 trang x 54B = 396B table) Trang[0]: ' + formatPacketHexPreview(pkt, 18)
+                : 'Cmd9 Trang[' + page + '/7]: ' + formatPacketHexPreview(pkt, 18);
+              appendHexLog('log-dry', '[DRY-RUN CMD9]', label);
+            }
+          } else if (hidCtrl.device && hidCtrl.device.opened) {
+            await hidSendPacket(pkt);
+            hidCtrl.packetsSentCount++;
+            if (!hidCtrl.compactStreamLog || page === 0) {
+              const label = hidCtrl.compactStreamLog
+                ? 'Đã truyền 8 trang Cmd9 (396B) · Trang[0]: ' + formatPacketHexPreview(pkt, 18)
+                : 'Cmd9 Trang[' + page + '/7]: ' + formatPacketHexPreview(pkt, 18);
+              appendHexLog('log-tx', '[TX CMD9 rId=0x' + BYTE_HEX_LUT[hidCtrl.reportId] + ']', label);
+            }
+          }
+        }
+        updateStreamStatsUI();
+      } catch (err) {
+        handleHidSendError('Lỗi khi đang Streaming Cmd 9', err);
+      } finally {
+        hidCtrl.isStreamingBusy = false;
+      }
+    }
+
+    // Gửi 1 gói xuống ĐÚNG interface/collection đang chọn (output hoặc feature report), tự khớp độ dài report
+    async function hidSendPacket(pkt) {
+      const dev = hidCtrl.device;
+      const col = dev && dev.collections ? dev.collections[hidCtrl.selectedCollectionIdx] : null;
+      const isFeature = hidCtrl.sendMethod === 'feature';
+      const reps = col ? (isFeature ? col.featureReports : col.outputReports) : null;
+      if (!reps || reps.length === 0) {
+        throw new Error(
+          'Interface đang chọn (usagePage ' + (col ? formatHex16(col.usagePage) : '?') + ') không có ' +
+          (isFeature ? 'Feature' : 'Output') + ' report. Hãy bấm "Kết nối bàn phím" lại và chọn thêm các mục khác của bàn phím trong hộp thoại.'
+        );
+      }
+      let data = pkt;
+      let rep = reps[0];
+      for (let i = 0; i < reps.length; i++) {
+        if ((reps[i].reportId || 0) === hidCtrl.reportId) { rep = reps[i]; break; }
+      }
+      const expected = computeReportByteLength(rep);
+      if (expected > 0 && expected !== pkt.length) {
+        data = new Uint8Array(expected);
+        data.set(pkt.subarray(0, Math.min(expected, pkt.length)));
+      }
+      if (isFeature) await dev.sendFeatureReport(hidCtrl.reportId, data);
+      else await dev.sendReport(hidCtrl.reportId, data);
+    }
+
+    function handleHidSendError(contextMsg, err) {
+      const errMsg = err && err.message ? err.message : String(err);
+      appendHexLog('log-err', '[LỖI SENDREPORT]', contextMsg + ': ' + errMsg + ' -> Đã tự động dừng Streaming.');
+      if (hidCtrl.controlMode === 'streaming') {
+        setHardwareControlMode('firmware', false);
+      }
+      setHidBannerState('is-error', contextMsg + ': ' + errMsg);
+    }
+
+    /* =========================================================================
+     * KHỐI 6: TRẠNG THÁI ỨNG DỤNG, PREVIEW GRID & VÒNG LẶP RENDER DUY NHẤT
+     * ========================================================================= */
+    const prefersReducedMotion = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const appState = {
+      effectId: 'wave',
+      brightness: 4,     // 1..4
+      speed: 3,          // 1..4
+      fgHex: '#00e5ff',
+      bgHex: '#101828',
+      direction: 'right',
+      fullColor: true,
+      power: true,
+      ecoMode: prefersReducedMotion,
+      showFps: true
+    };
+
+    const renderParams = {
+      briScale: BRIGHTNESS_SCALE[4],
+      speedScale: SPEED_SCALE[3],
+      fgR: 0, fgG: 229, fgB: 255,
+      bgR: 16, bgG: 24, bgB: 40,
+      dirCode: 0,
+      power: true,
+      isPreview: false
+    };
+
+    function parseHexToRgb(hex, isFg) {
+      const v = parseInt(hex.slice(1), 16);
+      const r = (v >> 16) & 255;
+      const g = (v >> 8) & 255;
+      const b = v & 255;
+      if (isFg) {
+        renderParams.fgR = r;
+        renderParams.fgG = g;
+        renderParams.fgB = b;
+      } else {
+        renderParams.bgR = r;
+        renderParams.bgG = g;
+        renderParams.bgB = b;
+      }
+    }
+
+    function syncRenderParamsFromState() {
+      renderParams.briScale = BRIGHTNESS_SCALE[appState.brightness];
+      renderParams.speedScale = SPEED_SCALE[appState.speed];
+      renderParams.dirCode = DIR_TO_CODE[appState.direction] || 0;
+      renderParams.power = appState.power;
+      parseHexToRgb(appState.fgHex, true);
+      parseHexToRgb(appState.bgHex, false);
+    }
+    syncRenderParamsFromState();
+
+    const previewContexts = new Array(EFFECTS_LIST.length);
+    const previewCanvases = new Array(EFFECTS_LIST.length);
+    const previewVisible = new Uint8Array(EFFECTS_LIST.length);
+    previewVisible.fill(1);
+
+    function renderSinglePreviewCanvas(effectIndex, tSec) {
+      const ctx = previewContexts[effectIndex];
+      if (!ctx) return;
+      const effectObj = EFFECTS_LIST[effectIndex];
+
+      renderParams.isPreview = true;
+      evaluateEffectsIntoBuffer(
+        effectObj.fn,
+        tSec,
+        PREVIEW_LED_COUNT,
+        PREV_NORM_X,
+        PREV_NORM_Y,
+        renderParams,
+        PREV_LED_BUFFER
+      );
+      renderParams.isPreview = false;
+
+      ctx.fillStyle = '#090c14';
+      ctx.fillRect(0, 0, PREVIEW_WIDTH, PREVIEW_HEIGHT);
+
+      for (let i = 0; i < PREVIEW_LED_COUNT; i++) {
+        const offset = i * 3;
+        const r = PREV_LED_BUFFER[offset];
+        const g = PREV_LED_BUFFER[offset + 1];
+        const b = PREV_LED_BUFFER[offset + 2];
+        const lutIdx = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+        ctx.fillStyle = RGB_STRING_LUT[lutIdx];
+        ctx.fillRect(PREV_PX_X[i], PREV_PX_Y[i], 11, 6);
+      }
+    }
+
+    function renderAllStaticPreviewsSnapshot(tSec) {
+      for (let i = 0; i < EFFECTS_LIST.length; i++) {
+        renderSinglePreviewCanvas(i, tSec);
+      }
+    }
+
+    let rafId = 0;
+    let isLoopRunning = false;
+    let isPageActive = !document.hidden;
+    let lastTimestampMs = 0;
+    let deltaAccumulatorMs = 0;
+    let tickCounter = 0;
+    let mainBoardDirty = true;
+
+    let fpsFrameCounter = 0;
+    let fpsWindowStartMs = performance.now();
+    const fpsValueEl = document.getElementById('fpsValue');
+    const fpsStateEl = document.getElementById('fpsState');
+
+    function hasAnyVisiblePreview() {
+      if (appState.ecoMode || !appState.power) return false;
+      for (let i = 0; i < previewVisible.length; i++) {
+        if (previewVisible[i] === 1) return true;
+      }
+      return false;
+    }
+
+    function shouldAnimationLoopRun() {
+      if (!isPageActive) return false;
+      if (!appState.power) return false;
+      const isMainAnimated = appState.effectId !== 'static';
+      const arePreviewsAnimated = hasAnyVisiblePreview();
+      return isMainAnimated || arePreviewsAnimated;
+    }
+
+    function renderStaticOnceIfNeeded() {
+      const nowSec = performance.now() * 0.001;
+      if (mainBoardDirty) {
+        const currentEffect = EFFECT_MAP[appState.effectId];
+        renderParams.isPreview = false;
+        evaluateEffectsIntoBuffer(
+          currentEffect.fn,
+          nowSec,
+          KEY_COUNT,
+          KEY_NORM_X,
+          KEY_NORM_Y,
+          renderParams,
+          MAIN_LED_BUFFER
+        );
+        renderMainKeyboardCanvas();
+        mainBoardDirty = false;
+
+        // Nếu đang ở chế độ Streaming Cmd 9 và hiệu ứng là static, gửi đúng 1 frame khi có thay đổi
+        if (hidCtrl.controlMode === 'streaming') {
+          streamCmd9FrameIfReady();
+        }
+      }
+      if (appState.ecoMode || !appState.power) {
+        renderAllStaticPreviewsSnapshot(nowSec + 1.25);
+      }
+    }
+
+    function updateFpsBadgeStatus(customText, stateLabel) {
+      if (!appState.showFps) return;
+      if (customText !== null) fpsValueEl.textContent = customText;
+      if (stateLabel !== null) fpsStateEl.textContent = stateLabel;
+    }
+
+    function masterAnimationLoop(nowMs) {
+      if (!isLoopRunning) return;
+
+      const targetFps = appState.ecoMode ? ECO_FPS : TARGET_FPS;
+      const frameIntervalMs = 1000 / targetFps;
+      let deltaMs = nowMs - lastTimestampMs;
+      lastTimestampMs = nowMs;
+
+      if (deltaMs > 250) deltaMs = frameIntervalMs;
+      deltaAccumulatorMs += deltaMs;
+
+      if (deltaAccumulatorMs >= frameIntervalMs) {
+        deltaAccumulatorMs %= frameIntervalMs;
+        tickCounter++;
+
+        const nowSec = nowMs * 0.001;
+        const currentEffect = EFFECT_MAP[appState.effectId];
+
+        if (appState.effectId !== 'static' || mainBoardDirty) {
+          renderParams.isPreview = false;
+          evaluateEffectsIntoBuffer(
+            currentEffect.fn,
+            nowSec,
+            KEY_COUNT,
+            KEY_NORM_X,
+            KEY_NORM_Y,
+            renderParams,
+            MAIN_LED_BUFFER
+          );
+          renderMainKeyboardCanvas();
+          mainBoardDirty = false;
+
+          // Nếu đang bật Chế độ Streaming (Cmd 9), gửi bảng 396-byte theo nhịp frame (30 FPS / 20 FPS Eco)
+          if (hidCtrl.controlMode === 'streaming') {
+            streamCmd9FrameIfReady();
+          }
+        }
+
+        if (!appState.ecoMode && (tickCounter & 1) === 0) {
+          for (let i = 0; i < EFFECTS_LIST.length; i++) {
+            if (previewVisible[i] === 1) {
+              renderSinglePreviewCanvas(i, nowSec);
+            }
+          }
+        }
+
+        fpsFrameCounter++;
+        const elapsedFpsMs = nowMs - fpsWindowStartMs;
+        if (elapsedFpsMs >= 500) {
+          const measuredFps = Math.round((fpsFrameCounter * 1000) / elapsedFpsMs);
+          fpsFrameCounter = 0;
+          fpsWindowStartMs = nowMs;
+          const modeNote = appState.effectId === 'static'
+            ? 'Board nghỉ · Preview 15Hz'
+            : (appState.ecoMode ? 'Tiết kiệm 20Hz' : 'Chuẩn 30Hz');
+          updateFpsBadgeStatus(measuredFps + ' FPS', modeNote);
+        }
+      }
+
+      if (shouldAnimationLoopRun()) {
+        rafId = requestAnimationFrame(masterAnimationLoop);
+      } else {
+        stopAnimationLoop();
+      }
+    }
+
+    function startOrUpdateAnimationLoop() {
+      mainBoardDirty = true;
+      renderStaticOnceIfNeeded();
+
+      if (shouldAnimationLoopRun()) {
+        if (!isLoopRunning) {
+          isLoopRunning = true;
+          lastTimestampMs = performance.now();
+          deltaAccumulatorMs = 0;
+          fpsFrameCounter = 0;
+          fpsWindowStartMs = lastTimestampMs;
+          rafId = requestAnimationFrame(masterAnimationLoop);
+        }
+      } else {
+        stopAnimationLoop();
+      }
+    }
+
+    function stopAnimationLoop() {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      isLoopRunning = false;
+      if (!isPageActive) {
+        updateFpsBadgeStatus('0 FPS', 'Tạm dừng (Ẩn tab)');
+      } else if (!appState.power) {
+        updateFpsBadgeStatus('0 FPS', 'Đèn tắt (Idle)');
+      } else {
+        updateFpsBadgeStatus('0 FPS', 'Static (Không chạy rAF)');
+      }
+    }
+
+    /* =========================================================================
+     * KHỐI 7: QUẢN LÝ THIẾT BỊ WEBHID, LIỆT KÊ COLLECTIONS & GIAO DIỆN NGƯỜI DÙNG
+     * ========================================================================= */
+    const hidStatusBannerEl = document.getElementById('hidStatusBanner');
+    const hidStatusTextEl = document.getElementById('hidStatusText');
+    const hidDeviceBadgeEl = document.getElementById('hidDeviceBadge');
+    const connectHidBtn = document.getElementById('connectHidBtn');
+    const disconnectHidBtn = document.getElementById('disconnectHidBtn');
+    const restoreLightBtn = document.getElementById('restoreLightBtn');
+    const dryRunBtn = document.getElementById('dryRunBtn');
+    const dryRunLabelEl = document.getElementById('dryRunLabel');
+    const modeFirmwareBtn = document.getElementById('modeFirmwareBtn');
+    const modeStreamingBtn = document.getElementById('modeStreamingBtn');
+    const collectionSelectEl = document.getElementById('collectionSelect');
+    const reportIdInputEl = document.getElementById('reportIdInput');
+    const checksumSelectEl = document.getElementById('checksumSelect');
+    const collectionsTableBodyEl = document.getElementById('collectionsTableBody');
+    const fullColorCheckbox = document.getElementById('fullColorCheckbox');
+
+    function setHidBannerState(stateClass, message) {
+      hidStatusBannerEl.className = 'hid-banner' + (stateClass ? ' ' + stateClass : '');
+      hidStatusTextEl.textContent = message;
+    }
+
+    function formatHex16(val) {
+      const n = Number(val) || 0;
+      return '0x' + n.toString(16).toUpperCase().padStart(4, '0');
+    }
+
+    // Tính kích thước byte của một HIDReportInfo từ danh sách items
+    function computeReportByteLength(reportInfo) {
+      if (!reportInfo || !reportInfo.items) return 0;
+      let totalBits = 0;
+      for (let i = 0; i < reportInfo.items.length; i++) {
+        const item = reportInfo.items[i];
+        totalBits += (item.reportSize || 0) * (item.reportCount || 0);
+      }
+      return Math.ceil(totalBits / 8);
+    }
+
+    // Tóm tắt danh sách report (ID + kích thước byte)
+    function summarizeReports(list) {
+      if (!list || list.length === 0) return 'Không có';
+      const parts = [];
+      for (let r = 0; r < list.length; r++) {
+        const rep = list[r];
+        parts.push('ID 0x' + BYTE_HEX_LUT[(rep.reportId || 0) & 0xFF] + ' (' + computeReportByteLength(rep) + 'B)');
+      }
+      return parts.join(', ');
+    }
+
+    // Chấm điểm 1 collection: vendor + output > vendor + feature > output bất kỳ > feature bất kỳ > 0 (không gửi được)
+    function scoreCollection(c) {
+      const isVendor = (c.usagePage || 0) >= HID_VENDOR_USAGE_PAGE_MIN;
+      const hasOut = (c.outputReports || []).length > 0;
+      const hasFeat = (c.featureReports || []).length > 0;
+      if (isVendor && hasOut) return { score: 4, method: 'output' };
+      if (isVendor && hasFeat) return { score: 3, method: 'feature' };
+      if (hasOut) return { score: 2, method: 'output' };
+      if (hasFeat) return { score: 1, method: 'feature' };
+      return { score: 0, method: 'output' };
+    }
+
+    // Tìm (interface, collection) tốt nhất trong tất cả các interface của bàn phím
+    function pickBestInterface(devs) {
+      let best = { di: 0, ci: 0, score: -1, method: 'output' };
+      for (let di = 0; di < devs.length; di++) {
+        const cols = devs[di].collections || [];
+        for (let ci = 0; ci < cols.length; ci++) {
+          const sc = scoreCollection(cols[ci]);
+          if (sc.score > best.score) best = { di: di, ci: ci, score: sc.score, method: sc.method };
+        }
+      }
+      if (best.score < 0) best.score = 0;
+      return best;
+    }
+
+    // Liệt kê TẤT CẢ interface/collection vào bảng debug và dropdown (value = "interface:collection:phương thức")
+    function renderInterfaceList(devs, best) {
+      collectionsTableBodyEl.innerHTML = '';
+      collectionSelectEl.innerHTML = '';
+      let rowCount = 0;
+
+      for (let di = 0; di < devs.length; di++) {
+        const cols = devs[di].collections || [];
+        for (let ci = 0; ci < cols.length; ci++) {
+          const c = cols[ci];
+          const upHex = formatHex16(c.usagePage);
+          const uHex = '0x' + (Number(c.usage) || 0).toString(16).toUpperCase().padStart(2, '0');
+          const outReps = c.outputReports || [];
+          const featReps = c.featureReports || [];
+          const outS = summarizeReports(outReps);
+          const featS = summarizeReports(featReps);
+          const isVendor = (c.usagePage || 0) >= HID_VENDOR_USAGE_PAGE_MIN;
+          const label = 'D' + di + '.C' + ci;
+
+          const methods = [];
+          if (outReps.length > 0) methods.push('output');
+          if (featReps.length > 0) methods.push('feature');
+          if (methods.length === 0) methods.push('none');
+
+          for (let m = 0; m < methods.length; m++) {
+            const opt = document.createElement('option');
+            opt.value = di + ':' + ci + ':' + methods[m];
+            opt.textContent = label + ' · UP ' + upHex + ' · U ' + uHex + ' · ' +
+              (methods[m] === 'output' ? 'Out: ' + outS : methods[m] === 'feature' ? 'Feature: ' + featS : 'Không gửi được');
+            if (di === best.di && ci === best.ci && methods[m] === best.method) opt.selected = true;
+            collectionSelectEl.appendChild(opt);
+          }
+
+          const tr = document.createElement('tr');
+          tr.dataset.key = di + ':' + ci;
+          if (di === best.di && ci === best.ci) tr.className = 'is-chosen';
+          const cells = [
+            label,
+            upHex + (isVendor ? ' (Vendor)' : ''),
+            uHex,
+            'Out: ' + outS + ' | Feat: ' + featS,
+            (di === best.di && ci === best.ci) ? 'Đang dùng' : (methods[0] === 'none' ? 'Không gửi được' : 'Có thể dùng')
+          ];
+          for (let k = 0; k < cells.length; k++) {
+            const td = document.createElement('td');
+            td.textContent = cells[k];
+            tr.appendChild(td);
+          }
+          collectionsTableBodyEl.appendChild(tr);
+          rowCount++;
+        }
+      }
+
+      if (rowCount === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="5" style="color:var(--text-muted);text-align:center;padding:12px;">Không có dữ liệu HID Collections.</td>';
+        collectionsTableBodyEl.appendChild(tr);
+        const opt = document.createElement('option');
+        opt.value = '-1';
+        opt.textContent = 'Không có collection';
+        collectionSelectEl.appendChild(opt);
+      }
+    }
+
+    // Chọn 1 interface/collection để gửi lệnh (mở interface đó nếu cần, đóng interface cũ)
+    async function selectInterface(di, ci, method) {
+      const dev = hidCtrl.allDevices[di];
+      if (!dev) return false;
+      if (hidCtrl.device !== dev) {
+        const prev = hidCtrl.device;
+        try {
+          if (!dev.opened) await dev.open();
+        } catch (err) {
+          const msg = err && err.message ? err.message : String(err);
+          setHidBannerState('is-error', 'Không thể mở interface D' + di + ': ' + msg);
+          appendHexLog('log-err', '[LỖI OPEN HID]', 'D' + di + ': ' + msg + ' (hãy đóng app Aether HE / driver Aula đang chiếm thiết bị)');
+          return false;
+        }
+        if (prev) {
+          prev.removeEventListener('inputreport', handleInputReportFromDevice);
+          try { if (prev.opened) await prev.close(); } catch (e) { /* bỏ qua */ }
+        }
+        dev.removeEventListener('inputreport', handleInputReportFromDevice);
+        dev.addEventListener('inputreport', handleInputReportFromDevice);
+        hidCtrl.device = dev;
+      }
+      const col = (dev.collections || [])[ci] || {};
+      hidCtrl.selectedDeviceIdx = di;
+      hidCtrl.selectedCollectionIdx = ci;
+      hidCtrl.sendMethod = method === 'feature' ? 'feature' : 'output';
+      const reps = hidCtrl.sendMethod === 'feature' ? (col.featureReports || []) : (col.outputReports || []);
+      if (reps.length > 0) {
+        hidCtrl.reportId = reps[0].reportId || 0;
+        reportIdInputEl.value = String(hidCtrl.reportId);
+      }
+      const rows = collectionsTableBodyEl.querySelectorAll('tr');
+      for (let i = 0; i < rows.length; i++) {
+        rows[i].classList.toggle('is-chosen', rows[i].dataset.key === (di + ':' + ci));
+      }
+      return true;
+    }
+
+    // Gom mọi interface Aula đã cấp quyền (cộng thêm thiết bị vừa chọn trong hộp thoại)
+    async function collectAulaDevices(extra) {
+      const list = [];
+      const add = function (d) {
+        if (d && d.vendorId === HID_VENDOR_ID && d.productId === HID_PRODUCT_ID && list.indexOf(d) === -1) list.push(d);
+      };
+      (extra || []).forEach(add);
+      try {
+        const granted = await navigator.hid.getDevices();
+        granted.forEach(add);
+      } catch (err) {
+        appendHexLog('log-err', '[LỖI GETDEVICES]', err && err.message ? err.message : String(err));
+      }
+      return list;
+    }
+
+    // Kết nối: quét TẤT CẢ interface, chọn interface vendor có Output/Feature report, rồi mới gửi
+    async function connectAllInterfaces(extraDevices) {
+      const devs = await collectAulaDevices(extraDevices);
+      if (devs.length === 0) {
+        appendHexLog('log-err', '[KHÔNG THẤY THIẾT BỊ]', 'Chưa có interface Aula nào được cấp quyền. Bấm "Kết nối bàn phím" và chọn bàn phím trong hộp thoại.');
+        return;
+      }
+      hidCtrl.allDevices = devs;
+      const best = pickBestInterface(devs);
+      renderInterfaceList(devs, best);
+
+      let total = 0;
+      for (let i = 0; i < devs.length; i++) total += (devs[i].collections || []).length;
+      appendHexLog('log-sys', '[HID INTERFACES]',
+        'Thấy ' + devs.length + ' interface / ' + total + ' collection. Chọn D' + best.di + '.C' + best.ci +
+        ' (điểm ' + best.score + ', gửi bằng ' + best.method + ').');
+
+      const ok = await selectInterface(best.di, best.ci, best.method);
+      if (!ok) return;
+
+      const prodName = hidCtrl.device.productName || 'Aula Win60 HE';
+      hidDeviceBadgeEl.textContent = prodName + ' (' + formatHex16(hidCtrl.device.vendorId) + ':' + formatHex16(hidCtrl.device.productId) + ')';
+      disconnectHidBtn.disabled = false;
+
+      if (best.score === 0) {
+        setHidBannerState('is-error',
+          'Chưa thấy interface điều khiển đèn (chỉ có interface không có Output/Feature report). Bấm "Kết nối bàn phím" lại và chọn thêm các mục khác của bàn phím; đồng thời đóng app Aether HE / driver Aula nếu đang mở.');
+        appendHexLog('log-err', '[CHƯA CÓ INTERFACE GHI ĐƯỢC]',
+          'Không interface nào có Output/Feature report. Chưa gửi gói nào xuống bàn phím.');
+        return;
+      }
+
+      hidCtrl.dryRun = false;
+      syncDryRunUI();
+      setHidBannerState('is-connected', 'Đã kết nối ' + prodName + ' (D' + best.di + '.C' + best.ci + '). Đang đồng bộ hiệu ứng ánh sáng.');
+      prevHidTableValid = false;
+      await sendCmd7CurrentStateToHardware('Kết nối mới');
+    }
+
+    function handleInputReportFromDevice(event) {
+      const dataBytes = new Uint8Array(event.data.buffer, event.data.byteOffset, event.data.byteLength);
+      appendHexLog(
+        'log-sys',
+        '[RX rId=0x' + BYTE_HEX_LUT[event.reportId & 0xFF] + ']',
+        formatPacketHexPreview(dataBytes, 20)
+      );
+    }
+
+    async function disconnectCurrentHidDevice() {
+      if (!hidCtrl.device) return;
+      const dev = hidCtrl.device;
+      hidCtrl.device = null;
+      hidCtrl.isStreamingBusy = false;
+      try {
+        dev.removeEventListener('inputreport', handleInputReportFromDevice);
+        if (dev.opened) {
+          await dev.close();
+        }
+        appendHexLog('log-sys', '[NGẮT KẾT NỐI]', 'Đã đóng kết nối WebHID an toàn.');
+      } catch (err) {
+        appendHexLog('log-err', '[LỖI CLOSE HID]', err && err.message ? err.message : String(err));
+      }
+      disconnectHidBtn.disabled = true;
+      hidDeviceBadgeEl.textContent = 'VID: 0x2E3C · PID: 0xC365';
+      setHidBannerState('', 'Đã ngắt kết nối bàn phím. Chế độ mô phỏng vẫn hoạt động bình thường.');
+    }
+
+    function syncDryRunUI() {
+      dryRunBtn.classList.toggle('is-active', hidCtrl.dryRun);
+      dryRunLabelEl.textContent = hidCtrl.dryRun
+        ? 'Chế độ thử (Dry Run): BẬT'
+        : 'Chế độ thử (Dry Run): TẮT (Gửi thật)';
+    }
+
+    function setHardwareControlMode(mode, triggerImmediateSend) {
+      hidCtrl.controlMode = mode === 'streaming' ? 'streaming' : 'firmware';
+      prevHidTableValid = false;
+      modeFirmwareBtn.classList.toggle('is-active', hidCtrl.controlMode === 'firmware');
+      modeStreamingBtn.classList.toggle('is-active', hidCtrl.controlMode === 'streaming');
+
+      appendHexLog(
+        'log-sys',
+        '[ĐỔI CHẾ ĐỘ]',
+        hidCtrl.controlMode === 'firmware'
+          ? 'Chuyển sang Chế độ Firmware (Cmd 7 — gửi 1 gói duy nhất khi đổi thông số).'
+          : 'Chuyển sang Chế độ Streaming (Cmd 9 — truyền bảng 396B Per-key RGB từ Canvas).'
+      );
+
+      if (triggerImmediateSend) {
+        sendCmd7CurrentStateToHardware(
+          hidCtrl.controlMode === 'streaming' ? 'Bật Custom Mode 10 cho Streaming' : 'Đồng bộ Firmware Cmd 7'
+        );
+        if (hidCtrl.controlMode === 'streaming') {
+          startOrUpdateAnimationLoop();
+        }
+      }
+    }
+
+    /* =========================================================================
+     * KHỐI 8: SỰ KIỆN GIAO DIỆN & TƯƠNG TÁC BÀN PHÍM
+     * ========================================================================= */
+    const effectsGridEl = document.getElementById('effectsGrid');
+    const cardElements = new Array(EFFECTS_LIST.length);
+
+    const previewObserver = ('IntersectionObserver' in window)
+      ? new IntersectionObserver((entries) => {
+          let changed = false;
+          for (let i = 0; i < entries.length; i++) {
+            const entry = entries[i];
+            const idx = Number(entry.target.dataset.index);
+            const vis = entry.isIntersecting ? 1 : 0;
+            if (previewVisible[idx] !== vis) {
+              previewVisible[idx] = vis;
+              changed = true;
+            }
+          }
+          if (changed) startOrUpdateAnimationLoop();
+        }, { threshold: 0.05 })
+      : null;
+
+    function buildEffectsGridUI() {
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < EFFECTS_LIST.length; i++) {
+        const fx = EFFECTS_LIST[i];
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'effect-card' + (fx.id === appState.effectId ? ' is-selected' : '');
+        btn.dataset.effectId = fx.id;
+        btn.dataset.index = String(i);
+
+        const topRow = document.createElement('div');
+        topRow.className = 'effect-card-top';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'effect-name';
+        nameSpan.textContent = fx.name;
+
+        const tagSpan = document.createElement('span');
+        tagSpan.className = 'effect-tag';
+        tagSpan.textContent = fx.tag;
+
+        topRow.appendChild(nameSpan);
+        topRow.appendChild(tagSpan);
+
+        const prevFrame = document.createElement('div');
+        prevFrame.className = 'preview-frame';
+
+        const pCanvas = document.createElement('canvas');
+        pCanvas.className = 'preview-canvas';
+        pCanvas.width = PREVIEW_WIDTH;
+        pCanvas.height = PREVIEW_HEIGHT;
+        prevFrame.appendChild(pCanvas);
+
+        const descDiv = document.createElement('div');
+        descDiv.className = 'effect-desc';
+        descDiv.textContent = fx.desc;
+
+        btn.appendChild(topRow);
+        btn.appendChild(prevFrame);
+        btn.appendChild(descDiv);
+
+        btn.addEventListener('click', () => {
+          selectEffectMode(fx.id);
+        });
+
+        previewCanvases[i] = pCanvas;
+        previewContexts[i] = pCanvas.getContext('2d', { alpha: false });
+        cardElements[i] = btn;
+
+        if (previewObserver) {
+          previewObserver.observe(btn);
+        }
+        frag.appendChild(btn);
+      }
+      effectsGridEl.appendChild(frag);
+    }
+
+    const currentEffectBadgeEl = document.getElementById('currentEffectBadge');
+    const directionGridEl = document.getElementById('directionGrid');
+    const dirSupportNoteEl = document.getElementById('dirSupportNote');
+
+    function updateDirectionButtonsUI() {
+      const fx = EFFECT_MAP[appState.effectId];
+      const buttons = directionGridEl.querySelectorAll('.dir-btn');
+      for (let i = 0; i < buttons.length; i++) {
+        const b = buttons[i];
+        b.disabled = !fx.usesDir;
+        if (b.dataset.dir === appState.direction) {
+          b.classList.add('is-active');
+        } else {
+          b.classList.remove('is-active');
+        }
+      }
+      dirSupportNoteEl.textContent = fx.usesDir
+        ? 'Hiệu ứng "' + fx.name + '" đang áp dụng hướng: ' + appState.direction.toUpperCase() + '.'
+        : 'Hiệu ứng "' + fx.name + '" không phụ thuộc hướng chuyển động.';
+    }
+
+    function notifyHardwareOnLightingParamChange(reasonLabel) {
+      prevHidTableValid = false;
+      if (hidCtrl.controlMode === 'firmware') {
+        sendCmd7CurrentStateToHardware(reasonLabel);
+      }
+    }
+
+    function selectEffectMode(effectId) {
+      const fx = EFFECT_MAP[effectId];
+      if (!fx) return;
+      appState.effectId = effectId;
+      appState.fullColor = fx.defaultFullColor;
+      fullColorCheckbox.checked = appState.fullColor;
+      currentEffectBadgeEl.textContent = effectId.toUpperCase();
+
+      for (let i = 0; i < EFFECTS_LIST.length; i++) {
+        if (EFFECTS_LIST[i].id === effectId) {
+          cardElements[i].classList.add('is-selected');
+        } else {
+          cardElements[i].classList.remove('is-selected');
+        }
+      }
+
+      if (effectId === 'reactive' || effectId === 'cross' || effectId === 'ripple') {
+        recordKeyHit(34, performance.now() * 0.001);
+      }
+
+      updateDirectionButtonsUI();
+      startOrUpdateAnimationLoop();
+      notifyHardwareOnLightingParamChange('Chọn ' + fx.name);
+    }
+
+    const brightnessSlider = document.getElementById('brightnessSlider');
+    const brightnessValEl = document.getElementById('brightnessVal');
+    brightnessSlider.addEventListener('input', () => {
+      appState.brightness = Number(brightnessSlider.value);
+      brightnessValEl.textContent = 'Mức ' + appState.brightness + ' / 4';
+      syncRenderParamsFromState();
+      startOrUpdateAnimationLoop();
+      notifyHardwareOnLightingParamChange('Độ sáng=' + appState.brightness);
+    });
+
+    const speedSlider = document.getElementById('speedSlider');
+    const speedValEl = document.getElementById('speedVal');
+    speedSlider.addEventListener('input', () => {
+      appState.speed = Number(speedSlider.value);
+      speedValEl.textContent = 'Mức ' + appState.speed + ' / 4';
+      syncRenderParamsFromState();
+      startOrUpdateAnimationLoop();
+      notifyHardwareOnLightingParamChange('Tốc độ=' + appState.speed);
+    });
+
+    fullColorCheckbox.addEventListener('change', () => {
+      appState.fullColor = fullColorCheckbox.checked;
+      notifyHardwareOnLightingParamChange('FullColor=' + (appState.fullColor ? 1 : 0));
+    });
+
+    const fgColorInput = document.getElementById('fgColorInput');
+    const bgColorInput = document.getElementById('bgColorInput');
+    const fgHexText = document.getElementById('fgHexText');
+    const bgHexText = document.getElementById('bgHexText');
+
+    fgColorInput.addEventListener('input', () => {
+      appState.fgHex = fgColorInput.value;
+      fgHexText.textContent = appState.fgHex.toUpperCase();
+      syncRenderParamsFromState();
+      startOrUpdateAnimationLoop();
+      notifyHardwareOnLightingParamChange('Màu FG ' + appState.fgHex);
+    });
+
+    bgColorInput.addEventListener('input', () => {
+      appState.bgHex = bgColorInput.value;
+      bgHexText.textContent = appState.bgHex.toUpperCase();
+      syncRenderParamsFromState();
+      startOrUpdateAnimationLoop();
+      notifyHardwareOnLightingParamChange('Màu BG ' + appState.bgHex);
+    });
+
+    document.getElementById('fgSwatches').addEventListener('click', (e) => {
+      const btn = e.target.closest('.swatch-btn');
+      if (!btn) return;
+      const hex = btn.dataset.fg;
+      appState.fgHex = hex;
+      fgColorInput.value = hex;
+      fgHexText.textContent = hex.toUpperCase();
+      syncRenderParamsFromState();
+      startOrUpdateAnimationLoop();
+      notifyHardwareOnLightingParamChange('Preset FG ' + hex);
+    });
+
+    directionGridEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.dir-btn');
+      if (!btn || btn.disabled) return;
+      appState.direction = btn.dataset.dir;
+      syncRenderParamsFromState();
+      updateDirectionButtonsUI();
+      startOrUpdateAnimationLoop();
+      notifyHardwareOnLightingParamChange('Hướng ' + appState.direction);
+    });
+
+    const powerBtn = document.getElementById('powerBtn');
+    const powerLabel = document.getElementById('powerLabel');
+    powerBtn.addEventListener('click', () => {
+      appState.power = !appState.power;
+      powerBtn.classList.toggle('is-active', appState.power);
+      powerLabel.textContent = appState.power ? 'Đèn: BẬT' : 'Đèn: TẮT';
+      syncRenderParamsFromState();
+      startOrUpdateAnimationLoop();
+      notifyHardwareOnLightingParamChange(appState.power ? 'Bật đèn' : 'Tắt đèn');
+    });
+
+    const ecoModeBtn = document.getElementById('ecoModeBtn');
+    const previewStatusNoteEl = document.getElementById('previewStatusNote');
+
+    function syncEcoModeUI() {
+      ecoModeBtn.classList.toggle('is-active', appState.ecoMode);
+      previewStatusNoteEl.textContent = appState.ecoMode
+        ? 'Chế độ tiết kiệm: 20 FPS · Preview tĩnh'
+        : 'Preview: 15 FPS · Tự dừng khi cuộn khuất';
+    }
+    syncEcoModeUI();
+
+    ecoModeBtn.addEventListener('click', () => {
+      appState.ecoMode = !appState.ecoMode;
+      syncEcoModeUI();
+      startOrUpdateAnimationLoop();
+    });
+
+    const toggleFpsBtn = document.getElementById('toggleFpsBtn');
+    const fpsBadge = document.getElementById('fpsBadge');
+    toggleFpsBtn.addEventListener('click', () => {
+      appState.showFps = !appState.showFps;
+      toggleFpsBtn.classList.toggle('is-active', appState.showFps);
+      fpsBadge.classList.toggle('is-hidden', !appState.showFps);
+    });
+
+    // Sự kiện các nút WebHID (Mục 6)
+    connectHidBtn.addEventListener('click', async () => {
+      if (!hidCtrl.supported) {
+        setHidBannerState(
+          'is-unsupported',
+          'Trình duyệt hiện tại không hỗ trợ WebHID hoặc không ở Secure Context (HTTPS/localhost).'
+        );
+        appendHexLog('log-err', '[KHÔNG HỖ TRỢ WEBHID]', 'Hãy mở file trên Chrome/Edge qua localhost hoặc HTTPS.');
+        return;
+      }
+      try {
+        const devices = await navigator.hid.requestDevice({
+          filters: [{ vendorId: HID_VENDOR_ID, productId: HID_PRODUCT_ID }]
+        });
+        if (!devices || devices.length === 0) {
+          appendHexLog('log-sys', '[HỦY CHỌN]', 'Người dùng đã đóng hộp thoại chọn thiết bị.');
+          return;
+        }
+        // KHÔNG chỉ lấy devices[0]: mỗi interface là 1 thiết bị riêng, gom tất cả rồi tự chọn interface vendor
+        await connectAllInterfaces(devices);
+      } catch (err) {
+        const msg = err && err.message ? err.message : String(err);
+        setHidBannerState('is-error', 'Lỗi khi yêu cầu kết nối WebHID: ' + msg);
+        appendHexLog('log-err', '[LỖI REQUESTDEVICE]', msg);
+      }
+    });
+
+    disconnectHidBtn.addEventListener('click', () => {
+      disconnectCurrentHidDevice();
+    });
+
+    // Nút Khôi phục đèn: đặt lại thông số mặc định và gửi gói Cmd 7 chuẩn
+    restoreLightBtn.addEventListener('click', () => {
+      appState.effectId = 'wave';
+      appState.brightness = 4;
+      appState.speed = 3;
+      appState.fgHex = '#00e5ff';
+      appState.bgHex = '#101828';
+      appState.direction = 'right';
+      appState.fullColor = true;
+      appState.power = true;
+
+      brightnessSlider.value = '4';
+      brightnessValEl.textContent = 'Mức 4 / 4';
+      speedSlider.value = '3';
+      speedValEl.textContent = 'Mức 3 / 4';
+      fgColorInput.value = '#00e5ff';
+      fgHexText.textContent = '#00E5FF';
+      bgColorInput.value = '#101828';
+      bgHexText.textContent = '#101828';
+      fullColorCheckbox.checked = true;
+      powerBtn.classList.add('is-active');
+      powerLabel.textContent = 'Đèn: BẬT';
+
+      syncRenderParamsFromState();
+      setHardwareControlMode('firmware', false);
+      selectEffectMode('wave');
+      appendHexLog('log-sys', '[KHÔI PHỤC ĐÈN]', 'Đã khôi phục cấu hình Lighting Firmware mặc định (Wave, Bri 4, Spd 3).');
+    });
+
+    dryRunBtn.addEventListener('click', () => {
+      hidCtrl.dryRun = !hidCtrl.dryRun;
+      syncDryRunUI();
+      appendHexLog(
+        'log-sys',
+        '[DRY RUN]',
+        hidCtrl.dryRun
+          ? 'Đã BẬT Chế độ thử (Dry Run) — không ghi xuống thiết bị USB, chỉ in gói Hex.'
+          : 'Đã TẮT Chế độ thử (Dry Run) — gửi gói trực tiếp qua sendReport()/sendFeatureReport().'
+      );
+    });
+
+    modeFirmwareBtn.addEventListener('click', () => {
+      setHardwareControlMode('firmware', true);
+    });
+
+    modeStreamingBtn.addEventListener('click', () => {
+      setHardwareControlMode('streaming', true);
+    });
+
+    collectionSelectEl.addEventListener('change', async () => {
+      const parts = collectionSelectEl.value.split(':');
+      if (parts.length < 3) return;
+      const di = Number(parts[0]);
+      const ci = Number(parts[1]);
+      const ok = await selectInterface(di, ci, parts[2]);
+      if (ok) {
+        appendHexLog(
+          'log-sys',
+          '[ĐỔI INTERFACE]',
+          'Đã chọn thủ công D' + di + '.C' + ci + ' (gửi bằng ' + hidCtrl.sendMethod + ', Report ID = 0x' + BYTE_HEX_LUT[hidCtrl.reportId & 0xFF] + ').'
+        );
+      }
+    });
+
+    reportIdInputEl.addEventListener('change', () => {
+      const val = Math.max(0, Math.min(255, Number(reportIdInputEl.value) | 0));
+      reportIdInputEl.value = String(val);
+      hidCtrl.reportId = val;
+      appendHexLog('log-sys', '[ĐỔI REPORT ID]', 'Report ID hiện tại: 0x' + BYTE_HEX_LUT[val] + ' (' + val + ').');
+    });
+
+    checksumSelectEl.addEventListener('change', () => {
+      hidCtrl.checksumMode = checksumSelectEl.value;
+      appendHexLog('log-sys', '[ĐỔI CHECKSUM]', 'Kiểu checksum: ' + hidCtrl.checksumMode);
+      notifyHardwareOnLightingParamChange('Đổi Checksum');
+    });
+
+    document.getElementById('compactStreamLogCheckbox').addEventListener('change', (e) => {
+      hidCtrl.compactStreamLog = e.target.checked;
+    });
+
+    document.getElementById('sendTestCmd7Btn').addEventListener('click', () => {
+      sendCmd7CurrentStateToHardware('Gửi thủ công');
+    });
+
+    document.getElementById('clearLogBtn').addEventListener('click', () => {
+      hexLogContainer.innerHTML = '';
+      appendHexLog('log-sys', '[LOG]', 'Đã xóa nhật ký Hex.');
+    });
+
+    // Phím thật & Chuột trên Canvas
+    const activeKeyIndicatorEl = document.getElementById('activeKeyIndicator');
+
+    function triggerKeyByIndex(idx) {
+      if (idx === undefined || idx < 0 || idx >= KEY_COUNT) return;
+      const nowSec = performance.now() * 0.001;
+      recordKeyHit(idx, nowSec);
+      activeKeyIndicatorEl.innerHTML =
+        'Phím vừa nhấn: <strong>' + KEY_LABELS[idx] +
+        '</strong> (HW LED #' + KEYMAP_HARDWARE_LED_INDEX[idx] + ')';
+      mainBoardDirty = true;
+      if (!isLoopRunning && appState.power) {
+        startOrUpdateAnimationLoop();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      const idx = CODE_TO_INDEX[e.code];
+      if (idx !== undefined) {
+        if (!KEY_IS_DOWN[idx]) {
+          KEY_IS_DOWN[idx] = 1;
+          triggerKeyByIndex(idx);
+        }
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      const idx = CODE_TO_INDEX[e.code];
+      if (idx !== undefined) {
+        KEY_IS_DOWN[idx] = 0;
+        mainBoardDirty = true;
+      }
+    });
+
+    let isPointerDownOnBoard = false;
+    let lastHoveredKeyIdx = -1;
+
+    function findKeyIndexAtCanvasPos(clientX, clientY) {
+      const rect = mainCanvas.getBoundingClientRect();
+      const x = (clientX - rect.left) * (LOGICAL_WIDTH / rect.width);
+      const y = (clientY - rect.top) * (LOGICAL_HEIGHT / rect.height);
+      for (let i = 0; i < KEY_COUNT; i++) {
+        if (
+          x >= KEY_PX_X[i] &&
+          x <= KEY_PX_X[i] + KEY_PX_W[i] &&
+          y >= KEY_PX_Y[i] &&
+          y <= KEY_PX_Y[i] + KEY_PX_H[i]
+        ) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    mainCanvas.addEventListener('pointerdown', (e) => {
+      isPointerDownOnBoard = true;
+      const idx = findKeyIndexAtCanvasPos(e.clientX, e.clientY);
+      if (idx >= 0) {
+        lastHoveredKeyIdx = idx;
+        KEY_IS_DOWN[idx] = 1;
+        triggerKeyByIndex(idx);
+      }
+    });
+
+    mainCanvas.addEventListener('pointermove', (e) => {
+      if (!isPointerDownOnBoard) return;
+      const idx = findKeyIndexAtCanvasPos(e.clientX, e.clientY);
+      if (idx !== lastHoveredKeyIdx) {
+        if (lastHoveredKeyIdx >= 0) KEY_IS_DOWN[lastHoveredKeyIdx] = 0;
+        lastHoveredKeyIdx = idx;
+        if (idx >= 0) {
+          KEY_IS_DOWN[idx] = 1;
+          triggerKeyByIndex(idx);
+        }
+      }
+    });
+
+    function clearPointerKeys() {
+      isPointerDownOnBoard = false;
+      if (lastHoveredKeyIdx >= 0) {
+        KEY_IS_DOWN[lastHoveredKeyIdx] = 0;
+        lastHoveredKeyIdx = -1;
+        mainBoardDirty = true;
+      }
+    }
+    window.addEventListener('pointerup', clearPointerKeys);
+    window.addEventListener('pointercancel', clearPointerKeys);
+
+    document.getElementById('simulateKeyBtn').addEventListener('click', () => {
+      const sampleKeys = [17, 30, 31, 32, 34, 35, 57];
+      const pick = sampleKeys[(Math.random() * sampleKeys.length) | 0];
+      KEY_IS_DOWN[pick] = 1;
+      triggerKeyByIndex(pick);
+      setTimeout(() => {
+        KEY_IS_DOWN[pick] = 0;
+        mainBoardDirty = true;
+      }, 140);
+    });
+
+    // Dừng animation & dừng streaming Cmd 9 khi tab bị ẩn hoặc mất focus
+    document.addEventListener('visibilitychange', () => {
+      isPageActive = !document.hidden;
+      if (isPageActive) {
+        startOrUpdateAnimationLoop();
+      } else {
+        stopAnimationLoop();
+        if (hidCtrl.controlMode === 'streaming') {
+          appendHexLog('log-sys', '[TẠM DỪNG STREAM]', 'Tab bị ẩn — tạm ngưng truyền gói Cmd 9.');
+        }
+      }
+    });
+
+    window.addEventListener('blur', () => {
+      isPageActive = false;
+      KEY_IS_DOWN.fill(0);
+      stopAnimationLoop();
+    });
+
+    window.addEventListener('focus', () => {
+      if (!document.hidden) {
+        isPageActive = true;
+        startOrUpdateAnimationLoop();
+      }
+    });
+
+    // Khởi tạo kiểm tra WebHID, tự kết nối lại qua navigator.hid.getDevices() và lắng nghe connect/disconnect
+    async function initWebHidSubsystem() {
+      if (!hidCtrl.supported) {
+        connectHidBtn.disabled = true;
+        setHidBannerState(
+          'is-unsupported',
+          'Trình duyệt không có navigator.hid (hoặc chưa chạy trên HTTPS/localhost). Hãy dùng Chrome/Edge; chế độ mô phỏng & Dry Run vẫn hoạt động đầy đủ.'
+        );
+        appendHexLog(
+          'log-dry',
+          '[CHẾ ĐỘ MÔ PHỎNG]',
+          'navigator.hid không khả dụng. Bạn vẫn có thể kiểm tra toàn bộ gói Hex Cmd 7 & Cmd 9 qua Chế độ thử (Dry Run).'
+        );
+        sendCmd7CurrentStateToHardware('Khởi tạo Dry Run');
+        return;
+      }
+
+      appendHexLog(
+        'log-sys',
+        '[WEBHID SẴN SÀNG]',
+        'Trình duyệt hỗ trợ WebHID. Bộ lọc thiết bị: VID 0x2E3C, PID 0xC365 (Aula Win60 HE).'
+      );
+
+      // Lắng nghe sự kiện cắm/rút bàn phím
+      navigator.hid.addEventListener('connect', (e) => {
+        const d = e.device;
+        if (d && d.vendorId === HID_VENDOR_ID && d.productId === HID_PRODUCT_ID) {
+          appendHexLog('log-sys', '[USB CONNECT]', 'Phát hiện cắm bàn phím Aula Win60 HE — đang quét interface...');
+          connectAllInterfaces([d]);
+        }
+      });
+
+      navigator.hid.addEventListener('disconnect', (e) => {
+        if (hidCtrl.device && (e.device === hidCtrl.device || hidCtrl.allDevices.indexOf(e.device) !== -1)) {
+          appendHexLog('log-err', '[USB DISCONNECT]', 'Bàn phím Aula Win60 HE đã bị rút khỏi máy tính.');
+          hidCtrl.device = null;
+          hidCtrl.isStreamingBusy = false;
+          disconnectHidBtn.disabled = true;
+          setHidBannerState('is-unsupported', 'Bàn phím đã ngắt kết nối vật lý. Đã dừng truyền lệnh HID.');
+        }
+      });
+
+      // Tự kết nối lại nếu đã được cấp quyền trước đó (quét TẤT CẢ interface đã cấp quyền)
+      try {
+        const granted = await collectAulaDevices([]);
+        if (granted.length > 0) {
+          appendHexLog('log-sys', '[AUTO-RECONNECT]', 'Tìm thấy ' + granted.length + ' interface Aula đã cấp quyền — đang quét...');
+          await connectAllInterfaces([]);
+          return;
+        }
+        // Nếu chưa có thiết bị nào được cấp quyền, gửi 1 gói mẫu vào Dry Run Log
+        sendCmd7CurrentStateToHardware('Khởi tạo');
+      } catch (err) {
+        appendHexLog('log-err', '[LỖI GETDEVICES]', err && err.message ? err.message : String(err));
+      }
+    }
+
+    // Khởi chạy toàn bộ ứng dụng
+    buildGlowSpriteAtlas();
+    initMainCanvasesAndStaticLayers();
+    buildEffectsGridUI();
+    updateDirectionButtonsUI();
+    renderAllStaticPreviewsSnapshot(1.25);
+    startOrUpdateAnimationLoop();
+    initWebHidSubsystem();
+  </script>
+</body>
+</html>
