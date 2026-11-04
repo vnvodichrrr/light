@@ -849,6 +849,254 @@
       accent-color: var(--accent);
       cursor: pointer;
     }
+  
+    .app-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 8, 14, 0.78);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 999;
+    }
+    .app-modal-backdrop.is-open {
+      display: flex;
+    }
+    .app-modal-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-active);
+      border-radius: var(--radius-lg);
+      max-width: 580px;
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      color: var(--text-primary);
+    }
+    .app-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+    }
+    .app-modal-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .app-step-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .app-step-box code {
+      background: #090c14;
+      border: 1px solid #1e2638;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.74rem;
+      color: var(--accent);
+      display: block;
+      word-break: break-all;
+    }
+
+  
+    /* =========================================================================
+     * KHỐI CSS GIF LED & CUSTOM ANIMATION STUDIO (PHONG CÁCH MCHOSE M HUB)
+     * ========================================================================= */
+    .gif-studio-section {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .gif-studio-section.is-highlighted {
+      border-color: var(--accent);
+    }
+
+    .studio-top-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .studio-top-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .studio-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .studio-card-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .preset-pills-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 7px;
+    }
+
+    .preset-gif-btn {
+      background: #111624;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      padding: 7px 9px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .preset-gif-btn:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .preset-gif-btn.is-active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .import-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .paint-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .tool-btn {
+      background: #111624;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .tool-btn:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .tool-btn.is-active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tool-btn.paint-master-toggle.is-active {
+      background: rgba(0, 230, 118, 0.16);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .timeline-bar {
+      background: #0d111b;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .timeline-controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .timeline-frames-strip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .frame-chip {
+      min-width: 42px;
+      height: 28px;
+      border-radius: 5px;
+      background: #151b2b;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      padding: 0 7px;
+    }
+
+    .frame-chip:hover {
+      border-color: #3e4c6e;
+      color: var(--text-primary);
+    }
+
+    .frame-chip.is-current {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
   </style>
 </head>
 <body>
@@ -891,6 +1139,16 @@
             <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
           </svg>
           <span id="ecoModeLabel">Tiết kiệm (20 FPS)</span>
+        </button>
+
+        <!-- Nút hướng dẫn / cài thành App chạy trên máy tính -->
+        <button id="installAppBtn" type="button" class="pill-toggle is-active" title="Cách cài đặt thành ứng dụng độc lập trên máy tính (Windows / macOS / Linux)">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <span>Cài thành App</span>
         </button>
 
         <!-- Công tắc Nguồn Đèn LED -->
@@ -1059,6 +1317,149 @@
       </section>
     </main>
 
+    <!-- KHU VỰC MỚI: GIF LED & CUSTOM ANIMATION STUDIO (NHƯ TRÊN PHÍM MCHOSE M HUB) -->
+    <section id="gifStudioSection" class="gif-studio-section" aria-label="GIF LED và Custom Animation Studio">
+      <div class="panel-title">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span>GIF LED &amp; Custom Animation Studio (MCHOSE Style &rarr; Aula Win60 HE)</span>
+          <span class="badge-model">Mode 10 + Cmd 9 Per-Key Stream</span>
+        </div>
+        <span id="gifStudioStatusNote" style="font-size:0.74rem;color:var(--accent);font-weight:600;">
+          Đang nạp sẵn: Cyber Scanner (16 Frame) · Bấm "Bật hiệu ứng GIF LED" để chạy
+        </span>
+      </div>
+
+      <div class="studio-top-grid">
+        <!-- KHỐI A: NHẬP FILE GIF / VIDEO / PRESET TỪ BÊN NGOÀI HOẶC CHỌN MẪU DỰNG SẴN -->
+        <div class="studio-card">
+          <div class="studio-card-title">
+            <span>A. Thư viện Mẫu GIF LED &amp; Nhập File (.GIF / Video / Ảnh / .JSON)</span>
+            <button id="activateGifModeBtn" type="button" class="pill-toggle is-active" style="padding:4px 10px;font-size:0.74rem;">
+              <span>Bật hiệu ứng GIF LED lên Phím</span>
+            </button>
+          </div>
+
+          <!-- 6 Mẫu GIF LED động dựng sẵn (giống trên video showcase bàn phím HE) -->
+          <div class="preset-pills-row" id="gifTemplatesGrid">
+            <button type="button" class="preset-gif-btn is-active" data-tpl="cyber_scanner">
+              <span>1. Cyber Scanner</span>
+              <span class="kbd-tag">16F</span>
+            </button>
+            <button type="button" class="preset-gif-btn" data-tpl="pacman_chase">
+              <span>2. Pac-Man Săn Mồi</span>
+              <span class="kbd-tag">18F</span>
+            </button>
+            <button type="button" class="preset-gif-btn" data-tpl="heartbeat_pulse">
+              <span>3. Trái Tim Đập</span>
+              <span class="kbd-tag">16F</span>
+            </button>
+            <button type="button" class="preset-gif-btn" data-tpl="matrix_rain">
+              <span>4. Mưa Ma Trận</span>
+              <span class="kbd-tag">20F</span>
+            </button>
+            <button type="button" class="preset-gif-btn" data-tpl="equalizer_bars">
+              <span>5. Sóng Nhạc EQ</span>
+              <span class="kbd-tag">16F</span>
+            </button>
+            <button type="button" class="preset-gif-btn" data-tpl="aula_marquee">
+              <span>6. Chữ Chạy AULA</span>
+              <span class="kbd-tag">20F</span>
+            </button>
+          </div>
+
+          <!-- Hàng nút Nhập file .gif / .mp4 / .png / .json từ máy tính -->
+          <div class="import-actions-row">
+            <input id="gifFileInput" type="file" accept=".gif,image/gif,video/mp4,video/webm,image/png,image/jpeg,image/webp,.json" style="display:none;" />
+            <button id="importGifFileBtn" type="button" class="btn-action btn-primary" style="width:auto;padding:7px 12px;">
+              <svg class="svg-icon" viewBox="0 0 24 24">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>Tải file .GIF / Video / Ảnh / .JSON từ máy</span>
+            </button>
+
+            <button id="exportGifJsonBtn" type="button" class="btn-action" style="width:auto;padding:7px 12px;">
+              <svg class="svg-icon" viewBox="0 0 24 24">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Xuất Preset (.json)</span>
+            </button>
+
+            <label class="checkbox-inline" title="Tăng độ rực màu khi lấy mẫu từ file GIF/Video bên ngoài">
+              <span>Độ rực màu GIF:</span>
+              <select id="gifSatBoostSelect" class="select-input" style="padding:3px 6px;">
+                <option value="1.35" selected>Rực rỡ (135%)</option>
+                <option value="1.75">Siêu rực Neon (175%)</option>
+                <option value="1.0">Nguyên bản (100%)</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <!-- KHỐI B: TỰ TẠO / VẼ HIỆU ỨNG TRỰC TIẾP TRÊN BÀN PHÍM (CUSTOM FRAME EDITOR) -->
+        <div class="studio-card">
+          <div class="studio-card-title">
+            <span>B. Tự Vẽ Đèn Custom Từng Khung Hình (Paint trực tiếp lên 61 phím)</span>
+            <button id="togglePaintModeBtn" type="button" class="tool-btn paint-master-toggle" title="Khi bật, nhấp hoặc kéo chuột trên bàn phím 61 phím ở trên sẽ tô màu trực tiếp vào Frame hiện tại">
+              <span class="dot-indicator"></span>
+              <span id="paintModeBtnText">Chế độ Vẽ lên Phím: TẮT</span>
+            </button>
+          </div>
+
+          <div class="paint-toolbar">
+            <button type="button" class="tool-btn is-active" data-tool="brush" id="toolBrushBtn">Bút vẽ (Brush)</button>
+            <button type="button" class="tool-btn" data-tool="eraser" id="toolEraserBtn">Tẩy (Eraser)</button>
+            <button type="button" class="tool-btn" data-tool="picker" id="toolPickerBtn">Hút màu</button>
+
+            <label class="checkbox-inline" style="margin-left:4px;">
+              <span>Màu bút:</span>
+              <input id="studioBrushColor" type="color" value="#00e5ff" style="width:28px;height:24px;" />
+            </label>
+
+            <button id="fillFrameBtn" type="button" class="tool-btn" title="Tô toàn bộ 61 phím ở Frame hiện tại bằng màu bút">Tô kín</button>
+            <button id="wasdFrameBtn" type="button" class="tool-btn" title="Tô nổi bật cụm WASD + Phím điều hướng">Mẫu WASD</button>
+            <button id="clearFrameBtn" type="button" class="tool-btn" title="Xóa toàn bộ 61 phím ở Frame hiện tại về màu đen">Xóa Frame</button>
+          </div>
+
+          <!-- Dịch chuyển khung hình 4 hướng để tạo hiệu ứng chạy cực nhanh -->
+          <div class="paint-toolbar">
+            <span style="font-size:0.73rem;color:var(--text-secondary);font-weight:600;">Dịch hình 1 phím:</span>
+            <button id="shiftLeftBtn" type="button" class="tool-btn" title="Dịch toàn bộ màu của Frame hiện tại sang trái 1 phím">&larr; Trái</button>
+            <button id="shiftRightBtn" type="button" class="tool-btn" title="Dịch toàn bộ màu của Frame hiện tại sang phải 1 phím">Phải &rarr;</button>
+            <button id="shiftUpBtn" type="button" class="tool-btn" title="Dịch toàn bộ màu của Frame hiện tại lên trên 1 hàng">&uarr; Lên</button>
+            <button id="shiftDownBtn" type="button" class="tool-btn" title="Dịch toàn bộ màu của Frame hiện tại xuống dưới 1 hàng">Xuống &darr;</button>
+            <button id="cloneShiftRightBtn" type="button" class="tool-btn is-active" title="Nhân đôi Frame hiện tại và tự động dịch sang phải 1 phím (Bấm liên tục để tạo chữ/hình chạy ngang!)">+Frame &amp; Dịch &rarr;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- THANH TIMELINE QUẢN LÝ FRAME & TỐC ĐỘ FPS CỦA GIF -->
+      <div class="timeline-bar">
+        <div class="timeline-controls-row">
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+            <button id="gifPlayPauseBtn" type="button" class="tool-btn is-active">
+              <span id="gifPlayPauseText">Đang phát (Pause để vẽ)</span>
+            </button>
+            <button id="addFrameBtn" type="button" class="tool-btn">+ Thêm Frame trống</button>
+            <button id="dupFrameBtn" type="button" class="tool-btn">Nhân đôi Frame</button>
+            <button id="delFrameBtn" type="button" class="tool-btn">Xóa Frame</button>
+            <span id="frameCounterLabel" class="control-val">Frame 1 / 16</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;min-width:230px;">
+            <label for="gifFpsSlider" style="font-size:0.75rem;color:var(--text-secondary);white-space:nowrap;">Tốc độ GIF:</label>
+            <input id="gifFpsSlider" type="range" min="1" max="30" step="1" value="12" />
+            <span id="gifFpsVal" class="control-val" style="white-space:nowrap;">12 FPS</span>
+          </div>
+        </div>
+
+        <div id="timelineFramesStrip" class="timeline-frames-strip" aria-label="Danh sách các khung hình GIF"></div>
+      </div>
+    </section>
+
     <!-- KHU VỰC MỤC 6: KẾT NỐI BÀN PHÍM THẬT AULA WIN60 HE QUA WEBHID & GỠ LỖI -->
     <section class="webhid-section" aria-label="Kết nối bàn phím thật Aula Win60 HE qua WebHID">
       <!-- BẢNG TRÁI: ĐIỀU KHIỂN KẾT NỐI WEBHID & COLLECTIONS DEBUG -->
@@ -1131,6 +1532,33 @@
           </div>
         </div>
 
+        <!-- Hiệu ứng Khởi động Bàn phím (Boot Sequence 2.4s khi kết nối / bật app) -->
+        <div class="control-group" style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:10px 12px;">
+          <div class="control-label-row">
+            <span>Hiệu ứng Khởi động Bàn phím (Boot Animation)</span>
+            <label class="checkbox-inline" title="Tự động chạy hiệu ứng chào mừng 2.4 giây mỗi khi kết nối bàn phím hoặc mở ứng dụng">
+              <input id="bootAnimEnableCheckbox" type="checkbox" checked />
+              <span>Tự chạy khi kết nối</span>
+            </label>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:8px;align-items:center;margin-top:4px;">
+            <select id="bootAnimStyleSelect" class="select-input" aria-label="Chọn kiểu hiệu ứng khởi động">
+              <option value="heart_ecg_boot" selected>1. Nhịp Tim ECG &amp; Trái Tim Đỏ (Như Video)</option>
+              <option value="cyber_sweep">2. Cyber BIOS Sweep (Quét Laser 2 chiều)</option>
+              <option value="reactor_ignition">3. Lõi Năng Lượng Bung Tỏa (Reactor Core)</option>
+              <option value="matrix_charge">4. Sạc Đầy Ma Trận Từng Hàng (Power Bar)</option>
+            </select>
+
+            <button id="testBootAnimBtn" type="button" class="btn-action btn-primary" style="padding:6px 10px;font-size:0.76rem;">
+              <svg class="svg-icon" viewBox="0 0 24 24">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span id="testBootAnimBtnText">Chạy thử Khởi động</span>
+            </button>
+          </div>
+        </div>
+
         <!-- Khung Debug HID Collections & Chọn thủ công Collection / Report ID / Checksum -->
         <div class="control-group">
           <div class="control-label-row">
@@ -1148,16 +1576,16 @@
 
             <div class="field-block">
               <label for="reportIdInput">Report ID (Hex/Số)</label>
-              <input id="reportIdInput" type="number" min="0" max="255" value="0" class="num-input" title="Đổi Report ID thủ công nếu cần" />
+              <input id="reportIdInput" type="number" min="0" max="255" value="1" class="num-input" title="Aula Win60 HE dùng Report ID = 1 (0x01) theo protocol.py" />
             </div>
 
             <div class="field-block">
               <label for="checksumSelect">Thuật toán Checksum (Tùy chỉnh)</label>
               <select id="checksumSelect" class="select-input">
-                <option value="sum7_inv">Bù 255 tổng 7 byte đầu (Byte [7]/[63])</option>
-                <option value="sum_last">Tổng modulo 256 ở byte cuối [63]</option>
-                <option value="xor_last">XOR toàn gói ở byte cuối [63]</option>
-                <option value="none">Không dùng checksum (0x00)</option>
+                <option value="none" selected>Không dùng checksum (Chuẩn protocol.py)</option>
+                <option value="sum7_inv">Bù 255 tổng 7 byte đầu</option>
+                <option value="sum_last">Tổng modulo 256 ở byte cuối</option>
+                <option value="xor_last">XOR toàn gói ở byte cuối</option>
               </select>
             </div>
           </div>
@@ -1210,6 +1638,34 @@
     </section>
   </div>
 
+  
+  <!-- HỘP THOẠI CÀI ĐẶT THÀNH APP TRÊN MÁY TÍNH -->
+  <div id="installAppModal" class="app-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="installAppModalTitle">
+    <div class="app-modal-card">
+      <div class="app-modal-header">
+        <span id="installAppModalTitle" class="app-modal-title">Cài đặt Aether HE Lighting thành App trên Máy Tính</span>
+        <button id="closeInstallModalBtn" type="button" class="pill-toggle" style="padding:4px 10px;">Đóng</button>
+      </div>
+
+      <div class="app-step-box">
+        <strong>Cách 1: Dùng gói App Desktop (.zip) chạy 1 chạm (Khuyên dùng trên Windows)</strong>
+        <span>Giải nén file <strong>Aether_HE_Lighting_Desktop_App.zip</strong> và nhấp đúp vào <strong>Chay_App_Win60HE.bat</strong> (hoặc <strong>app_desktop.py</strong>). Script sẽ mở cửa sổ App riêng biệt (không thanh địa chỉ) và lưu quyền kết nối USB vĩnh viễn.</span>
+      </div>
+
+      <div class="app-step-box">
+        <strong>Cách 2: Mở trực tiếp cửa sổ App độc lập bằng lệnh Edge / Chrome</strong>
+        <span>Bạn có thể tạo Shortcut trên Desktop với đường dẫn dưới đây để mở thẳng thành cửa sổ App:</span>
+        <code id="appCmdSnippet">msedge.exe --app="http://127.0.0.1:8765/aula.html"</code>
+        <button id="copyAppCmdBtn" type="button" class="btn-action" style="margin-top:4px;padding:6px 10px;">Sao chép lệnh mở App</button>
+      </div>
+
+      <div class="app-step-box">
+        <strong>Cách 3: Cài thành PWA từ menu Chrome / Edge</strong>
+        <span>Khi mở qua localhost, nhấn biểu tượng <strong>Cài đặt (Install)</strong> trên thanh địa chỉ hoặc vào menu <strong>⋮ &rarr; Ứng dụng (Apps) &rarr; Cài đặt trang này dưới dạng ứng dụng</strong> để ghim thẳng ra Desktop &amp; Start Menu.</span>
+      </div>
+    </div>
+  </div>
+
   <script>
     /* =========================================================================
      * KHỐI 1: CONFIG & HẰNG SỐ GIAO THỨC WEBHID + HIỆU NĂNG
@@ -1227,53 +1683,52 @@
     const PREVIEW_LED_COUNT = PREVIEW_COLS * PREVIEW_ROWS;
 
     // -------------------------------------------------------------------------
-    // HẰNG SỐ GIAO THỨC WEBHID AULA WIN60 HE (Theo thông số xác minh từ Aether-HE)
-    // [TÙY CHỈNH THEO PROTOCOL.PY]: Nếu bạn có nội dung file protocol.py của repo, hãy cập nhật các hằng số
-    // HEADER / REPORT_ID / CHECKSUM ngay bên dưới cho khớp tuyệt đối từng byte.
+    // HẰNG SỐ GIAO THỨC WEBHID AULA WIN60 HE (Khớp 100% protocol.py & aula_device.py của Aether-HE)
+    // - Interface điều khiển đèn: usagePage = 0xFF1B, usage = 0x0091 (Interface 2)
+    // - REPORT_ID = 1 (0x01), BODY = 63 bytes (WebHID sendReport(1, body63) tạo gói 64 bytes)
+    // - Không dùng checksum. Trong Cmd 7, byte d[4] = 14 (độ dài payload) và d[16] = 0 khi BẬT, 1 khi TẮT.
     // -------------------------------------------------------------------------
-    const HID_VENDOR_ID = 0x2E3C;        // Vendor ID của Aula Win60 HE
-    const HID_PRODUCT_ID = 0xC365;       // Product ID của Aula Win60 HE
-    const HID_DEFAULT_REPORT_ID = 0x00;  // [TÙY CHỈNH THEO PROTOCOL.PY]: Report ID mặc định khi gọi device.sendReport(reportId, data)
-    const HID_PACKET_SIZE = 64;          // Độ dài gói chuẩn USB HID (64 bytes)
-    const HID_VENDOR_USAGE_PAGE_MIN = 0xFF00; // UsagePage vendor-defined (0xFF00 .. 0xFFFF)
+    const HID_VENDOR_ID = 0x2E3C;             // Vendor ID của Aula Win60 HE
+    const HID_PRODUCT_ID = 0xC365;            // Product ID của Aula Win60 HE
+    const HID_EXACT_USAGE_PAGE = 0xFF1B;      // UsagePage chính xác của Aula Win60 HE (aula_device.py)
+    const HID_EXACT_USAGE = 0x0091;           // Usage chính xác của Aula Win60 HE (aula_device.py)
+    const HID_DEFAULT_REPORT_ID = 0x01;       // REPORT_ID = 1 theo protocol.py
+    const HID_PACKET_SIZE = 63;               // BODY = 63 bytes (cộng 1 byte Report ID = 64 bytes trên dây USB)
+    const HID_VENDOR_USAGE_PAGE_MIN = 0xFF00; // UsagePage vendor-defined
 
-    // Cấu trúc byte cho lệnh Lighting Firmware (Cmd 7) — Đã xác minh phần cứng:
-    // [5]=mode, [6]=bri (1-4), [7]=speed (1-4), [8:10]=fg RGB, [11:13]=bg RGB, [14]=dir, [15]=fullColor, [16]=power
-    const HID_CMD_LIGHTING_FW = 0x07;    // Mã lệnh Lighting Firmware (cmd 7)
-    const HID_HEADER_BYTE_0 = 0x04;      // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [0] định danh gói lệnh host->device (theo chuẩn Sonix/Aula)
-    const HID_CMD_BYTE_INDEX = 1;        // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [1] chứa mã lệnh (0x07 = Lighting FW, 0x09 = Per-key RGB)
-    const HID_SUBCMD_BYTE_2 = 0x00;      // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [2] sub-command / page index
-    const HID_SUBCMD_BYTE_3 = 0x00;      // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [3] payload length / flag
-    const HID_SUBCMD_BYTE_4 = 0x00;      // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [4] reserved header byte
-
-    // Vị trí byte chính xác của Cmd 7 (đúng theo tài liệu kỹ thuật Aether-HE):
-    const CMD7_OFFSET_MODE = 5;          // [5] = mode (0..16)
-    const CMD7_OFFSET_BRI = 6;           // [6] = độ sáng (1..4)
-    const CMD7_OFFSET_SPEED = 7;         // [7] = tốc độ (1..4)
-    const CMD7_OFFSET_FG_R = 8;          // [8:10] = màu fg RGB
+    // Cấu trúc byte trong mảng BODY 63-byte `d` của lệnh Lighting Firmware (build_light - Cmd 7):
+    // d[0]=cmd(7), d[4]=14, d[5]=mode, d[6]=bri(1-4), d[7]=speed(1-4), d[8:11]=fg, d[11:14]=bg,
+    // d[14]=dir, d[15]=fullColor, d[16]=(0 if power_on else 1)
+    const HID_CMD_LIGHTING_FW = 0x07;         // d[0] = 7 (Main lighting)
+    const CMD7_PAYLOAD_LEN_INDEX = 4;         // d[4] = 14 (Payload length cố định của Cmd 7)
+    const CMD7_PAYLOAD_LEN_VALUE = 14;
+    const CMD7_OFFSET_MODE = 5;               // d[5] = mode
+    const CMD7_OFFSET_BRI = 6;                // d[6] = độ sáng (1..4)
+    const CMD7_OFFSET_SPEED = 7;              // d[7] = tốc độ (1..4)
+    const CMD7_OFFSET_FG_R = 8;               // d[8..10] = màu fg RGB
     const CMD7_OFFSET_FG_G = 9;
     const CMD7_OFFSET_FG_B = 10;
-    const CMD7_OFFSET_BG_R = 11;         // [11:13] = màu bg RGB
+    const CMD7_OFFSET_BG_R = 11;              // d[11..13] = màu bg RGB
     const CMD7_OFFSET_BG_G = 12;
     const CMD7_OFFSET_BG_B = 13;
-    const CMD7_OFFSET_DIR = 14;          // [14] = hướng (0..5)
-    const CMD7_OFFSET_FULLCOLOR = 15;    // [15] = fullColor (0 hoặc 1)
-    const CMD7_OFFSET_POWER = 16;        // [16] = bật/tắt nguồn đèn (1 = bật, 0 = tắt)
+    const CMD7_OFFSET_DIR = 14;               // d[14] = hướng (0..5)
+    const CMD7_OFFSET_FULLCOLOR = 15;         // d[15] = fullColor (0 hoặc 1)
+    const CMD7_OFFSET_POWER = 16;             // d[16] = trạng thái nguồn (0 = BẬT, 1 = TẮT theo protocol.py!)
 
-    // Cấu trúc byte cho lệnh Per-key RGB Streaming (Cmd 9):
-    // Bảng 396 byte (132 khe LED * 3 byte RGB), gửi chia thành các trang 54 byte (8 trang)
-    const HID_CMD_PERKEY_RGB = 0x09;     // Mã lệnh Per-key RGB (cmd 9)
-    const PERKEY_TABLE_BYTES = 396;      // Tổng kích thước bảng màu Per-key RGB (396 byte = 6 hàng x 22 cột x 3 byte)
-    const PERKEY_PAGE_BYTES = 54;        // Kích thước mỗi trang RGB gửi trong 1 gói Cmd 9 (54 byte = 18 LED x 3 byte)
-    const PERKEY_TOTAL_PAGES = 8;        // Math.ceil(396 / 54) = 8 trang (7 trang 54B + trang cuối 18B được đệm đủ 54B)
-    const CMD9_OFFSET_PAGE_INDEX = 2;    // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [2] lưu chỉ số trang (0..7) hoặc word offset
-    const CMD9_OFFSET_PAGE_LEN = 3;      // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [3] lưu số byte hiệu lực trong trang (54 hoặc 18)
-    const CMD9_OFFSET_PAYLOAD_START = 8; // [TÙY CHỈNH THEO PROTOCOL.PY]: Byte [8..61] chứa 54 byte RGB của trang (8 + 54 = 62 <= 64 byte)
-    const HID_CHECKSUM_BYTE_INDEX = 63;  // [TÙY CHỈNH THEO PROTOCOL.PY]: Vị trí byte checksum cuối gói (byte [63])
+    // Cấu trúc byte trong mảng BODY 63-byte `d` của lệnh Per-key RGB (build_custom_light - Cmd 9):
+    // d[0]=9, d[1]=slot(0), d[2]=(pageOffset>>8)&0xFF, d[3]=pageOffset&0xFF, d[4]=len(part), d[5:5+len]=part
+    const HID_CMD_PERKEY_RGB = 0x09;          // d[0] = 9
+    const PERKEY_TABLE_BYTES = 396;           // 396 bytes (132 vị trí ma trận x 3 bytes R,G,B)
+    const PERKEY_PAGE_BYTES = 54;             // 54 bytes mỗi trang (7 trang 54B + 1 trang 18B)
+    const PERKEY_TOTAL_PAGES = 8;
+    const CMD9_OFFSET_SLOT = 1;               // d[1] = slot (0 = Custom1)
+    const CMD9_OFFSET_PAGE_HI = 2;            // d[2] = (pageIndex >> 8) & 0xFF (luôn = 0 với 8 trang)
+    const CMD9_OFFSET_PAGE_LO = 3;            // d[3] = pageIndex & 0xFF (chỉ số trang 0, 1, 2, 3, 4, 5, 6, 7 theo protocol.py!)
+    const CMD9_OFFSET_PAGE_LEN = 4;           // d[4] = độ dài trang (54 hoặc 18)
+    const CMD9_OFFSET_PAYLOAD_START = 5;      // d[5..58] = dữ liệu RGB của trang
+    const HID_CHECKSUM_BYTE_INDEX = 62;       // Byte cuối cùng của body 63-byte (mặc định không dùng checksum)
 
-    // Bảng mã Mode của Cmd 7 (đã xác minh trên phần cứng theo repo Aether-HE):
-    // static 0, breath 1, wave 2, neon 3, radar 4, reactive 6, cross 7, ripple 8,
-    // twinkle 9, custom 10, fireworks 11, speedres 12, autorip 14, striation 15, aurora 16
+    // Bảng mã Mode của Cmd 7 (theo protocol.py):
     const FW_MODE_BYTES = {
       static: 0,
       breath: 1,
@@ -1289,7 +1744,8 @@
       speedres: 12,
       autorip: 14,
       striation: 15,
-      aurora: 16
+      aurora: 16,
+      gif_custom: 10
     };
 
     // Bảng mã Hướng (Direction) của Cmd 7: right 0, left 1, up 2, down 3, spread 4, gather 5
@@ -1302,20 +1758,19 @@
       gather: 5
     };
 
-    // BẢNG ÁNH XẠ CHỈ SỐ PHÍM TRÊN HÌNH VẼ (0..60) -> CHỈ SỐ LED PHẦN CỨNG TRONG BẢNG 396-BYTE (0..131)
-    // Trong Aether-HE, ma trận phím dùng stride 22 cột mỗi hàng: ledIndex = row * 22 + col (tối đa 6 * 22 = 132 khe = 396 byte).
-    // Bạn có thể sửa trực tiếp mảng 61 số nguyên dưới đây nếu vị trí LED thực tế lệch cột.
+    // BẢNG ÁNH XẠ 61 PHÍM WIN60 HE -> CHỈ SỐ MA TRẬN TRONG BẢNG 396-BYTE (Trích xuất chính xác từ ui/keymap.json của Aether-HE)
+    // Hàng 0 của ma trận (0..21) là hàng phím F1..F12 (bàn phím 60% bỏ qua), nên hàng phím số Esc..Bksp bắt đầu từ chỉ số 22!
     const KEYMAP_HARDWARE_LED_INDEX = new Uint8Array([
-      // Hàng 0 (14 phím: Esc, 1..0, -, =, Bksp) -> Hàng ma trận 0 (cột 0..13)
-       0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13,
-      // Hàng 1 (14 phím: Tab, Q..P, [, ], \) -> Hàng ma trận 1 (offset 22 + cột 0..13)
-      22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
-      // Hàng 2 (13 phím: Caps, A..L, ;, ', Enter) -> Hàng ma trận 2 (offset 44 + cột 0..12)
-      44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56,
-      // Hàng 3 (12 phím: LShift, Z..M, ,, ., /, RShift) -> Hàng ma trận 3 (offset 66 + cột 0..11)
-      66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77,
-      // Hàng 4 (8 phím: LCtrl, Win, LAlt, Space, RAlt, Fn, Menu, RCtrl) -> Hàng ma trận 4 (offset 88)
-      88, 89, 90, 93, 97, 98, 99, 100
+      // Hàng 1 (14 phím: Esc, 1..0, -, =, Bksp)
+       22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  36,
+      // Hàng 2 (14 phím: Tab, Q..P, [, ], \)
+       44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  58,
+      // Hàng 3 (13 phím: Caps, A..L, ;, ', Enter)
+       66,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  80,
+      // Hàng 4 (12 phím: LShift, Z..M, ,, ., /, RShift)
+       88,  90,  91,  92,  93,  94,  95,  96,  97,  98,  99, 100,
+      // Hàng 5 (8 phím: LCtrl, Win, LAlt, Space, RAlt, Fn, Menu, RCtrl)
+      110, 111, 112, 116, 119, 122, 120, 121
     ]);
 
     // Bảng quy đổi mức Độ sáng (1-4) và Tốc độ (1-4)
@@ -1731,6 +2186,64 @@
       return writeMixFgBgToShared(pulse, params);
     }
 
+    // 14. GIF / CUSTOM STUDIO: Đọc trực tiếp từ bộ đệm phẳng GIF_FRAMES_BUFFER (Zero-Allocation)
+    const MAX_GIF_FRAMES = 60;
+    const GIF_FRAMES_BUFFER = new Uint8ClampedArray(MAX_GIF_FRAMES * KEY_COUNT * 3);
+    const GIF_PREVIEW_BUFFER = new Uint8ClampedArray(MAX_GIF_FRAMES * PREVIEW_LED_COUNT * 3);
+
+    // Hàng và cột logic của 61 phím để hỗ trợ dịch hình 4 hướng (Shift Left/Right/Up/Down)
+    const KEY_ROW_IDX = new Uint8Array(KEY_COUNT);
+    const KEY_COL_IDX = new Uint8Array(KEY_COUNT);
+    const ROW_KEY_START = new Uint8Array([0, 14, 28, 41, 53]);
+    const ROW_KEY_LEN = new Uint8Array([14, 14, 13, 12, 8]);
+    {
+      let k = 0;
+      for (let r = 0; r < RAW_ROWS.length; r++) {
+        for (let c = 0; c < RAW_ROWS[r].length; c++) {
+          KEY_ROW_IDX[k] = r;
+          KEY_COL_IDX[k] = c;
+          k++;
+        }
+      }
+    }
+
+    const gifStudio = {
+      frameCount: 16,
+      currentFrame: 0,
+      fps: 12,
+      isPlaying: true,
+      paintMode: false,
+      activeTool: 'brush', // 'brush' | 'eraser' | 'picker'
+      brushR: 0,
+      brushG: 229,
+      brushB: 255,
+      activeTemplateId: 'cyber_scanner'
+    };
+
+    function fxGifCustom(t, keyIndex, x, y, params) {
+      const total = gifStudio.frameCount > 0 ? gifStudio.frameCount : 1;
+      let fIdx = gifStudio.currentFrame;
+      if (gifStudio.isPlaying && total > 1) {
+        fIdx = ((t * gifStudio.fps) | 0) % total;
+      }
+      if (fIdx >= total) fIdx = 0;
+
+      const bri = params.briScale;
+      if (params.isPreview) {
+        const pOff = (fIdx * PREVIEW_LED_COUNT + keyIndex) * 3;
+        SHARED_RGB_OUT[0] = (GIF_PREVIEW_BUFFER[pOff] * bri) | 0;
+        SHARED_RGB_OUT[1] = (GIF_PREVIEW_BUFFER[pOff + 1] * bri) | 0;
+        SHARED_RGB_OUT[2] = (GIF_PREVIEW_BUFFER[pOff + 2] * bri) | 0;
+        return SHARED_RGB_OUT;
+      }
+
+      const off = (fIdx * KEY_COUNT + keyIndex) * 3;
+      SHARED_RGB_OUT[0] = (GIF_FRAMES_BUFFER[off] * bri) | 0;
+      SHARED_RGB_OUT[1] = (GIF_FRAMES_BUFFER[off + 1] * bri) | 0;
+      SHARED_RGB_OUT[2] = (GIF_FRAMES_BUFFER[off + 2] * bri) | 0;
+      return SHARED_RGB_OUT;
+    }
+
     const EFFECTS_LIST = [
       { id: 'static',    name: 'Static',    tag: 'Mode 0',  usesDir: false, defaultFullColor: false, fn: fxStatic,    desc: 'Ánh sáng đơn sắc cố định, tự ngắt vòng lặp rAF.' },
       { id: 'breath',    name: 'Breath',    tag: 'Mode 1',  usesDir: false, defaultFullColor: false, fn: fxBreath,    desc: 'Chuyển sắc mềm mại giữa màu chính và màu nền.' },
@@ -1743,13 +2256,149 @@
       { id: 'twinkle',   name: 'Twinkle',   tag: 'Mode 9',  usesDir: false, defaultFullColor: false, fn: fxTwinkle,   desc: 'Các điểm LED lấp lánh ngẫu nhiên như bầu trời sao.' },
       { id: 'fireworks', name: 'Fireworks', tag: 'Mode 11', usesDir: false, defaultFullColor: true,  fn: fxFireworks, desc: 'Pháo hoa đa sắc bung nở tự động theo nhịp.' },
       { id: 'striation', name: 'Striation', tag: 'Mode 15', usesDir: true,  defaultFullColor: false, fn: fxStriation, desc: 'Các dải sọc sáng đan xen chạy ngược chiều nhau.' },
-      { id: 'aurora',    name: 'Aurora',    tag: 'Mode 16', usesDir: true,  defaultFullColor: true,  fn: fxAurora,    desc: 'Dải cực quang chuyển sắc uốn lượn mềm mại.' },
-      { id: 'autorip',   name: 'Autorip',   tag: 'Mode 14', usesDir: true,  defaultFullColor: false, fn: fxAutorip,   desc: 'Sóng gợn tự động lan tỏa liên hoàn theo hướng.' }
+      { id: 'aurora',     name: 'Aurora',       tag: 'Mode 16', usesDir: true,  defaultFullColor: true,  fn: fxAurora,    desc: 'Dải cực quang chuyển sắc uốn lượn mềm mại.' },
+      { id: 'autorip',    name: 'Autorip',      tag: 'Mode 14', usesDir: true,  defaultFullColor: false, fn: fxAutorip,   desc: 'Sóng gợn tự động lan tỏa liên hoàn theo hướng.' },
+      { id: 'gif_custom', name: 'GIF / Custom', tag: 'GIF LED', usesDir: false, defaultFullColor: true,  fn: fxGifCustom, desc: 'Chạy ảnh động GIF/Video, mẫu Pixel Art hoặc tự vẽ từng frame.' }
     ];
 
     const EFFECT_MAP = Object.create(null);
     for (let i = 0; i < EFFECTS_LIST.length; i++) {
       EFFECT_MAP[EFFECTS_LIST[i].id] = EFFECTS_LIST[i];
+    }
+
+    // Trạng thái & Hàm tính Hiệu ứng Khởi động Bàn phím (Boot Sequence 2.4 giây, Zero-Allocation)
+    const bootAnim = {
+      enabled: true,
+      active: false,
+      style: 'heart_ecg_boot', // 'heart_ecg_boot' | 'cyber_sweep' | 'reactor_ignition' | 'matrix_charge'
+      startTimeSec: 0,
+      durationSec: 2.4
+    };
+
+    // Ma trận hình trái tim 7x5 dùng cho hiệu ứng khởi động Heartbeat Boot
+    const BOOT_HEART_7x5 = [
+      [0, 1, 1, 0, 1, 1, 0],
+      [1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1],
+      [0, 1, 1, 1, 1, 1, 0],
+      [0, 0, 0, 1, 0, 0, 0]
+    ];
+    const BOOT_ECG_ROW_BY_COL = new Uint8Array([2, 2, 3, 4, 1, 0, 2, 3, 2, 2, 2, 2, 2, 2, 2]);
+
+    function fxBootSequence(prog, keyIndex, x, y, params) {
+      // prog: tiến độ khởi động từ 0.0 -> 1.0 (trong 2.4 giây)
+      const bri = params.briScale;
+      const style = bootAnim.style;
+      let r = 0, g = 0, b = 0;
+
+      if (style === 'heart_ecg_boot') {
+        // Kiểu 1: Tia xung ECG xanh tím chạy ngang -> Bừng sáng Trái Tim đôi Tím/Đỏ -> Bung Đỏ toàn phím rồi thu về
+        const col = Math.min(14, Math.max(0, Math.round(x * 14)));
+        const row = KEY_ROW_IDX[keyIndex];
+        if (prog < 0.38) {
+          const headX = (prog / 0.38) * 1.15;
+          if (x <= headX && row === BOOT_ECG_ROW_BY_COL[col]) {
+            const dist = Math.max(0, 1.0 - (headX - x) * 1.6);
+            r = (145 * dist) | 0;
+            g = (50 * dist) | 0;
+            b = (255 * dist) | 0;
+          }
+        } else if (prog < 0.75) {
+          const pulse = Math.sin(((prog - 0.38) / 0.37) * Math.PI * 3);
+          const showBeat = pulse > -0.25;
+          if (showBeat) {
+            const leftCol = col - 1;
+            const rightCol = col - 8;
+            if (leftCol >= 0 && leftCol < 7 && BOOT_HEART_7x5[row][leftCol]) {
+              r = 220; g = 80; b = 255;
+            } else if (rightCol >= 0 && rightCol < 7 && BOOT_HEART_7x5[row][rightCol]) {
+              r = 255; g = 15; b = 35;
+            } else if (row === BOOT_ECG_ROW_BY_COL[col]) {
+              r = 120; g = 40; b = 220;
+            }
+          }
+        } else {
+          const sub = (prog - 0.75) / 0.25; // 0..1
+          const fadeOut = 1.0 - sub;
+          const radius = sub * 0.85;
+          const dist = Math.hypot(x - 0.5, (y - 0.5) * 0.55);
+          if (dist <= radius) {
+            r = (255 * fadeOut) | 0;
+            g = (25 * fadeOut) | 0;
+            b = (50 * fadeOut) | 0;
+          }
+        }
+      } else if (style === 'cyber_sweep') {
+        // Kiểu 2: Hai tia laser Cyan & Magenta quét chéo 2 vòng rồi hội tụ chớp trắng ở giữa
+        if (prog < 0.72) {
+          const p = (prog / 0.72) * 2.0;
+          const pos1 = p < 1.0 ? p : (2.0 - p);
+          const pos2 = 1.0 - pos1;
+          const d1 = Math.abs(x - pos1);
+          const d2 = Math.abs(x - pos2);
+          if (d1 < 0.12) {
+            const s1 = 1.0 - d1 / 0.12;
+            g = Math.min(255, (245 * s1) | 0);
+            b = Math.min(255, (255 * s1) | 0);
+          }
+          if (d2 < 0.12) {
+            const s2 = 1.0 - d2 / 0.12;
+            r = Math.min(255, r + ((255 * s2) | 0));
+            b = Math.min(255, b + ((180 * s2) | 0));
+          }
+        } else {
+          const flash = 1.0 - (prog - 0.72) / 0.28;
+          const dist = Math.hypot(x - 0.5, (y - 0.5) * 0.5);
+          if (dist < 0.65) {
+            r = (180 * flash) | 0;
+            g = (255 * flash) | 0;
+            b = (255 * flash) | 0;
+          }
+        }
+      } else if (style === 'reactor_ignition') {
+        // Kiểu 3: Tâm bàn phím (phím G/H) tích tụ năng lượng rồi bung 2 vòng sóng cầu vồng ra 4 góc
+        const dist = Math.hypot(x - 0.5, (y - 0.5) * 0.55);
+        if (prog < 0.3) {
+          const coreR = (prog / 0.3) * 0.18;
+          if (dist <= coreR) {
+            r = 255; g = 255; b = 255;
+          }
+        } else {
+          const expand = (prog - 0.3) / 0.7;
+          const ring1 = Math.abs(dist - expand * 0.72);
+          const ring2 = Math.abs(dist - Math.max(0, expand - 0.22) * 0.72);
+          if (ring1 < 0.09) {
+            const s = (1.0 - ring1 / 0.09) * (1.0 - expand * 0.4);
+            writeHsvToShared((dist + prog) % 1.0, 0.9, s, 1.0);
+            r = SHARED_RGB_OUT[0]; g = SHARED_RGB_OUT[1]; b = SHARED_RGB_OUT[2];
+          } else if (ring2 < 0.08) {
+            const s = (1.0 - ring2 / 0.08) * (1.0 - expand * 0.5);
+            r = (0 * s) | 0; g = (240 * s) | 0; b = (255 * s) | 0;
+          }
+        }
+      } else {
+        // Kiểu 4: Sạc đầy từng hàng từ đáy (Space) lên đỉnh (Esc..Bksp) rồi chớp Xanh Matrix
+        const rowFromBottom = 4 - KEY_ROW_IDX[keyIndex]; // 0..4
+        if (prog < 0.7) {
+          const level = (prog / 0.7) * 5.0;
+          if (rowFromBottom <= level) {
+            const frac = rowFromBottom / 4.0;
+            r = (20 + (1 - frac) * 40) | 0;
+            g = (180 + frac * 75) | 0;
+            b = (255 * frac) | 0;
+          }
+        } else {
+          const flash = 1.0 - (prog - 0.7) / 0.3;
+          r = (80 * flash) | 0;
+          g = (255 * flash) | 0;
+          b = (160 * flash) | 0;
+        }
+      }
+
+      SHARED_RGB_OUT[0] = (r * bri) | 0;
+      SHARED_RGB_OUT[1] = (g * bri) | 0;
+      SHARED_RGB_OUT[2] = (b * bri) | 0;
+      return SHARED_RGB_OUT;
     }
 
     function evaluateEffectsIntoBuffer(effectFn, t, count, normXArr, normYArr, params, outBuffer) {
@@ -1962,27 +2611,28 @@
       supported: Boolean(window.isSecureContext && ('hid' in navigator)),
       device: null,
       selectedCollectionIdx: -1,
-      reportId: HID_DEFAULT_REPORT_ID,
-      checksumMode: 'sum7_inv',
-      controlMode: 'firmware', // 'firmware' (cmd 7) | 'streaming' (cmd 9)
-      dryRun: true,            // Mặc định bật Dry Run để kiểm tra gói hex an toàn
+      reportId: HID_DEFAULT_REPORT_ID, // Mặc định Report ID = 1 (0x01)
+      checksumMode: 'none',            // Mặc định không dùng checksum theo protocol.py
+      controlMode: 'firmware',         // 'firmware' (cmd 7) | 'streaming' (cmd 9)
+      dryRun: true,                    // Tự động tắt khi kết nối bàn phím thật
       compactStreamLog: true,
-      isStreamingBusy: false,  // Khóa chống xếp hàng chồng chéo khi await device.sendReport()
+      isStreamingBusy: false,
       packetsSentCount: 0,
       framesSkippedSameColor: 0,
-      sendMethod: 'output',    // 'output' (sendReport) | 'feature' (sendFeatureReport)
-      allDevices: [],          // Mọi interface HID của bàn phím (mỗi interface là 1 HIDDevice riêng)
+      sendMethod: 'output',
+      allDevices: [],
       selectedDeviceIdx: -1
     };
 
     function formatPacketHexPreview(buf, maxBytes) {
-      const limit = Math.min(buf.length, maxBytes || 24);
-      let out = '';
+      const limit = Math.min(buf.length, maxBytes || 20);
+      // Hiển thị kèm byte Report ID ở đầu [01] để dễ đối chiếu với _wrap(d) trong protocol.py
+      let out = '[' + BYTE_HEX_LUT[hidCtrl.reportId & 0xFF] + '] ';
       for (let i = 0; i < limit; i++) {
         out += BYTE_HEX_LUT[buf[i]] + (i < limit - 1 ? ' ' : '');
       }
       if (buf.length > limit) {
-        out += ' … [' + buf.length + 'B]';
+        out += ' … [1+' + buf.length + 'B]';
       }
       return out;
     }
@@ -2014,11 +2664,10 @@
         '</strong> gói · Bỏ qua (trùng màu): <strong>' + hidCtrl.framesSkippedSameColor + '</strong> frame';
     }
 
-    // Hàm tính checksum cho gói 64 byte ([TÙY CHỈNH THEO PROTOCOL.PY]: thay đổi dễ dàng nếu có protocol.py)
     function applyPacketChecksum(packet) {
       const mode = hidCtrl.checksumMode;
-      packet[HID_CHECKSUM_BYTE_INDEX] = 0;
       if (mode === 'none') return;
+      packet[HID_CHECKSUM_BYTE_INDEX] = 0;
 
       if (mode === 'sum7_inv') {
         let sum7 = 0;
@@ -2035,53 +2684,56 @@
       }
     }
 
-    // Đóng gói lệnh Cmd 7 (Lighting Firmware) đúng vị trí byte [5..16] đã xác minh
-    function buildCmd7LightingPacket(modeByte, bri, speed, fgR, fgG, fgB, bgR, bgG, bgB, dirByte, fullColorBit, powerBit) {
+    // Đóng gói lệnh Cmd 7 (build_light trong protocol.py) vào mảng BODY 63-byte `d`:
+    // d[0]=7, d[4]=14, d[5]=mode, d[6]=bri, d[7]=speed, d[8:11]=fg, d[11:14]=bg, d[14]=dir, d[15]=fullColor, d[16]=(0 if power_on else 1)
+    function buildCmd7LightingPacket(modeByte, bri, speed, fgR, fgG, fgB, bgR, bgG, bgB, dirByte, fullColorBit, powerOn) {
       CMD7_PACKET_BUF.fill(0);
-      CMD7_PACKET_BUF[0] = HID_HEADER_BYTE_0;
-      CMD7_PACKET_BUF[HID_CMD_BYTE_INDEX] = HID_CMD_LIGHTING_FW; // 0x07
-      CMD7_PACKET_BUF[2] = HID_SUBCMD_BYTE_2;
-      CMD7_PACKET_BUF[3] = HID_SUBCMD_BYTE_3;
-      CMD7_PACKET_BUF[4] = HID_SUBCMD_BYTE_4;
-
-      // Các byte xác minh trên phần cứng Aula Win60 HE (Aether-HE README):
-      CMD7_PACKET_BUF[CMD7_OFFSET_MODE]      = modeByte & 0xFF;     // [5] = mode
-      CMD7_PACKET_BUF[CMD7_OFFSET_BRI]       = bri & 0xFF;          // [6] = độ sáng (1-4)
-      CMD7_PACKET_BUF[CMD7_OFFSET_SPEED]     = speed & 0xFF;        // [7] = tốc độ (1-4)
-      CMD7_PACKET_BUF[CMD7_OFFSET_FG_R]      = fgR & 0xFF;          // [8] = fg R
-      CMD7_PACKET_BUF[CMD7_OFFSET_FG_G]      = fgG & 0xFF;          // [9] = fg G
-      CMD7_PACKET_BUF[CMD7_OFFSET_FG_B]      = fgB & 0xFF;          // [10] = fg B
-      CMD7_PACKET_BUF[CMD7_OFFSET_BG_R]      = bgR & 0xFF;          // [11] = bg R
-      CMD7_PACKET_BUF[CMD7_OFFSET_BG_G]      = bgG & 0xFF;          // [12] = bg G
-      CMD7_PACKET_BUF[CMD7_OFFSET_BG_B]      = bgB & 0xFF;          // [13] = bg B
-      CMD7_PACKET_BUF[CMD7_OFFSET_DIR]       = dirByte & 0xFF;      // [14] = hướng (0-5)
-      CMD7_PACKET_BUF[CMD7_OFFSET_FULLCOLOR] = fullColorBit ? 1 : 0;// [15] = fullColor
-      CMD7_PACKET_BUF[CMD7_OFFSET_POWER]     = powerBit ? 1 : 0;    // [16] = power
+      CMD7_PACKET_BUF[0] = HID_CMD_LIGHTING_FW;                     // d[0] = 7 (cmd 7)
+      CMD7_PACKET_BUF[CMD7_PAYLOAD_LEN_INDEX] = CMD7_PAYLOAD_LEN_VALUE; // d[4] = 14 (payload length)
+      CMD7_PACKET_BUF[CMD7_OFFSET_MODE]      = modeByte & 0xFF;     // d[5] = mode
+      CMD7_PACKET_BUF[CMD7_OFFSET_BRI]       = bri & 0xFF;          // d[6] = brightness (1-4)
+      CMD7_PACKET_BUF[CMD7_OFFSET_SPEED]     = speed & 0xFF;        // d[7] = speed (1-4)
+      CMD7_PACKET_BUF[CMD7_OFFSET_FG_R]      = fgR & 0xFF;          // d[8] = fg R
+      CMD7_PACKET_BUF[CMD7_OFFSET_FG_G]      = fgG & 0xFF;          // d[9] = fg G
+      CMD7_PACKET_BUF[CMD7_OFFSET_FG_B]      = fgB & 0xFF;          // d[10] = fg B
+      CMD7_PACKET_BUF[CMD7_OFFSET_BG_R]      = bgR & 0xFF;          // d[11] = bg R
+      CMD7_PACKET_BUF[CMD7_OFFSET_BG_G]      = bgG & 0xFF;          // d[12] = bg G
+      CMD7_PACKET_BUF[CMD7_OFFSET_BG_B]      = bgB & 0xFF;          // d[13] = bg B
+      CMD7_PACKET_BUF[CMD7_OFFSET_DIR]       = dirByte & 0xFF;      // d[14] = direction (0-5)
+      CMD7_PACKET_BUF[CMD7_OFFSET_FULLCOLOR] = fullColorBit ? 1 : 0;// d[15] = full_color (0/1)
+      CMD7_PACKET_BUF[CMD7_OFFSET_POWER]     = powerOn ? 0 : 1;     // d[16] = 0 if power_on else 1 (0 = BẬT, 1 = TẮT!)
 
       applyPacketChecksum(CMD7_PACKET_BUF);
       return CMD7_PACKET_BUF;
     }
 
-    // Đóng gói 1 trang 54-byte của lệnh Cmd 9 (Per-key RGB) từ bảng 396-byte
+    // Đóng gói 1 trang 54-byte của lệnh Cmd 9 (build_custom_light trong protocol.py) vào mảng BODY 63-byte `d`:
+    // Chú ý cực kỳ quan trọng từ protocol.py:
+    // `for page, start in enumerate(range(0, total_bytes, chunk)):`
+    // - `page` là CHỈ SỐ TRANG 0..7 -> đặt vào d[2] = (page >> 8) & 0xFF, d[3] = page & 0xFF
+    // - `start` là byteOffset (0, 54, 108..378) -> dùng để cắt mảng `table[start : start + 54]`!
     function buildCmd9PagePacket(pageIndex, table396) {
       CMD9_PAGE_PACKET_BUF.fill(0);
-      const tableOffset = pageIndex * PERKEY_PAGE_BYTES;
-      const validBytes = Math.min(PERKEY_PAGE_BYTES, PERKEY_TABLE_BYTES - tableOffset);
+      const byteOffset = pageIndex * PERKEY_PAGE_BYTES; // 0, 54, 108, 162, 216, 270, 324, 378
+      const validBytes = Math.min(PERKEY_PAGE_BYTES, PERKEY_TABLE_BYTES - byteOffset); // 54 hoặc 18
 
-      CMD9_PAGE_PACKET_BUF[0] = HID_HEADER_BYTE_0;
-      CMD9_PAGE_PACKET_BUF[HID_CMD_BYTE_INDEX] = HID_CMD_PERKEY_RGB; // 0x09
-      CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_PAGE_INDEX] = pageIndex & 0xFF;
-      CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_PAGE_LEN] = validBytes & 0xFF;
+      CMD9_PAGE_PACKET_BUF[0] = HID_CMD_PERKEY_RGB;                  // d[0] = 9
+      CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_SLOT] = 0;                    // d[1] = slot 0 (Custom1)
+      CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_PAGE_HI] = (pageIndex >> 8) & 0xFF; // d[2] = page high byte (0)
+      CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_PAGE_LO] = pageIndex & 0xFF;        // d[3] = page index (0..7)
+      CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_PAGE_LEN] = validBytes & 0xFF;      // d[4] = 54 hoặc 18
 
       for (let i = 0; i < validBytes; i++) {
-        CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_PAYLOAD_START + i] = table396[tableOffset + i];
+        CMD9_PAGE_PACKET_BUF[CMD9_OFFSET_PAYLOAD_START + i] = table396[byteOffset + i];
       }
 
       applyPacketChecksum(CMD9_PAGE_PACKET_BUF);
       return CMD9_PAGE_PACKET_BUF;
     }
 
-    // Ánh xạ 61 phím trên giao diện vào bảng 396-byte của bàn phím thật và kiểm tra xem có đổi màu không
+    // Mảng đánh dấu trang nào (0..7) có thay đổi màu so với frame trước (giống stream_frame trong drivers/win60.py)
+    const CHANGED_CMD9_PAGES = new Uint8Array(PERKEY_TOTAL_PAGES);
+
     function packMainLedsInto396TableAndCheckDiff() {
       HID_RGB_TABLE_396.fill(0);
       if (renderParams.power) {
@@ -2097,21 +2749,31 @@
         }
       }
 
-      if (prevHidTableValid) {
-        let hasDiff = false;
-        for (let i = 0; i < PERKEY_TABLE_BYTES; i++) {
-          if (HID_RGB_TABLE_396[i] !== PREV_HID_RGB_TABLE_396[i]) {
-            hasDiff = true;
-            break;
+      let anyPageDiff = false;
+      for (let page = 0; page < PERKEY_TOTAL_PAGES; page++) {
+        const start = page * PERKEY_PAGE_BYTES;
+        const end = Math.min(PERKEY_TABLE_BYTES, start + PERKEY_PAGE_BYTES);
+        if (!prevHidTableValid) {
+          CHANGED_CMD9_PAGES[page] = 1;
+          anyPageDiff = true;
+        } else {
+          let pageDiff = 0;
+          for (let i = start; i < end; i++) {
+            if (HID_RGB_TABLE_396[i] !== PREV_HID_RGB_TABLE_396[i]) {
+              pageDiff = 1;
+              break;
+            }
           }
-        }
-        if (!hasDiff) {
-          return false; // Không thay đổi màu so với frame trước -> Bỏ qua gửi!
+          CHANGED_CMD9_PAGES[page] = pageDiff;
+          if (pageDiff) anyPageDiff = true;
         }
       }
 
+      if (!anyPageDiff) {
+        return false; // Không có trang nào đổi màu -> Bỏ qua gửi!
+      }
+
       PREV_HID_RGB_TABLE_396.set(HID_RGB_TABLE_396);
-      prevHidTableValid = true;
       return true;
     }
 
@@ -2168,12 +2830,17 @@
       }
     }
 
-    // Gửi tuần tự 8 trang 54-byte của bảng 396-byte (Cmd 9) — Không xếp hàng chồng chéo
+    function sleepMs(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    // Gửi tuần tự các trang 54-byte có thay đổi của bảng 396-byte (Cmd 9) — Khớp 100% stream_frame của drivers/win60.py
     async function streamCmd9FrameIfReady() {
-      if (hidCtrl.controlMode !== 'streaming') return;
+      if (hidCtrl.controlMode !== 'streaming' && appState.effectId !== 'gif_custom' && !bootAnim.active) return;
       if (!isPageActive) return;
       if (hidCtrl.isStreamingBusy) return; // Frame trước chưa gửi xong -> bỏ qua ngay, không xếp hàng
 
+      const isInitialFullSync = !prevHidTableValid;
       const changed = packMainLedsInto396TableAndCheckDiff();
       if (!changed) {
         hidCtrl.framesSkippedSameColor++;
@@ -2182,25 +2849,34 @@
         }
         return;
       }
+      prevHidTableValid = true;
 
       hidCtrl.isStreamingBusy = true;
       try {
+        let loggedThisFrame = false;
         for (let page = 0; page < PERKEY_TOTAL_PAGES; page++) {
+          if (!CHANGED_CMD9_PAGES[page]) continue;
           const pkt = buildCmd9PagePacket(page, HID_RGB_TABLE_396);
 
           if (hidCtrl.dryRun) {
-            if (!hidCtrl.compactStreamLog || page === 0) {
+            if (!hidCtrl.compactStreamLog || !loggedThisFrame) {
+              loggedThisFrame = true;
               const label = hidCtrl.compactStreamLog
-                ? 'Cmd9 Frame (8 trang x 54B = 396B table) Trang[0]: ' + formatPacketHexPreview(pkt, 18)
+                ? 'Cmd9 Frame · Trang[' + page + '/7]: ' + formatPacketHexPreview(pkt, 18)
                 : 'Cmd9 Trang[' + page + '/7]: ' + formatPacketHexPreview(pkt, 18);
               appendHexLog('log-dry', '[DRY-RUN CMD9]', label);
             }
           } else if (hidCtrl.device && hidCtrl.device.opened) {
             await hidSendPacket(pkt);
             hidCtrl.packetsSentCount++;
-            if (!hidCtrl.compactStreamLog || page === 0) {
+            // Khi đồng bộ toàn bộ 8 trang lần đầu (hoặc từ set_per_key_rgb), nghỉ 3ms giữa các trang như win60.py
+            if (isInitialFullSync) {
+              await sleepMs(3);
+            }
+            if (!hidCtrl.compactStreamLog || !loggedThisFrame) {
+              loggedThisFrame = true;
               const label = hidCtrl.compactStreamLog
-                ? 'Đã truyền 8 trang Cmd9 (396B) · Trang[0]: ' + formatPacketHexPreview(pkt, 18)
+                ? 'Đã truyền Cmd9 · Trang[' + page + '/7]: ' + formatPacketHexPreview(pkt, 18)
                 : 'Cmd9 Trang[' + page + '/7]: ' + formatPacketHexPreview(pkt, 18);
               appendHexLog('log-tx', '[TX CMD9 rId=0x' + BYTE_HEX_LUT[hidCtrl.reportId] + ']', label);
             }
@@ -2208,6 +2884,7 @@
         }
         updateStreamStatsUI();
       } catch (err) {
+        prevHidTableValid = false;
         handleHidSendError('Lỗi khi đang Streaming Cmd 9', err);
       } finally {
         hidCtrl.isStreamingBusy = false;
@@ -2370,6 +3047,7 @@
     function shouldAnimationLoopRun() {
       if (!isPageActive) return false;
       if (!appState.power) return false;
+      if (bootAnim.active) return true;
       const isMainAnimated = appState.effectId !== 'static';
       const arePreviewsAnimated = hasAnyVisiblePreview();
       return isMainAnimated || arePreviewsAnimated;
@@ -2392,8 +3070,8 @@
         renderMainKeyboardCanvas();
         mainBoardDirty = false;
 
-        // Nếu đang ở chế độ Streaming Cmd 9 và hiệu ứng là static, gửi đúng 1 frame khi có thay đổi
-        if (hidCtrl.controlMode === 'streaming') {
+        // Nếu đang ở chế độ Streaming Cmd 9 hoặc GIF / Custom đang dừng vẽ, gửi đúng 1 frame khi có thay đổi
+        if (hidCtrl.controlMode === 'streaming' || appState.effectId === 'gif_custom') {
           streamCmd9FrameIfReady();
         }
       }
@@ -2426,7 +3104,26 @@
         const nowSec = nowMs * 0.001;
         const currentEffect = EFFECT_MAP[appState.effectId];
 
-        if (appState.effectId !== 'static' || mainBoardDirty) {
+        if (bootAnim.active) {
+          const elapsedBoot = nowSec - bootAnim.startTimeSec;
+          if (elapsedBoot >= bootAnim.durationSec) {
+            finishBootAnimationSequence();
+          } else {
+            const prog = Math.max(0, Math.min(1, elapsedBoot / bootAnim.durationSec));
+            renderParams.isPreview = false;
+            evaluateEffectsIntoBuffer(
+              (tUnused, kIdx, kx, ky, p) => fxBootSequence(prog, kIdx, kx, ky, p),
+              nowSec,
+              KEY_COUNT,
+              KEY_NORM_X,
+              KEY_NORM_Y,
+              renderParams,
+              MAIN_LED_BUFFER
+            );
+            renderMainKeyboardCanvas();
+            streamCmd9FrameIfReady();
+          }
+        } else if (appState.effectId !== 'static' || mainBoardDirty) {
           renderParams.isPreview = false;
           evaluateEffectsIntoBuffer(
             currentEffect.fn,
@@ -2440,8 +3137,8 @@
           renderMainKeyboardCanvas();
           mainBoardDirty = false;
 
-          // Nếu đang bật Chế độ Streaming (Cmd 9), gửi bảng 396-byte theo nhịp frame (30 FPS / 20 FPS Eco)
-          if (hidCtrl.controlMode === 'streaming') {
+          // Nếu đang bật Chế độ Streaming (Cmd 9) hoặc hiệu ứng GIF / Custom, truyền bảng 396-byte xuống phím
+          if (hidCtrl.controlMode === 'streaming' || appState.effectId === 'gif_custom') {
             streamCmd9FrameIfReady();
           }
         }
@@ -2558,11 +3255,16 @@
       return parts.join(', ');
     }
 
-    // Chấm điểm 1 collection: vendor + output > vendor + feature > output bất kỳ > feature bất kỳ > 0 (không gửi được)
+    // Chấm điểm 1 collection: ưu tiên tuyệt đối đúng interface điều khiển của Aula Win60 HE (usagePage 0xFF1B, usage 0x0091)
     function scoreCollection(c) {
-      const isVendor = (c.usagePage || 0) >= HID_VENDOR_USAGE_PAGE_MIN;
+      const up = c.usagePage || 0;
+      const u = c.usage || 0;
+      const isExactAulaVendor = (up === HID_EXACT_USAGE_PAGE && u === HID_EXACT_USAGE);
+      const isVendor = up >= HID_VENDOR_USAGE_PAGE_MIN;
       const hasOut = (c.outputReports || []).length > 0;
       const hasFeat = (c.featureReports || []).length > 0;
+      if (isExactAulaVendor && hasOut) return { score: 6, method: 'output' };
+      if (isExactAulaVendor && hasFeat) return { score: 5, method: 'feature' };
       if (isVendor && hasOut) return { score: 4, method: 'output' };
       if (isVendor && hasFeat) return { score: 3, method: 'feature' };
       if (hasOut) return { score: 2, method: 'output' };
@@ -2738,7 +3440,11 @@
       syncDryRunUI();
       setHidBannerState('is-connected', 'Đã kết nối ' + prodName + ' (D' + best.di + '.C' + best.ci + '). Đang đồng bộ hiệu ứng ánh sáng.');
       prevHidTableValid = false;
-      await sendCmd7CurrentStateToHardware('Kết nối mới');
+      if (bootAnim.enabled && appState.power) {
+        await triggerBootAnimationSequence('Khởi động khi kết nối');
+      } else {
+        await sendCmd7CurrentStateToHardware('Kết nối mới');
+      }
     }
 
     function handleInputReportFromDevice(event) {
@@ -2793,10 +3499,12 @@
       if (triggerImmediateSend) {
         sendCmd7CurrentStateToHardware(
           hidCtrl.controlMode === 'streaming' ? 'Bật Custom Mode 10 cho Streaming' : 'Đồng bộ Firmware Cmd 7'
-        );
-        if (hidCtrl.controlMode === 'streaming') {
-          startOrUpdateAnimationLoop();
-        }
+        ).then(() => {
+          if (hidCtrl.controlMode === 'streaming') {
+            prevHidTableValid = false;
+            startOrUpdateAnimationLoop();
+          }
+        });
       }
     }
 
@@ -2927,9 +3635,21 @@
         recordKeyHit(34, performance.now() * 0.001);
       }
 
+      const studioSec = document.getElementById('gifStudioSection');
+      if (studioSec) {
+        studioSec.classList.toggle('is-highlighted', effectId === 'gif_custom');
+      }
+
       updateDirectionButtonsUI();
       startOrUpdateAnimationLoop();
-      notifyHardwareOnLightingParamChange('Chọn ' + fx.name);
+      if (effectId === 'gif_custom') {
+        sendCmd7CurrentStateToHardware('Bật Custom Mode 10 cho GIF LED').then(() => {
+          prevHidTableValid = false;
+          streamCmd9FrameIfReady();
+        });
+      } else {
+        notifyHardwareOnLightingParamChange('Chọn ' + fx.name);
+      }
     }
 
     const brightnessSlider = document.getElementById('brightnessSlider');
@@ -3048,7 +3768,18 @@
       }
       try {
         const devices = await navigator.hid.requestDevice({
-          filters: [{ vendorId: HID_VENDOR_ID, productId: HID_PRODUCT_ID }]
+          filters: [
+            {
+              vendorId: HID_VENDOR_ID,
+              productId: HID_PRODUCT_ID,
+              usagePage: HID_EXACT_USAGE_PAGE,
+              usage: HID_EXACT_USAGE
+            },
+            {
+              vendorId: HID_VENDOR_ID,
+              productId: HID_PRODUCT_ID
+            }
+          ]
         });
         if (!devices || devices.length === 0) {
           appendHexLog('log-sys', '[HỦY CHỌN]', 'Người dùng đã đóng hộp thoại chọn thiết bị.');
@@ -3216,6 +3947,10 @@
       const idx = findKeyIndexAtCanvasPos(e.clientX, e.clientY);
       if (idx >= 0) {
         lastHoveredKeyIdx = idx;
+        if (gifStudio.paintMode) {
+          applyStudioPaintOnKey(idx);
+          return;
+        }
         KEY_IS_DOWN[idx] = 1;
         triggerKeyByIndex(idx);
       }
@@ -3228,6 +3963,10 @@
         if (lastHoveredKeyIdx >= 0) KEY_IS_DOWN[lastHoveredKeyIdx] = 0;
         lastHoveredKeyIdx = idx;
         if (idx >= 0) {
+          if (gifStudio.paintMode) {
+            applyStudioPaintOnKey(idx);
+            return;
+          }
           KEY_IS_DOWN[idx] = 1;
           triggerKeyByIndex(idx);
         }
@@ -3339,6 +4078,815 @@
       }
     }
 
+
+    /* =========================================================================
+     * KHỐI 9: BỘ XỬ LÝ GIF LED & CUSTOM ANIMATION STUDIO (MCHOSE STYLE -> AULA WIN60 HE)
+     * - 6 mẫu hiệu ứng GIF Pixel Art dựng sẵn (Cyber Scanner, Pac-Man, Heartbeat, Matrix, EQ, AULA).
+     * - Giải mã file .GIF động bằng ImageDecoder API (kèm fallback ảnh/video/JSON) 1 lần lúc import.
+     * - Trình vẽ từng phím trên Timeline + Dịch khung hình 4 hướng + Xuất/Nhập JSON.
+     * ========================================================================= */
+    const gifStudioStatusNoteEl = document.getElementById('gifStudioStatusNote');
+    const timelineFramesStripEl = document.getElementById('timelineFramesStrip');
+    const frameCounterLabelEl = document.getElementById('frameCounterLabel');
+    const gifPlayPauseBtn = document.getElementById('gifPlayPauseBtn');
+    const gifPlayPauseTextEl = document.getElementById('gifPlayPauseText');
+    const gifFpsSlider = document.getElementById('gifFpsSlider');
+    const gifFpsValEl = document.getElementById('gifFpsVal');
+    const togglePaintModeBtn = document.getElementById('togglePaintModeBtn');
+    const paintModeBtnTextEl = document.getElementById('paintModeBtnText');
+    const studioBrushColorInput = document.getElementById('studioBrushColor');
+
+    // Đồng bộ bộ đệm 18 LED của ô Preview nhỏ từ bộ đệm 61 phím của GIF_FRAMES_BUFFER
+    function syncGifPreviewBufferFromMain() {
+      const total = gifStudio.frameCount;
+      for (let f = 0; f < total; f++) {
+        for (let p = 0; p < PREVIEW_LED_COUNT; p++) {
+          const px = PREV_NORM_X[p];
+          const py = PREV_NORM_Y[p];
+          // Tìm phím gần nhất với tọa độ (px, py)
+          let bestKey = 0;
+          let bestDist = 999;
+          for (let k = 0; k < KEY_COUNT; k++) {
+            const dx = KEY_NORM_X[k] - px;
+            const dy = KEY_NORM_Y[k] - py;
+            const d = dx * dx + dy * dy;
+            if (d < bestDist) {
+              bestDist = d;
+              bestKey = k;
+            }
+          }
+          const srcOff = (f * KEY_COUNT + bestKey) * 3;
+          const dstOff = (f * PREVIEW_LED_COUNT + p) * 3;
+          GIF_PREVIEW_BUFFER[dstOff]     = GIF_FRAMES_BUFFER[srcOff];
+          GIF_PREVIEW_BUFFER[dstOff + 1] = GIF_FRAMES_BUFFER[srcOff + 1];
+          GIF_PREVIEW_BUFFER[dstOff + 2] = GIF_FRAMES_BUFFER[srcOff + 2];
+        }
+      }
+    }
+
+    function setKeyRgbInFrame(frameIdx, keyIdx, r, g, b) {
+      if (frameIdx < 0 || frameIdx >= MAX_GIF_FRAMES || keyIdx < 0 || keyIdx >= KEY_COUNT) return;
+      const off = (frameIdx * KEY_COUNT + keyIdx) * 3;
+      GIF_FRAMES_BUFFER[off]     = r;
+      GIF_FRAMES_BUFFER[off + 1] = g;
+      GIF_FRAMES_BUFFER[off + 2] = b;
+    }
+
+    // Dựng 6 mẫu GIF LED động chuẩn NỀN ĐEN TUYỆT ĐỐI RGB(0,0,0) — Chỉ sáng những phím có hiệu ứng chạy qua!
+    function loadBuiltInGifTemplate(templateId) {
+      gifStudio.activeTemplateId = templateId;
+      GIF_FRAMES_BUFFER.fill(0);
+
+      if (templateId === 'cyber_scanner') {
+        // 1. Cyber Scanner: Hai tia laser Đỏ Hồng & Cyan quét ngược chiều trên nền đen 100%
+        gifStudio.frameCount = 20;
+        gifStudio.fps = 15;
+        for (let f = 0; f < 20; f++) {
+          const t = f / 20;
+          const pos1 = t < 0.5 ? (t * 2.0) : (2.0 - t * 2.0);
+          const pos2 = 1.0 - pos1;
+          for (let k = 0; k < KEY_COUNT; k++) {
+            const x = KEY_NORM_X[k];
+            const d1 = Math.abs(x - pos1);
+            const d2 = Math.abs(x - pos2);
+            let r = 0, g = 0, b = 0;
+            if (d1 < 0.11) {
+              const s1 = Math.pow(1.0 - d1 / 0.11, 1.5);
+              g = Math.min(255, (245 * s1) | 0);
+              b = Math.min(255, (255 * s1) | 0);
+            }
+            if (d2 < 0.11) {
+              const s2 = Math.pow(1.0 - d2 / 0.11, 1.5);
+              r = Math.min(255, r + ((255 * s2) | 0));
+              g = Math.min(255, g + ((20 * s2) | 0));
+              b = Math.min(255, b + ((110 * s2) | 0));
+            }
+            setKeyRgbInFrame(f, k, r, g, b);
+          }
+        }
+      } else if (templateId === 'pacman_chase') {
+        // 2. Pac-Man Săn Mồi trên nền đen tuyệt đối (0,0,0)
+        gifStudio.frameCount = 18;
+        gifStudio.fps = 12;
+        for (let f = 0; f < 18; f++) {
+          const pacX = -0.12 + (f / 17) * 1.24;
+          const ghostX = pacX + 0.25;
+          const mouthOpen = (f & 1) === 0;
+          for (let k = 0; k < KEY_COUNT; k++) {
+            const x = KEY_NORM_X[k];
+            const y = KEY_NORM_Y[k];
+            const rIdx = KEY_ROW_IDX[k];
+            const cIdx = KEY_COL_IDX[k];
+
+            let r = 0, g = 0, b = 0;
+            // Các hạt năng lượng chưa bị ăn ở hàng giữa
+            if (rIdx === 2 && (cIdx % 3 === 1) && x > pacX + 0.06) {
+              r = 255; g = 190; b = 100;
+            }
+            // Bóng ma Cyan chạy trước
+            const dGhost = Math.hypot(x - ghostX, (y - 0.5) * 0.55);
+            if (dGhost < 0.11) {
+              r = 0; g = 240; b = 255;
+            }
+            // Pac-Man vàng chạy sau
+            const dPac = Math.hypot(x - pacX, (y - 0.5) * 0.52);
+            if (dPac < 0.13) {
+              if (mouthOpen && x > pacX + 0.02 && rIdx === 2) {
+                r = 0; g = 0; b = 0;
+              } else {
+                r = 255; g = 230; b = 0;
+              }
+            }
+            setKeyRgbInFrame(f, k, r, g, b);
+          }
+        }
+      } else if (templateId === 'heartbeat_pulse') {
+        // 3. Trái Tim Đập + Tia Xung ECG trên nền đen tuyệt đối (0,0,0)
+        gifStudio.frameCount = 16;
+        gifStudio.fps = 12;
+        for (let f = 0; f < 16; f++) {
+          const beat = (f === 2 || f === 3 || f === 6) ? 1.05 : Math.max(0.2, 0.95 - (f % 8) * 0.11);
+          const ecgX = (f / 15);
+          for (let k = 0; k < KEY_COUNT; k++) {
+            const x = KEY_NORM_X[k];
+            const y = KEY_NORM_Y[k];
+            const dx = (x - 0.5) * 2.4;
+            const dy = (0.52 - y) * 1.45;
+            const heartVal = Math.pow(dx * dx + dy * dy - 0.30 * beat, 3) - dx * dx * Math.pow(dy, 3);
+            let r = 0, g = 0, b = 0;
+            if (heartVal < 0) {
+              r = Math.min(255, (255 * beat) | 0);
+              g = (15 * beat) | 0;
+              b = (90 * beat) | 0;
+            } else if (Math.abs(x - ecgX) < 0.075 && KEY_ROW_IDX[k] === 2) {
+              r = 0; g = 255; b = 180;
+            }
+            setKeyRgbInFrame(f, k, r, g, b);
+          }
+        }
+      } else if (templateId === 'matrix_rain') {
+        // 4. Mưa Ma Trận trên nền đen tuyệt đối (0,0,0)
+        gifStudio.frameCount = 20;
+        gifStudio.fps = 14;
+        for (let f = 0; f < 20; f++) {
+          for (let k = 0; k < KEY_COUNT; k++) {
+            const cIdx = KEY_COL_IDX[k];
+            const rIdx = KEY_ROW_IDX[k];
+            const colSpeed = 1 + (cIdx % 3);
+            const dropRow = ((f * colSpeed * 0.45 + ((cIdx * 7) % 5)) % 7.0);
+            const dist = dropRow - rIdx;
+            let r = 0, g = 0, b = 0;
+            if (dist >= 0 && dist < 0.85) {
+              r = 180; g = 255; b = 195;
+            } else if (dist >= 0.85 && dist < 2.6) {
+              const tail = 1.0 - (dist - 0.85) / 1.75;
+              r = 0;
+              g = (240 * tail) | 0;
+              b = (35 * tail) | 0;
+            }
+            setKeyRgbInFrame(f, k, r, g, b);
+          }
+        }
+      } else if (templateId === 'equalizer_bars') {
+        // 5. Sóng Nhạc Equalizer trên nền đen tuyệt đối (0,0,0)
+        gifStudio.frameCount = 16;
+        gifStudio.fps = 14;
+        for (let f = 0; f < 16; f++) {
+          const phase = (f / 16) * Math.PI * 2;
+          for (let k = 0; k < KEY_COUNT; k++) {
+            const x = KEY_NORM_X[k];
+            const rIdx = KEY_ROW_IDX[k];
+            const rawWave = Math.sin(x * 9.0 + phase) * 0.45 + Math.cos(x * 14.0 - phase * 2) * 0.35 + 0.25;
+            const barHeight = Math.max(-0.5, rawWave * 4.5);
+            const rowFromBottom = 4 - rIdx;
+            if (rowFromBottom <= barHeight) {
+              if (rowFromBottom >= 3.2) {
+                setKeyRgbInFrame(f, k, 255, 20, 120);
+              } else if (rowFromBottom >= 1.8) {
+                setKeyRgbInFrame(f, k, 255, 195, 0);
+              } else {
+                setKeyRgbInFrame(f, k, 0, 240, 130);
+              }
+            } else {
+              setKeyRgbInFrame(f, k, 0, 0, 0);
+            }
+          }
+        }
+      } else {
+        // 6. Rắn Ánh Sáng RGB chạy chữ S qua toàn bộ 61 phím trên nền đen tuyệt đối (0,0,0)
+        gifStudio.frameCount = 24;
+        gifStudio.fps = 15;
+        for (let f = 0; f < 24; f++) {
+          const headPos = Math.round((f / 24) * KEY_COUNT);
+          for (let seg = 0; seg < 14; seg++) {
+            const k = (headPos - seg + KEY_COUNT) % KEY_COUNT;
+            if (seg === 0) {
+              setKeyRgbInFrame(f, k, 255, 255, 255);
+            } else {
+              const fade = 1.0 - seg / 14;
+              writeHsvToShared((seg / 14 + f / 24) % 1.0, 0.95, fade, 1.0);
+              setKeyRgbInFrame(f, k, SHARED_RGB_OUT[0], SHARED_RGB_OUT[1], SHARED_RGB_OUT[2]);
+            }
+          }
+        }
+      }
+
+      gifStudio.currentFrame = 0;
+      gifFpsSlider.value = String(gifStudio.fps);
+      gifFpsValEl.textContent = gifStudio.fps + ' FPS';
+      syncGifPreviewBufferFromMain();
+      renderTimelineFramesStrip();
+      updateGifStudioStatusText('Mẫu "' + templateId.toUpperCase() + '" (' + gifStudio.frameCount + ' Frame @ ' + gifStudio.fps + ' FPS)');
+      mainBoardDirty = true;
+      prevHidTableValid = false;
+      startOrUpdateAnimationLoop();
+    }
+
+    function updateGifStudioStatusText(msg) {
+      if (gifStudioStatusNoteEl) {
+        gifStudioStatusNoteEl.textContent = msg;
+      }
+    }
+
+    function renderTimelineFramesStrip() {
+      timelineFramesStripEl.innerHTML = '';
+      const total = gifStudio.frameCount;
+      const cur = gifStudio.currentFrame;
+      frameCounterLabelEl.textContent = 'Frame ' + (cur + 1) + ' / ' + total;
+
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < total; i++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'frame-chip' + (i === cur ? ' is-current' : '');
+        btn.textContent = 'F' + (i + 1);
+        btn.addEventListener('click', () => {
+          gifStudio.currentFrame = i;
+          gifStudio.isPlaying = false;
+          syncPlayPauseButtonUI();
+          renderTimelineFramesStrip();
+          mainBoardDirty = true;
+          prevHidTableValid = false;
+          renderStaticOnceIfNeeded();
+        });
+        frag.appendChild(btn);
+      }
+      timelineFramesStripEl.appendChild(frag);
+    }
+
+    function syncPlayPauseButtonUI() {
+      gifPlayPauseBtn.classList.toggle('is-active', gifStudio.isPlaying);
+      gifPlayPauseTextEl.textContent = gifStudio.isPlaying
+        ? 'Đang phát (Bấm để Pause & Vẽ)'
+        : 'Đang dừng ở Frame ' + (gifStudio.currentFrame + 1) + ' (Bấm để Phát)';
+    }
+
+    // Tô màu / Tẩy / Hút màu trên phím `keyIdx` ở Frame hiện tại
+    function applyStudioPaintOnKey(keyIdx) {
+      if (keyIdx < 0 || keyIdx >= KEY_COUNT) return;
+      // Khi người dùng chấm bút vẽ, tự động chuyển sang chế độ GIF / Custom và tạm dừng ở Frame đang chọn để dễ vẽ
+      if (appState.effectId !== 'gif_custom') {
+        selectEffectMode('gif_custom');
+      }
+      if (gifStudio.isPlaying && gifStudio.frameCount > 1) {
+        gifStudio.isPlaying = false;
+        syncPlayPauseButtonUI();
+      }
+
+      const fIdx = gifStudio.currentFrame;
+      const off = (fIdx * KEY_COUNT + keyIdx) * 3;
+
+      if (gifStudio.activeTool === 'picker') {
+        const r = GIF_FRAMES_BUFFER[off];
+        const g = GIF_FRAMES_BUFFER[off + 1];
+        const b = GIF_FRAMES_BUFFER[off + 2];
+        gifStudio.brushR = r;
+        gifStudio.brushG = g;
+        gifStudio.brushB = b;
+        studioBrushColorInput.value = '#' + BYTE_HEX_LUT[r] + BYTE_HEX_LUT[g] + BYTE_HEX_LUT[b];
+        setActivePaintTool('brush');
+        return;
+      }
+
+      if (gifStudio.activeTool === 'eraser') {
+        GIF_FRAMES_BUFFER[off]     = 0;
+        GIF_FRAMES_BUFFER[off + 1] = 0;
+        GIF_FRAMES_BUFFER[off + 2] = 0;
+      } else {
+        GIF_FRAMES_BUFFER[off]     = gifStudio.brushR;
+        GIF_FRAMES_BUFFER[off + 1] = gifStudio.brushG;
+        GIF_FRAMES_BUFFER[off + 2] = gifStudio.brushB;
+      }
+
+      syncGifPreviewBufferFromMain();
+      mainBoardDirty = true;
+      prevHidTableValid = false;
+      renderStaticOnceIfNeeded();
+    }
+
+    function setActivePaintTool(toolName) {
+      gifStudio.activeTool = toolName;
+      document.getElementById('toolBrushBtn').classList.toggle('is-active', toolName === 'brush');
+      document.getElementById('toolEraserBtn').classList.toggle('is-active', toolName === 'eraser');
+      document.getElementById('toolPickerBtn').classList.toggle('is-active', toolName === 'picker');
+    }
+
+    // Dịch chuyển toàn bộ màu của Frame hiện tại theo 4 hướng (dx, dy)
+    function shiftCurrentFrameLeds(dxCol, dyRow) {
+      const fIdx = gifStudio.currentFrame;
+      const baseOff = fIdx * KEY_COUNT * 3;
+      const tempFrame = new Uint8ClampedArray(KEY_COUNT * 3);
+
+      for (let k = 0; k < KEY_COUNT; k++) {
+        const r = KEY_ROW_IDX[k];
+        const c = KEY_COL_IDX[k];
+        const rowLen = ROW_KEY_LEN[r];
+        const newR = (r - dyRow + 5) % 5;
+        const newRowLen = ROW_KEY_LEN[newR];
+        const newC = ((c - dxCol) % newRowLen + newRowLen) % newRowLen;
+        const srcKey = ROW_KEY_START[newR] + Math.min(newC, newRowLen - 1);
+
+        const dstOff = k * 3;
+        const srcOff = baseOff + srcKey * 3;
+        tempFrame[dstOff]     = GIF_FRAMES_BUFFER[srcOff];
+        tempFrame[dstOff + 1] = GIF_FRAMES_BUFFER[srcOff + 1];
+        tempFrame[dstOff + 2] = GIF_FRAMES_BUFFER[srcOff + 2];
+      }
+
+      GIF_FRAMES_BUFFER.set(tempFrame, baseOff);
+      syncGifPreviewBufferFromMain();
+      mainBoardDirty = true;
+      prevHidTableValid = false;
+      renderStaticOnceIfNeeded();
+    }
+
+    // Thêm / Nhân đôi / Xóa Frame trên Timeline
+    function duplicateCurrentGifFrame(clearNew) {
+      if (gifStudio.frameCount >= MAX_GIF_FRAMES) {
+        updateGifStudioStatusText('Đã đạt giới hạn tối đa ' + MAX_GIF_FRAMES + ' Frame.');
+        return;
+      }
+      const cur = gifStudio.currentFrame;
+      const total = gifStudio.frameCount;
+      // Dịch các frame phía sau cur lùi 1 bậc
+      for (let f = total; f > cur + 1; f--) {
+        const srcStart = (f - 1) * KEY_COUNT * 3;
+        const dstStart = f * KEY_COUNT * 3;
+        GIF_FRAMES_BUFFER.copyWithin(dstStart, srcStart, srcStart + KEY_COUNT * 3);
+      }
+      const newIdx = cur + 1;
+      const newStart = newIdx * KEY_COUNT * 3;
+      if (clearNew) {
+        GIF_FRAMES_BUFFER.fill(0, newStart, newStart + KEY_COUNT * 3);
+      } else {
+        const curStart = cur * KEY_COUNT * 3;
+        GIF_FRAMES_BUFFER.copyWithin(newStart, curStart, curStart + KEY_COUNT * 3);
+      }
+      gifStudio.frameCount = total + 1;
+      gifStudio.currentFrame = newIdx;
+      syncGifPreviewBufferFromMain();
+      renderTimelineFramesStrip();
+      mainBoardDirty = true;
+      prevHidTableValid = false;
+      renderStaticOnceIfNeeded();
+    }
+
+    function deleteCurrentGifFrame() {
+      if (gifStudio.frameCount <= 1) {
+        GIF_FRAMES_BUFFER.fill(0, 0, KEY_COUNT * 3);
+        syncGifPreviewBufferFromMain();
+        mainBoardDirty = true;
+        prevHidTableValid = false;
+        renderStaticOnceIfNeeded();
+        return;
+      }
+      const cur = gifStudio.currentFrame;
+      const total = gifStudio.frameCount;
+      for (let f = cur; f < total - 1; f++) {
+        const srcStart = (f + 1) * KEY_COUNT * 3;
+        const dstStart = f * KEY_COUNT * 3;
+        GIF_FRAMES_BUFFER.copyWithin(dstStart, srcStart, srcStart + KEY_COUNT * 3);
+      }
+      gifStudio.frameCount = total - 1;
+      if (gifStudio.currentFrame >= gifStudio.frameCount) {
+        gifStudio.currentFrame = gifStudio.frameCount - 1;
+      }
+      syncGifPreviewBufferFromMain();
+      renderTimelineFramesStrip();
+      mainBoardDirty = true;
+      prevHidTableValid = false;
+      renderStaticOnceIfNeeded();
+    }
+
+    // LẤY MẪU TỪ CANVAS 60x20 SANG 61 PHÍM CỦA FRAME `frameIdx` (Có tăng độ rực màu Saturation Boost)
+    const sampleCanvas = document.createElement('canvas');
+    sampleCanvas.width = 60;
+    sampleCanvas.height = 20;
+    const sampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
+
+    function sampleImageSourceIntoGifFrame(drawableSource, frameIdx, satBoost) {
+      sampleCtx.clearRect(0, 0, 60, 20);
+      sampleCtx.drawImage(drawableSource, 0, 0, 60, 20);
+      const imgData = sampleCtx.getImageData(0, 0, 60, 20).data;
+
+      for (let k = 0; k < KEY_COUNT; k++) {
+        const sx = Math.min(59, Math.max(0, Math.round(KEY_NORM_X[k] * 59)));
+        const sy = Math.min(19, Math.max(0, Math.round(KEY_NORM_Y[k] * 19)));
+        const pOff = (sy * 60 + sx) * 4;
+        let r = imgData[pOff];
+        let g = imgData[pOff + 1];
+        let b = imgData[pOff + 2];
+        const a = imgData[pOff + 3] / 255;
+        r *= a; g *= a; b *= a;
+
+        if (satBoost !== 1.0) {
+          const avg = (r + g + b) / 3;
+          r = Math.min(255, Math.max(0, avg + (r - avg) * satBoost));
+          g = Math.min(255, Math.max(0, avg + (g - avg) * satBoost));
+          b = Math.min(255, Math.max(0, avg + (b - avg) * satBoost));
+        }
+        // Cắt nền tối (< 22) về đen tuyệt đối (0,0,0) để các phím nền tắt hẳn LED
+        if (r < 22 && g < 22 && b < 22) {
+          r = 0; g = 0; b = 0;
+        }
+        setKeyRgbInFrame(frameIdx, k, r | 0, g | 0, b | 0);
+      }
+    }
+
+    // Giải mã file .GIF / Video / Ảnh / .JSON từ máy tính
+    async function handleImportExternalFile(file) {
+      if (!file) return;
+      const satBoost = parseFloat(document.getElementById('gifSatBoostSelect').value) || 1.35;
+      const nameLower = file.name.toLowerCase();
+
+      try {
+        // 1. Nếu là file Preset .JSON
+        if (nameLower.endsWith('.json') || file.type === 'application/json') {
+          const text = await file.text();
+          const data = JSON.parse(text);
+          if (!data || !Array.isArray(data.frames) || data.frames.length === 0) {
+            throw new Error('File JSON không đúng định dạng Preset GIF LED.');
+          }
+          const count = Math.min(MAX_GIF_FRAMES, data.frames.length);
+          GIF_FRAMES_BUFFER.fill(0);
+          for (let f = 0; f < count; f++) {
+            const arr = data.frames[f];
+            const dstStart = f * KEY_COUNT * 3;
+            for (let i = 0; i < Math.min(arr.length, KEY_COUNT * 3); i++) {
+              GIF_FRAMES_BUFFER[dstStart + i] = arr[i] & 0xFF;
+            }
+          }
+          gifStudio.frameCount = count;
+          gifStudio.fps = Math.max(1, Math.min(30, Number(data.fps) || 12));
+          gifStudio.currentFrame = 0;
+          gifStudio.isPlaying = count > 1;
+          gifFpsSlider.value = String(gifStudio.fps);
+          gifFpsValEl.textContent = gifStudio.fps + ' FPS';
+          syncPlayPauseButtonUI();
+          syncGifPreviewBufferFromMain();
+          renderTimelineFramesStrip();
+          selectEffectMode('gif_custom');
+          updateGifStudioStatusText('Đã nạp Preset JSON: ' + file.name + ' (' + count + ' Frame)');
+          appendHexLog('log-sys', '[IMPORT JSON]', 'Đã nạp ' + count + ' frame từ ' + file.name);
+          return;
+        }
+
+        // 2. Nếu là file .GIF và trình duyệt hỗ trợ ImageDecoder (Chrome/Edge)
+        if ((file.type === 'image/gif' || nameLower.endsWith('.gif')) && ('ImageDecoder' in window)) {
+          const buf = await file.arrayBuffer();
+          const decoder = new ImageDecoder({ data: buf, type: 'image/gif' });
+          await decoder.tracks.ready;
+          const rawTotal = decoder.tracks.selectedTrack.frameCount || 1;
+          const count = Math.min(MAX_GIF_FRAMES, rawTotal);
+          GIF_FRAMES_BUFFER.fill(0);
+
+          let totalDurationUs = 0;
+          for (let f = 0; f < count; f++) {
+            const decoded = await decoder.decode({ frameIndex: f });
+            const vf = decoded.image;
+            totalDurationUs += (vf.duration || 80000);
+            sampleImageSourceIntoGifFrame(vf, f, satBoost);
+            vf.close();
+          }
+          decoder.close();
+
+          const avgMs = (totalDurationUs / count) / 1000;
+          const estFps = avgMs > 0 ? Math.round(1000 / avgMs) : 12;
+          gifStudio.frameCount = count;
+          gifStudio.fps = Math.max(2, Math.min(30, estFps));
+          gifStudio.currentFrame = 0;
+          gifStudio.isPlaying = true;
+          gifFpsSlider.value = String(gifStudio.fps);
+          gifFpsValEl.textContent = gifStudio.fps + ' FPS';
+          syncPlayPauseButtonUI();
+          syncGifPreviewBufferFromMain();
+          renderTimelineFramesStrip();
+          selectEffectMode('gif_custom');
+          updateGifStudioStatusText('Đã giải mã GIF: ' + file.name + ' (' + count + ' Frame @ ' + gifStudio.fps + ' FPS)');
+          appendHexLog('log-sys', '[IMPORT GIF]', 'Đã giải mã ' + count + ' frame từ ' + file.name + ' bằng ImageDecoder.');
+          return;
+        }
+
+        // 3. Nếu là file Video (.mp4 / .webm)
+        if (file.type.startsWith('video/') || nameLower.endsWith('.mp4') || nameLower.endsWith('.webm')) {
+          const url = URL.createObjectURL(file);
+          const video = document.createElement('video');
+          video.muted = true;
+          video.playsInline = true;
+          video.src = url;
+          await new Promise((res, rej) => {
+            video.onloadedmetadata = res;
+            video.onerror = () => rej(new Error('Không thể đọc video'));
+          });
+          const dur = Math.min(5.0, video.duration || 2.0);
+          const count = Math.min(MAX_GIF_FRAMES, Math.max(8, Math.round(dur * 12)));
+          GIF_FRAMES_BUFFER.fill(0);
+
+          for (let f = 0; f < count; f++) {
+            video.currentTime = (f / count) * dur;
+            await new Promise((r) => { video.onseeked = r; });
+            sampleImageSourceIntoGifFrame(video, f, satBoost);
+          }
+          URL.revokeObjectURL(url);
+          gifStudio.frameCount = count;
+          gifStudio.fps = 12;
+          gifStudio.currentFrame = 0;
+          gifStudio.isPlaying = true;
+          syncPlayPauseButtonUI();
+          syncGifPreviewBufferFromMain();
+          renderTimelineFramesStrip();
+          selectEffectMode('gif_custom');
+          updateGifStudioStatusText('Đã trích xuất Video: ' + file.name + ' (' + count + ' Frame)');
+          appendHexLog('log-sys', '[IMPORT VIDEO]', 'Đã lấy mẫu ' + count + ' frame từ ' + file.name);
+          return;
+        }
+
+        // 4. Fallback cho ảnh tĩnh (.png, .jpg, .webp) hoặc .gif trên trình duyệt không có ImageDecoder
+        const imgUrl = URL.createObjectURL(file);
+        const img = new Image();
+        await new Promise((res, rej) => {
+          img.onload = res;
+          img.onerror = () => rej(new Error('Không thể đọc file ảnh'));
+          img.src = imgUrl;
+        });
+        GIF_FRAMES_BUFFER.fill(0);
+        sampleImageSourceIntoGifFrame(img, 0, satBoost);
+        URL.revokeObjectURL(imgUrl);
+
+        gifStudio.frameCount = 1;
+        gifStudio.currentFrame = 0;
+        gifStudio.isPlaying = false;
+        syncPlayPauseButtonUI();
+        syncGifPreviewBufferFromMain();
+        renderTimelineFramesStrip();
+        selectEffectMode('gif_custom');
+        updateGifStudioStatusText('Đã nạp ảnh tĩnh: ' + file.name + ' (1 Frame — có thể bấm "+Frame & Dịch" để tạo chuyển động)');
+        appendHexLog('log-sys', '[IMPORT IMAGE]', 'Đã lấy mẫu 61 phím từ ảnh ' + file.name);
+      } catch (err) {
+        const msg = err && err.message ? err.message : String(err);
+        updateGifStudioStatusText('Lỗi nhập file: ' + msg);
+        appendHexLog('log-err', '[LỖI IMPORT]', msg);
+      }
+    }
+
+    // Xuất hiệu ứng GIF / Custom hiện tại ra file .json
+    function exportCurrentGifToJsonFile() {
+      const framesArr = [];
+      for (let f = 0; f < gifStudio.frameCount; f++) {
+        const start = f * KEY_COUNT * 3;
+        const slice = Array.from(GIF_FRAMES_BUFFER.subarray(start, start + KEY_COUNT * 3));
+        framesArr.push(slice);
+      }
+      const payload = {
+        model: 'Aula Win60 HE (0x2E3C:0xC365)',
+        type: 'aether_he_gif_led_preset',
+        fps: gifStudio.fps,
+        frameCount: gifStudio.frameCount,
+        frames: framesArr
+      };
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'aula_win60he_gif_preset.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      appendHexLog('log-sys', '[EXPORT JSON]', 'Đã xuất ' + gifStudio.frameCount + ' frame ra file aula_win60he_gif_preset.json.');
+    }
+
+    // Gắn sự kiện cho toàn bộ nút điều khiển trong GIF LED Studio
+    document.getElementById('activateGifModeBtn').addEventListener('click', () => {
+      selectEffectMode('gif_custom');
+    });
+
+    document.getElementById('gifTemplatesGrid').addEventListener('click', (e) => {
+      const btn = e.target.closest('.preset-gif-btn');
+      if (!btn) return;
+      const tpl = btn.dataset.tpl;
+      const allBtns = document.querySelectorAll('.preset-gif-btn');
+      for (let i = 0; i < allBtns.length; i++) {
+        allBtns[i].classList.toggle('is-active', allBtns[i] === btn);
+      }
+      gifStudio.isPlaying = true;
+      syncPlayPauseButtonUI();
+      loadBuiltInGifTemplate(tpl);
+      selectEffectMode('gif_custom');
+    });
+
+    const gifFileInputEl = document.getElementById('gifFileInput');
+    document.getElementById('importGifFileBtn').addEventListener('click', () => {
+      gifFileInputEl.value = '';
+      gifFileInputEl.click();
+    });
+    gifFileInputEl.addEventListener('change', () => {
+      if (gifFileInputEl.files && gifFileInputEl.files[0]) {
+        handleImportExternalFile(gifFileInputEl.files[0]);
+      }
+    });
+
+    document.getElementById('exportGifJsonBtn').addEventListener('click', () => {
+      exportCurrentGifToJsonFile();
+    });
+
+    togglePaintModeBtn.addEventListener('click', () => {
+      gifStudio.paintMode = !gifStudio.paintMode;
+      togglePaintModeBtn.classList.toggle('is-active', gifStudio.paintMode);
+      paintModeBtnTextEl.textContent = gifStudio.paintMode
+        ? 'Chế độ Vẽ lên Phím: BẬT (Nhấp/kéo trên phím)'
+        : 'Chế độ Vẽ lên Phím: TẮT';
+      if (gifStudio.paintMode && appState.effectId !== 'gif_custom') {
+        selectEffectMode('gif_custom');
+      }
+    });
+
+    document.getElementById('toolBrushBtn').addEventListener('click', () => setActivePaintTool('brush'));
+    document.getElementById('toolEraserBtn').addEventListener('click', () => setActivePaintTool('eraser'));
+    document.getElementById('toolPickerBtn').addEventListener('click', () => setActivePaintTool('picker'));
+
+    studioBrushColorInput.addEventListener('input', () => {
+      const v = parseInt(studioBrushColorInput.value.slice(1), 16);
+      gifStudio.brushR = (v >> 16) & 255;
+      gifStudio.brushG = (v >> 8) & 255;
+      gifStudio.brushB = v & 255;
+      if (!gifStudio.paintMode) {
+        gifStudio.paintMode = true;
+        togglePaintModeBtn.classList.add('is-active');
+        paintModeBtnTextEl.textContent = 'Chế độ Vẽ lên Phím: BẬT (Nhấp/kéo trên phím)';
+      }
+    });
+
+    document.getElementById('fillFrameBtn').addEventListener('click', () => {
+      if (appState.effectId !== 'gif_custom') selectEffectMode('gif_custom');
+      const f = gifStudio.currentFrame;
+      for (let k = 0; k < KEY_COUNT; k++) {
+        setKeyRgbInFrame(f, k, gifStudio.brushR, gifStudio.brushG, gifStudio.brushB);
+      }
+      syncGifPreviewBufferFromMain();
+      mainBoardDirty = true;
+      prevHidTableValid = false;
+      renderStaticOnceIfNeeded();
+    });
+
+    document.getElementById('wasdFrameBtn').addEventListener('click', () => {
+      if (appState.effectId !== 'gif_custom') selectEffectMode('gif_custom');
+      const f = gifStudio.currentFrame;
+      for (let k = 0; k < KEY_COUNT; k++) {
+        if (k === 16 || k === 29 || k === 30 || k === 31) {
+          setKeyRgbInFrame(f, k, gifStudio.brushR, gifStudio.brushG, gifStudio.brushB);
+        } else if (k === 0 || k === 56) {
+          setKeyRgbInFrame(f, k, 255, 45, 110);
+        } else {
+          setKeyRgbInFrame(f, k, renderParams.bgR, renderParams.bgG, renderParams.bgB);
+        }
+      }
+      syncGifPreviewBufferFromMain();
+      mainBoardDirty = true;
+      prevHidTableValid = false;
+      renderStaticOnceIfNeeded();
+    });
+
+    document.getElementById('clearFrameBtn').addEventListener('click', () => {
+      if (appState.effectId !== 'gif_custom') selectEffectMode('gif_custom');
+      const f = gifStudio.currentFrame;
+      const start = f * KEY_COUNT * 3;
+      GIF_FRAMES_BUFFER.fill(0, start, start + KEY_COUNT * 3);
+      syncGifPreviewBufferFromMain();
+      mainBoardDirty = true;
+      prevHidTableValid = false;
+      renderStaticOnceIfNeeded();
+    });
+
+    document.getElementById('shiftLeftBtn').addEventListener('click', () => shiftCurrentFrameLeds(-1, 0));
+    document.getElementById('shiftRightBtn').addEventListener('click', () => shiftCurrentFrameLeds(1, 0));
+    document.getElementById('shiftUpBtn').addEventListener('click', () => shiftCurrentFrameLeds(0, -1));
+    document.getElementById('shiftDownBtn').addEventListener('click', () => shiftCurrentFrameLeds(0, 1));
+
+    document.getElementById('cloneShiftRightBtn').addEventListener('click', () => {
+      if (appState.effectId !== 'gif_custom') selectEffectMode('gif_custom');
+      duplicateCurrentGifFrame(false);
+      shiftCurrentFrameLeds(1, 0);
+    });
+
+    gifPlayPauseBtn.addEventListener('click', () => {
+      gifStudio.isPlaying = !gifStudio.isPlaying;
+      syncPlayPauseButtonUI();
+      if (appState.effectId !== 'gif_custom') {
+        selectEffectMode('gif_custom');
+      } else {
+        startOrUpdateAnimationLoop();
+      }
+    });
+
+    document.getElementById('addFrameBtn').addEventListener('click', () => {
+      duplicateCurrentGifFrame(true);
+    });
+    document.getElementById('dupFrameBtn').addEventListener('click', () => {
+      duplicateCurrentGifFrame(false);
+    });
+    document.getElementById('delFrameBtn').addEventListener('click', () => {
+      deleteCurrentGifFrame();
+    });
+
+    gifFpsSlider.addEventListener('input', () => {
+      gifStudio.fps = Number(gifFpsSlider.value);
+      gifFpsValEl.textContent = gifStudio.fps + ' FPS';
+    });
+
+    // Nạp sẵn mẫu số 1 (Cyber Scanner) khi khởi tạo để ô Preview GIF LED hoạt động ngay lập tức
+    loadBuiltInGifTemplate('cyber_scanner');
+
+
+    // Bắt đầu chạy chuỗi Hiệu ứng Khởi động (Boot Sequence 2.4 giây) trên cả màn hình và bàn phím thật
+    async function triggerBootAnimationSequence(reasonText) {
+      if (!appState.power) return;
+      bootAnim.active = true;
+      bootAnim.startTimeSec = performance.now() * 0.001;
+      prevHidTableValid = false;
+
+      const btnText = document.getElementById('testBootAnimBtnText');
+      if (btnText) btnText.textContent = 'Đang chạy Boot...';
+
+      appendHexLog(
+        'log-sys',
+        '[BOOT SEQUENCE]',
+        'Bắt đầu hiệu ứng khởi động "' + bootAnim.style + '" (2.4s) — ' + (reasonText || 'Thủ công')
+      );
+
+      // Chuyển bàn phím thật sang Custom Mode 10 để nhận luồng frame khởi động Cmd 9
+      const pkt = buildCmd7LightingPacket(
+        FW_MODE_BYTES.custom,
+        appState.brightness,
+        appState.speed,
+        255, 255, 255,
+        0, 0, 0,
+        0, 1, 1
+      );
+      if (!hidCtrl.dryRun && hidCtrl.device && hidCtrl.device.opened) {
+        try {
+          await hidSendPacket(pkt);
+          hidCtrl.packetsSentCount++;
+        } catch (err) {
+          handleHidSendError('Lỗi bật Mode 10 cho Boot Sequence', err);
+        }
+      }
+
+      startOrUpdateAnimationLoop();
+    }
+
+    function finishBootAnimationSequence() {
+      if (!bootAnim.active) return;
+      bootAnim.active = false;
+      mainBoardDirty = true;
+      prevHidTableValid = false;
+
+      const btnText = document.getElementById('testBootAnimBtnText');
+      if (btnText) btnText.textContent = 'Chạy thử Khởi động';
+
+      appendHexLog(
+        'log-sys',
+        '[BOOT HOÀN TẤT]',
+        'Đã chạy xong hiệu ứng khởi động -> Chuyển về hiệu ứng "' + EFFECT_MAP[appState.effectId].name + '".'
+      );
+
+      // Khôi phục về hiệu ứng đang chọn của người dùng
+      sendCmd7CurrentStateToHardware('Sau khi Boot xong').then(() => {
+        prevHidTableValid = false;
+        startOrUpdateAnimationLoop();
+      });
+    }
+
+    document.getElementById('bootAnimEnableCheckbox').addEventListener('change', (e) => {
+      bootAnim.enabled = e.target.checked;
+    });
+    document.getElementById('bootAnimStyleSelect').addEventListener('change', (e) => {
+      bootAnim.style = e.target.value;
+    });
+    document.getElementById('testBootAnimBtn').addEventListener('click', () => {
+      triggerBootAnimationSequence('Người dùng bấm Chạy thử');
+    });
+
     // Khởi chạy toàn bộ ứng dụng
     buildGlowSpriteAtlas();
     initMainCanvasesAndStaticLayers();
@@ -3347,6 +4895,44 @@
     renderAllStaticPreviewsSnapshot(1.25);
     startOrUpdateAnimationLoop();
     initWebHidSubsystem();
+    if (bootAnim.enabled) {
+      triggerBootAnimationSequence('Mở ứng dụng');
+    }
+
+    // Sự kiện Hộp thoại Cài đặt thành App trên Máy Tính
+    const installAppBtn = document.getElementById('installAppBtn');
+    const installAppModal = document.getElementById('installAppModal');
+    const closeInstallModalBtn = document.getElementById('closeInstallModalBtn');
+    const copyAppCmdBtn = document.getElementById('copyAppCmdBtn');
+    const appCmdSnippet = document.getElementById('appCmdSnippet');
+
+    installAppBtn.addEventListener('click', () => {
+      installAppModal.classList.add('is-open');
+    });
+    closeInstallModalBtn.addEventListener('click', () => {
+      installAppModal.classList.remove('is-open');
+    });
+    installAppModal.addEventListener('click', (e) => {
+      if (e.target === installAppModal) installAppModal.classList.remove('is-open');
+    });
+    copyAppCmdBtn.addEventListener('click', () => {
+      const cmdText = appCmdSnippet.textContent;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cmdText).catch(() => {});
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = cmdText;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      copyAppCmdBtn.textContent = 'Đã sao chép lệnh!';
+      setTimeout(() => {
+        copyAppCmdBtn.textContent = 'Sao chép lệnh mở App';
+      }, 1800);
+    });
+
   </script>
 </body>
 </html>
